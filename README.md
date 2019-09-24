@@ -22,3 +22,11 @@ KNOWN BUGs
 
 - SHIFT 0-9 does not work due to a Qt feature, use ALT 0-9 instead.
 
+For compiling:
+
+
+You need to install Qt5 development framework.
+
+qmake
+make
+
