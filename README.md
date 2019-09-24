@@ -1,6 +1,7 @@
 
 QtSpecem v0.80
 (C) 2019 Rui Fernando Ferreira Ribero
+
 Z80 emulation core (C) 1991-2019 Rui Fernando Ferreira Ribeiro
 
 New Qt ZX Spectrum emulator
