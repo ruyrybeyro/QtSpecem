@@ -28,5 +28,6 @@ For compiling:
 You need to install Qt5 development framework.
 
 qmake
+
 make
 
