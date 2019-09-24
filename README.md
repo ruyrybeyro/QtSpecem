@@ -14,6 +14,8 @@ The project idea will be being an debugger, for the moment just upload for backu
 
 Supports drag-and-drop, file as arguments, and SLT, TAP, Z80, SNA, SNX, SIT, RAW, ZX, PRG, ACH, ROM, DAT, SCR, SEM snapshot emulation formats.
 
+For now pressing F2 saves Z80 snapshots at /tmp.
+
 KNOWN BUGs
 
 - non documented flags of BIT n,(HL) not fully implemented (eg. WZ only partially documented).
