@@ -16,11 +16,19 @@ Supports drag-and-drop, file as arguments, and SLT, TAP, Z80, SNA, SNX, SIT, RAW
 
 For now pressing F2 saves Z80 snapshots at /tmp.
 
+Kempston Joystick ALT + cursor keys
+
 KNOWN BUGs
 
 - non documented flags of BIT n,(HL) not fully implemented (eg. WZ only partially documented).
 
 - SHIFT 0-9 does not work due to a Qt feature, use ALT 0-9 instead.
+
+TO DO:
+
+- Flash
+- Debugger
+- Save/Load Menu
 
 For compiling:
 
