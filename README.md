@@ -7,7 +7,7 @@ New Qt ZX Spectrum emulator
 
 Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog except for a partial implementation of WZ/MEMPTR.
 
-Real time emulator, no sound support.
+Real time emulator, no sound support. Still rudimentary user interface.
 
 The project idea will be being an emulator, for the moment just upload for backup and for people to test the Z80 part.
 
