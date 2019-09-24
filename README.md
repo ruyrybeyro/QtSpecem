@@ -13,3 +13,10 @@ Real time emulator, no sound support. Still rudimentary user interface.
 The project idea will be being an debugger, for the moment just upload for backup and for people to test the Z80 part.
 
 Supports drag-and-drop, file as arguments, and SLT, TAP, Z80, SNA, SNX, SIT, RAW, ZX, PRG, ACH, ROM, DAT, SCR, SEM snapshot emulation formats.
+
+KNOWN BUGs
+
+- non documented flags of BIT n,(HL) not fully implemented (eg. WZ only partially documented).
+
+- SHIFT 0-9 does not work due to a Qt feature, use ALT 0-9 instead.
+
