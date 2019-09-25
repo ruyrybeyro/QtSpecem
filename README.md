@@ -24,7 +24,7 @@ KNOWN BUGs
 
 - SHIFT 0-9 does not work due to a Qt feature, use CTRL 0-9 instead.
 
-TO DO:
+TODO:
 
 - Flash
 - Debugger
