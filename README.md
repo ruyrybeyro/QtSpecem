@@ -39,3 +39,4 @@ qmake
 
 make
 
+. Tested in MacOS Mojave and Debian 10.
