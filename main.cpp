@@ -4,7 +4,7 @@
  *
  */
 
-#include "rand.h"
+#include "QtSpecem.h"
 
 extern "C" void init_emul();
 extern "C" void init_pallete();

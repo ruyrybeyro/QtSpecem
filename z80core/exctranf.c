@@ -20,7 +20,7 @@ void ex_de_hl()
    tmp = HL;
    HL  = DE;
    DE  = tmp;
-   WZ=HL;
+   WZ  = HL;
    Q = 0;
 }
 
@@ -107,7 +107,7 @@ void ex_psp_hl()
    tmp = HL;
    HL  = pop();
    push(tmp);
-   WZ=HL; /* WZ OK */
+   WZ  = HL; /* WZ OK */
    Q = 0;
 }
 
@@ -330,7 +330,7 @@ void cpd()
    flags._X = (tmp - flags._H)  & (UCHAR)BIT_1; \
    flags._Y = (tmp - flags._H)  & (UCHAR)BIT_3; \
    WZ--; \
-   Q=1;
+   Q = 1;
 
    cpd
 }

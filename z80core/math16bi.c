@@ -24,7 +24,6 @@
    Q = 1; \
 }
 
-
 void add_hl_bc() add_hl_ss(HL,BC,H,11);
 void add_hl_de() add_hl_ss(HL,DE,H,11);
 void add_hl_hl() add_hl_ss(HL,HL,H,11);

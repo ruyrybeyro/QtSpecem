@@ -4,7 +4,7 @@
  *
  */
 
-#include "rand.h"
+#include "QtSpecem.h"
 
 
 #include <QMessageBox>
@@ -93,7 +93,7 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_CapsLock:
                           keybd_buff[0] |= ~0xFE; /* CAPS SHIFT */
                           break;
-              case Qt::Key_Alt:
+              case Qt::Key_Control:
               case Qt::Key_Shift:
                         keybd_buff[7] |= ~0xFD; /* SYMBOL SHIFT */
                       break;
@@ -148,7 +148,7 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_Right: joystick |= 1; break;
               case Qt::Key_Up:    joystick |= 8; break;
               case Qt::Key_Down:  joystick |= 4; break;
-              case Qt::Key_Control: joystick |= 16; break; 
+              case Qt::Key_Alt: joystick |= 16; break;
               /* Sinclair joystick */
               //case VK_NUMPAD5:
               //case VK_NUMPAD0: keybd_buff[0] |= ~0xFE;
@@ -191,7 +191,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_CapsLock:
                      keybd_buff[0] &= 0xFE; /* CAPS SHIFT */
                     break;
-               case Qt::Key_Alt:
+               case Qt::Key_Control:
                case Qt::Key_Shift:
                      keybd_buff[7] &= 0xFD; /* SYMBOL SHIFT */
                  break;
@@ -244,7 +244,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_Right: joystick &= ~1; break;
                case Qt::Key_Up:    joystick &= ~8; break;
                case Qt::Key_Down:  joystick &= ~4; break;
-               case Qt::Key_Control:  joystick &= ~16; break;
+               case Qt::Key_Alt:   joystick &= ~16; break;
        
                 /* Sinclair joystick */
                //case VK_NUMPAD5:

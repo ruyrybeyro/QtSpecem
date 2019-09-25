@@ -8,7 +8,7 @@ New Qt5 ZX Spectrum emulator
 
 Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog except for a partial implementation of WZ/MEMPTR. (Thus failing compatibility tests of BIT n,(HL) )
 
-Real time emulator, no sound support. Still rudimentary user interface.
+Real time emulator, no sound support. Still (very) rudimentary user interface.
 
 The project idea will be being an debugger, for the moment just uploaded for backup and for people to test the Z80 part.
 
@@ -22,7 +22,7 @@ KNOWN BUGs
 
 - non documented flags of BIT n,(HL) not fully implemented (eg. WZ only partially documented).
 
-- SHIFT 0-9 does not work due to a Qt feature, use ALT 0-9 instead.
+- SHIFT 0-9 does not work due to a Qt feature, use CTRL 0-9 instead.
 
 TO DO:
 
@@ -33,7 +33,7 @@ TO DO:
 For compiling:
 
 
-You need to install Qt5 development framework.
+You need to install the Qt5 development framework.
 
 qmake
 
