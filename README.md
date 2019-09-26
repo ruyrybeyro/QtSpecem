@@ -1,5 +1,5 @@
 
-QtSpecem v0.80
+QtSpecem v0.81
 (C) 2019 Rui Fernando Ferreira Ribero
 
 Z80 emulation core (C) 1991-2019 Rui Fernando Ferreira Ribeiro
@@ -21,6 +21,10 @@ Kempston Joystick ALT + cursor keys
 KNOWN BUGs
 
 - SHIFT 0-9 does not work due to a Qt feature, use CTRL 0-9 instead.
+
+"Features"
+
+Loading a TAP file introduces patches to the ROM. A ROM checksum will fail.
 
 TODO:
 
