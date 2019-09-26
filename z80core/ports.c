@@ -4,6 +4,9 @@
  *
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "env.h"
 
 /* keeps last out to ula --- current border colour */
@@ -193,10 +196,10 @@ UCHAR readport(USHORT port)
 		 else
                  {
 		 // Any other port --- this is not well implemented
-		 if((clock_ticks  > 14346) && (clock_ticks < (USHORT)57121u))
-		 value = clock_ticks/224;
-		 else
-		 value = 0xFF;
+		 if((clock_ticks  > 14346) && (clock_ticks < 43008))
+		    value = rand() % 255;
+         else
+		    value = 0xFF;
                  }
 	return(value);	// default: 0xff
 }
