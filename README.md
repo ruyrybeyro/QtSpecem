@@ -24,7 +24,7 @@ KNOWN BUGs
 
 "Features"
 
-Loading a TAP file introduces patches to the ROM. A ROM checksum will fail.
+Loading a TAP file introduces patches to the ROM. A ROM checksum will fail after loading/drag and dropping a TAP file.
 
 TODO:
 
