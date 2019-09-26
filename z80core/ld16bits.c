@@ -25,7 +25,7 @@ void ld_sp_nn() ld_dd_nn(SP, 10);
  *                            ld_dd_pnn                                    *
  *=========================================================================*/
 
-#define ld_dd_pnn(dd, TS) { T(TS); dd=readword(Getnextword() ); WZ = dd+1; Q=0; }
+#define ld_dd_pnn(dd, TS) { T(TS); dd=readword(WZ=Getnextword() ); WZ++; Q=0; }
 
 void ld_hl_pnn() ld_dd_pnn(HL, 16);
 void ld_ix_pnn() ld_dd_pnn(IX, 20);

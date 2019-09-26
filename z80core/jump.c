@@ -51,7 +51,7 @@ void jp_m_nn()  jp_cc_nn(flags._S);
 void jr_e()
 {
 /* OK */
-#define jr_e() (PC += ucharToUshort(readbyte(PC++)));WZ=PC;Q=0;
+#define jr_e() (PC += ucharToUshort(readbyte(PC))+1);WZ=PC;Q=0;
 
    T(12);
    jr_e();

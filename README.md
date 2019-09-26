@@ -6,7 +6,7 @@ Z80 emulation core (C) 1991-2019 Rui Fernando Ferreira Ribeiro
 
 New Qt5 ZX Spectrum emulator
 
-Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog except for a partial implementation of WZ/MEMPTR. (Thus failing compatibility tests of BIT n,(HL) )
+Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog (including WZ/MEMPTR).
 
 Real time emulator, no sound support. Still (very) rudimentary user interface.
 
@@ -19,8 +19,6 @@ For now pressing F2 saves Z80 snapshots at /tmp.
 Kempston Joystick ALT + cursor keys
 
 KNOWN BUGs
-
-- non documented flags of BIT n,(HL) not fully implemented (eg. WZ only partially documented).
 
 - SHIFT 0-9 does not work due to a Qt feature, use CTRL 0-9 instead.
 

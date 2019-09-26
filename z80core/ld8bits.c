@@ -135,7 +135,7 @@ void ld_a_n()  ld_r_n(A, 7);
  *                            ld_r_phl                                     *
  *=========================================================================*/
 
-#define ld_r_phl(r,expr,TS) { T(TS); (r) = readbyte(WZ = expr); Q=0; }
+#define ld_r_phl(r,expr,TS) { T(TS); (r) = readbyte(expr); Q=0; }
 
 void ld_b_phl() ld_r_phl(B, HL , 7);
 void ld_c_phl() ld_r_phl(C, HL , 7);
@@ -165,7 +165,7 @@ void ld_a_piy() ld_r_phl(A, pIY, 19);
  *                            ld_phl_r                                     *
  *=========================================================================*/
 
-#define ld_phl_r(r,expr,TS) { T(TS); writebyte(WZ = expr, r); Q=0; }
+#define ld_phl_r(r,expr,TS) { T(TS); writebyte(expr, r); Q=0; }
 
 void ld_phl_b() ld_phl_r(B, HL, 7);
 void ld_phl_c() ld_phl_r(C, HL, 7);
@@ -194,7 +194,7 @@ void ld_piy_a() ld_phl_r(A, pIY, 19);
 /*=========================================================================*
  *                            ld_phl_n                                     *
  *=========================================================================*/
-void ld_phl_n() { T(10); writebyte(HL, Getnextbyte() ); WZ = HL + 1; Q=0; }
+void ld_phl_n() { T(10); writebyte(HL, Getnextbyte() ); Q=0; }
 /* The next two instructions will be a possible source of problems with a
 	optimizing compiler -- if tmp was cutted we will have a problem in
 	writebyte()
