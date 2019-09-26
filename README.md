@@ -6,7 +6,7 @@ Z80 emulation core (C) 1991-2019 Rui Fernando Ferreira Ribeiro
 
 New Qt5 ZX Spectrum emulator
 
-Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog (including WZ/MEMPTR).
+Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog (including WZ/MEMPTR). It passes all the zxeall/z80test tests.
 
 Real time emulator, no sound support. Still (very) rudimentary user interface.
 
