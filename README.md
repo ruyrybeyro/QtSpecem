@@ -1,6 +1,7 @@
 
 QtSpecem v0.81
 (C) 2019 Rui Fernando Ferreira Ribeiro
+
 (C) 1991-2019 Z80A core emulation
 
 New Qt5 ZX Spectrum emulator
