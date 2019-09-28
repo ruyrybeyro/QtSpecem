@@ -1,6 +1,7 @@
 
 QtSpecem v0.81
-(C) 2019 Rui Fernando Ferreira Ribero
+(C) 2019 Rui Fernando Ferreira Ribeiro
+(C) 1991-2019 Z80A core emulation
 
 Z80 emulation core (C) 1991-2019 Rui Fernando Ferreira Ribeiro
 
