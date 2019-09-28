@@ -3,8 +3,6 @@ QtSpecem v0.81
 (C) 2019 Rui Fernando Ferreira Ribeiro
 (C) 1991-2019 Z80A core emulation
 
-Z80 emulation core (C) 1991-2019 Rui Fernando Ferreira Ribeiro
-
 New Qt5 ZX Spectrum emulator
 
 Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog (including WZ/MEMPTR). It passes all the zxeall/z80test tests.
