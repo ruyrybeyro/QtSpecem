@@ -34,9 +34,6 @@ LOOP2:  LD      E,(HL)          ; LOAD "F" from table
 ; =============================
 DAATEST:
 
-        ; need to return to lower screen
-        LD      A,1             ; lower screen
-        CALL    5633            ; open channel
         PUSH    HL
         PUSH    BC
         PUSH    DE
