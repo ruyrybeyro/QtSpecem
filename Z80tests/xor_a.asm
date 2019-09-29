@@ -21,6 +21,12 @@ LOOP2:  LD      E,(HL)          ; LOAD "F" from table
         LD      E,(HL)          ; we need this for FF
         CALL    DAATEST
 
+        ; need to return to lower screen
+        LD      A,1             ; lower screen
+        CALL    5633            ; open channel
+
+        CALL    $15DE           ; WAIT-KEY1
+
         RET
 
 ; =============================

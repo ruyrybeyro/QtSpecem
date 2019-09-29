@@ -24,8 +24,11 @@ LOOP2:  LD      E,(HL)          ; LOAD "F" from table
 	LD 	(IX),D
         CALL    DAATEST
 
-LOOP3:
-        JR      LOOP3
+        ; need to return to lower screen
+        LD      A,1             ; lower screen
+        CALL    5633            ; open channel
+
+        CALL    $15DE           ; WAIT-KEY1
 
         RET
 

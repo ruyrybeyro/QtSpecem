@@ -21,8 +21,11 @@ LOOP2:  LD      E,$FF           ; LOAD "F" from table
         LD      E,$FF           ; we need this for FF
         CALL    DAATEST
 
-FREEZE:
-        JR      FREEZE
+        ; need to return to lower screen
+        LD      A,1             ; lower screen
+        CALL    5633            ; open channel
+
+        CALL    $15DE           ; WAIT-KEY1
 
         RET
 

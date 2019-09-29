@@ -4,6 +4,11 @@
 					CALL	PRINT_KEYB
 STALL:				        CALL	Read_Keyboard
 					JR	STALL
+
+        				; need to return to lower screen
+        				LD      A,1             ; lower screen
+        				CALL    5633            ; open channel
+
 					RET
 
 
