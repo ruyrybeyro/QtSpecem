@@ -42,49 +42,12 @@ extern union Z80Regs  Z80Regs;
 /* Alternative registers */
 extern union Z80Regs  Z80Regs2;
 
+extern struct Z80vars Z80vars;
+
 extern union Z80IX Z80IX;
 extern union Z80IY Z80IY;
 
-extern USHORT PC;
-
-extern USHORT  SP;
-extern UCHAR   R, R_BIT7,  I;
-
 extern struct CPU_flags  flags;
-
-/* 'ticks' counter ; SPECTRUM Z80A - 3,5469MHz -
-  70938 'ticks' between each int (50 per second)
-*/
-extern unsigned long  clock_ticks;
-
-/* Interrupt mode - 0, 1 or 2 */
-extern UCHAR _IM;
-
-/* interrupt 'switch' interrupts and copy
- *
- *            IFF1  IFF2
- *  ----------------------
- *  | RESET  |  0  |  0  |
- *  |--------+-----+-----|
- *  | DI     |  0  |  0  |
- *  |--------+-----+-----|
- *  | EI     |  1  |  1  |
- *  |--------+-----+-----|
- *  | LD A,I |  .  |  .  | - P/V = IFF2
- *  |--------+-----+-----|
- *  | LD A,R |  .  |  .  | - P/V = IFF2
- *  |--------+-----+-----|
- *  | NMI    |  0  |  .  |
- *  |--------+-----+-----|
- *  | RETN   | IFF2|  .  |
- *  |--------+-----+-----|
- *  | INT    |  0  |  0  |
- *  |--------+-----+-----|
- *  | RETI   |  .  |  .  | - same as RET. (This instruction only exists
- *  ----------------------              to be recognized by external
- *                                      devices, so they know int is over)
- */
-extern UCHAR IFF1, IFF2;
 
 /* Used in DDCB or FDCB to keep shift of IX or IY
  */
@@ -99,10 +62,6 @@ extern UCHAR * mem;
  *  1 : 64k of RAM
  */
 extern UCHAR WriteRom;
-
-/* 'flag' trace
- */
-extern UCHAR TraceOn;
 
 extern USHORT parity_table[256];
 

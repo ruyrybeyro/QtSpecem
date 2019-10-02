@@ -50,11 +50,66 @@ struct CPU_flags
    USHORT  _C;   /* Carry                   */
 };
 
-// define if last operation affected flags
-USHORT Q;
+struct Z80vars
+{
+   USHORT PC;
+   USHORT SP;
+   // define if last operation affected flags
+   USHORT Q;
+   /* 'ticks' counter ; SPECTRUM Z80A - 3,5469MHz -
+  70938 'ticks' between each int (50 per second)
+   */
+   unsigned long  clock_ticks;
+
+   UCHAR   R, R_BIT7,  I;
+
+   /* Interrupt mode - 0, 1 or 2 */
+   UCHAR _IM;
+
+   /* interrupt 'switch' interrupts and copy
+    *
+    *            IFF1  IFF2
+    *  ----------------------
+    *  | RESET  |  0  |  0  |
+    *  |--------+-----+-----|
+    *  | DI     |  0  |  0  |
+    *  |--------+-----+-----|
+    *  | EI     |  1  |  1  |
+    *  |--------+-----+-----|
+    *  | LD A,I |  .  |  .  | - P/V = IFF2
+    *  |--------+-----+-----|
+    *  | LD A,R |  .  |  .  | - P/V = IFF2
+    *  |--------+-----+-----|
+    *  | NMI    |  0  |  .  |
+    *  |--------+-----+-----|
+    *  | RETN   | IFF2|  .  |
+    *  |--------+-----+-----|
+    *  | INT    |  0  |  0  |
+    *  |--------+-----+-----|
+    *  | RETI   |  .  |  .  | - same as RET. (This instruction only exists
+    *  ----------------------              to be recognized by external
+    *                                      devices, so they know int is over)
+    */
+   UCHAR IFF1, IFF2;
+
+   /* Trace flag */
+   UCHAR TraceOn0;
+};
+
+#define PC Z80vars.PC
+#define SP Z80vars.SP
+#define Q Z80vars.Q
+#define clock_ticks Z80vars.clock_ticks
+#define R Z80vars.R
+#define R_BIT7 Z80vars.R_BIT7
+#define I Z80vars.I
+#define _IM Z80vars._IM
+#define IFF1 Z80vars.IFF1
+#define IFF2 Z80vars.IFF2
+
+#define TraceOn Z80vars.TraceOn;
 
 /* Shortcuts */
-
 #define BC   Z80Regs.x.bc     /* Z80Wreg(0) -- BC   */
 #define DE   Z80Regs.x.de     /* Z80Wreg(1) -- DE   */
 #define HL   Z80Regs.x.hl     /* Z80Wreg(2) -- HL   */
@@ -132,6 +187,7 @@ union Z80IY
 #define HY Z80IY.bregs[0]
 #define LY Z80IY.bregs[1]
 #endif
+
 
 /* Clock ticks between each interrupt */
 #define INT_TIME 69888L         /* Timing provided by Ian Collier */

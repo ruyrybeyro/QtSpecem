@@ -9,6 +9,8 @@
 #include "../z80core/z80.h"
 #include "../z80core/iglobal.h"
 
+unsigned char * alloc_speccy_shared_ram(void);
+
 /* vars to keep states of options for emulator */
 unsigned char 	     bModel3 = 1;   /* Model 3 or Model 2   */
 unsigned char        bFlashOn = 1;  /* Flash on or off      */
@@ -31,23 +33,18 @@ union Z80Regs  Z80Regs2;
 union Z80IX	Z80IX;
 union Z80IY	Z80IY;
 
-USHORT PC;
-
-
-USHORT  SP;
-UCHAR   R_BIT7, R,  I;
-
 struct CPU_flags  flags;
+struct Z80vars Z80vars;
 
 /* 'ticks' counter ; SPECTRUM Z80A - 3,5469MHz - 70938 ticks between each INT */
-unsigned long clock_ticks;
+// unsigned long clock_ticks;
 
 /* Interrupt mode - 0, 1 or 2 */
-UCHAR _IM;
+// UCHAR _IM;
 
 /* Interrupt flag & copy
  */
-UCHAR IFF1, IFF2;
+// UCHAR IFF1, IFF2;
 
 /* Used in DDCB and FDCB to keep a indice for IX and IY */
 UCHAR lastbyte;
@@ -85,7 +82,8 @@ void Init_Z80Emu(void)
 	*/
 
 
-	  mem =  (UCHAR *)calloc( 65536, 1 );
+	  // mem =  (UCHAR *)calloc( 65536, 1 );
+	  mem =  alloc_speccy_shared_ram();
 	}
 }
 

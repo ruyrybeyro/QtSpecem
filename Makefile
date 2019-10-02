@@ -56,6 +56,7 @@ SOURCES       = main.cpp \
 		QtSpecem.cpp \
 		emul/error.c \
 		emul/initmem.c \
+		emul/shm_server.c \
 		emul/sna_load.c \
 		emul/sna_save.c \
 		emul/video.c \
@@ -84,6 +85,7 @@ OBJECTS       = main.o \
 		QtSpecem.o \
 		error.o \
 		initmem.o \
+		shm_server.o \
 		sna_load.o \
 		sna_save.o \
 		video.o \
@@ -312,6 +314,7 @@ DIST          = ../../../Qt/5.13.1/clang_64/mkspecs/features/spec_pre.prf \
 		QtSpecem.cpp \
 		emul/error.c \
 		emul/initmem.c \
+		emul/shm_server.c \
 		emul/sna_load.c \
 		emul/sna_save.c \
 		emul/video.c \
@@ -791,7 +794,7 @@ distdir: FORCE
 	$(COPY_FILE) --parents QtSpecem.qrc QtSpecem.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../../Qt/5.13.1/clang_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents QtSpecem.h h/quirks.h h/snap.h z80core/env.h z80core/iglobal.h z80core/ivars.h z80core/z80.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp QtSpecem.cpp emul/error.c emul/initmem.c emul/sna_load.c emul/sna_save.c emul/video.c z80core/bits.c z80core/callret.c z80core/exctranf.c z80core/flags.c z80core/init.c z80core/inout.c z80core/intr.c z80core/jump.c z80core/kernel.c z80core/ld16bits.c z80core/ld8bits.c z80core/math16bi.c z80core/math8bit.c z80core/mem.c z80core/misc.c z80core/ndebgz80.c z80core/ports.c z80core/rotate.c z80core/shutdown.c z80core/stack.c $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp QtSpecem.cpp emul/error.c emul/initmem.c emul/shm_server.c emul/sna_load.c emul/sna_save.c emul/video.c z80core/bits.c z80core/callret.c z80core/exctranf.c z80core/flags.c z80core/init.c z80core/inout.c z80core/intr.c z80core/jump.c z80core/kernel.c z80core/ld16bits.c z80core/ld8bits.c z80core/math16bi.c z80core/math8bit.c z80core/mem.c z80core/misc.c z80core/ndebgz80.c z80core/ports.c z80core/rotate.c z80core/shutdown.c z80core/stack.c $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -1224,6 +1227,9 @@ initmem.o: emul/initmem.c z80core/env.h \
 		h/quirks.h \
 		z80core/iglobal.h
 	$(CC) -c $(CFLAGS) $(INCPATH) -o initmem.o emul/initmem.c
+
+shm_server.o: emul/shm_server.c 
+	$(CC) -c $(CFLAGS) $(INCPATH) -o shm_server.o emul/shm_server.c
 
 sna_load.o: emul/sna_load.c z80core/env.h \
 		z80core/z80.h \
