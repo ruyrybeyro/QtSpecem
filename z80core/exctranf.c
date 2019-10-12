@@ -152,11 +152,11 @@ void ldi()
    \
    T(16); \
    writebyte(DE++, n = readbyte(HL++) ); \
-   flags._P = (--BC != 0); \
-   flags._H = flags._N = 0; \
+   Z80_P = (--BC != 0); \
+   Z80_H = Z80_N = 0; \
    n += A; \
-   flags._X = n & (UCHAR)BIT_1; \
-   flags._Y = n & (UCHAR)BIT_3; \
+   Z80_X = n & (UCHAR)BIT_1; \
+   Z80_Y = n & (UCHAR)BIT_3; \
    Q = 1;
 
 
@@ -215,11 +215,11 @@ void ldd()
    \
    T(16); \
    writebyte(DE--, n = readbyte(HL--) ); \
-   flags._P = (--BC != 0); \
-   flags._H = flags._N = 0; \
+   Z80_P = (--BC != 0); \
+   Z80_H = Z80_N = 0; \
    n += A; \
-   flags._X = n & (UCHAR)BIT_1; \
-   flags._Y = n & (UCHAR)BIT_3; \
+   Z80_X = n & (UCHAR)BIT_1; \
+   Z80_Y = n & (UCHAR)BIT_3; \
    Q = 1;
 
    ldd
@@ -277,24 +277,24 @@ void cpi()
    LOCAL UCHAR tmp, n; \
    \
    T(16); \
-   flags._N = 1; \
+   Z80_N = 1; \
    \
-   /* cp_phl ïinlineï */ \
-   flags._H = (((n = readbyte(HL)) & 0xF) > (A & 0xF)); \
-   flags._Z = !(tmp = (UCHAR)((UCHAR)A - (UCHAR)n)); \
-   flags._S = (tmp & BIT_7); \
+   /* cp_phl inline */ \
+   Z80_H = (((n = readbyte(HL)) & 0xF) > (A & 0xF)); \
+   Z80_Z = !(tmp = (UCHAR)((UCHAR)A - (UCHAR)n)); \
+   Z80_S = (tmp & BIT_7); \
    /* -------------------------- */ \
-   flags._P = --BC != 0; \
+   Z80_P = --BC != 0; \
    HL++; \
-   flags._X = (tmp - flags._H) & (UCHAR)BIT_1; \
-   flags._Y = (tmp - flags._H) & (UCHAR)BIT_3; \
+   Z80_X = (tmp - Z80_H) & (UCHAR)BIT_1; \
+   Z80_Y = (tmp - Z80_H) & (UCHAR)BIT_3; \
    WZ++; \
    Q = 1;
 
    cpi
 }
 
-// flags._C = (n > A);
+// Z80_C = (n > A);
 
 /*=========================================================================*
  *                            cpir                                         *
@@ -302,7 +302,7 @@ void cpi()
 void cpir()
 {
    cpi
-   if(BC && !flags._Z)
+   if(BC && !Z80_Z)
    {
       T(5);
       WZ = PC + 1;
@@ -321,21 +321,21 @@ void cpd()
    LOCAL UCHAR tmp, n; \
    \
    T(16); \
-   flags._N = 1; \
-   flags._H = (((n  = readbyte(HL)) & 0xF) > (A & 0xF)); \
-   flags._Z = !(tmp = (UCHAR)((UCHAR)A - (UCHAR)n)); \
-   flags._S = (tmp & BIT_7); \
-   flags._P = --BC != 0; \
+   Z80_N = 1; \
+   Z80_H = (((n  = readbyte(HL)) & 0xF) > (A & 0xF)); \
+   Z80_Z = !(tmp = (UCHAR)((UCHAR)A - (UCHAR)n)); \
+   Z80_S = (tmp & BIT_7); \
+   Z80_P = --BC != 0; \
    HL--; \
-   flags._X = (tmp - flags._H)  & (UCHAR)BIT_1; \
-   flags._Y = (tmp - flags._H)  & (UCHAR)BIT_3; \
+   Z80_X = (tmp - Z80_H)  & (UCHAR)BIT_1; \
+   Z80_Y = (tmp - Z80_H)  & (UCHAR)BIT_3; \
    WZ--; \
    Q = 1;
 
    cpd
 }
 
-// flags._C = (n > A);
+// Z80_C = (n > A);
 
 /*=========================================================================*
  *                            cpdr                                         *
@@ -343,7 +343,7 @@ void cpd()
 void cpdr()
 {
    cpd
-   if(BC && !flags._Z)
+   if(BC && !Z80_Z)
    {
       T(5);
       WZ = PC + 1;

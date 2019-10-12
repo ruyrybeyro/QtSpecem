@@ -8,6 +8,8 @@
 #include "ivars.h"
 
 #include <stdio.h>
+#include <string.h>
+
 void save_sna(const char * file_name);
 
 /* Increment the lower 7 bits of R in each M1 cycle
@@ -34,8 +36,8 @@ void do_reset()
    HL2 = BC2 = DE2 = AF2 = WZ = WZ2 = 0xFFFF;
 
    /* flags CPU */
-   flags._S = flags._Z = flags._X = flags._H = flags._Y =
-   flags._P = flags._N = flags._C = 0;
+   Z80_S = Z80_Z = Z80_X = Z80_H = Z80_Y =
+   Z80_P = Z80_N = Z80_C = 0;
    /* Interrupt counter */
    ResetTickCounter();
    /* Program Counter */
@@ -52,11 +54,15 @@ void execute()
       till instruction end [but not in instructions prefixed by ED]
      --> 0xED, 0xCB are 'gates' to another sets of instructions
    */
-     while(clock_ticks < INT_TIME)
+     while( (clock_ticks < INT_TIME) && !TraceOn )
 	{
+
+        if (TraceOn < 3)
+        {
 	inc_R();
 	/* Call funtion indexed by opcode */
 	(*instruc_tabl[Getnextbyte()])();
+        }
         
      /*   if (PC > 16383)
                  {
@@ -70,12 +76,15 @@ void execute()
    
   /* do_int_tasks(); */
   /* if interrupts activated */
+  if( clock_ticks >= INT_TIME )
+  {
   if(IFF1)
      {
      do_interrupt();
      }
   else
      ResetTickCounter();
+  }
 }
 
 /*=========================================================================*
@@ -113,7 +122,7 @@ static void execute_CB()
  *=========================================================================*/
 static void execute_IXCB()
 {
-   /*If IX or IY is active, then the next byte isnït
+   /* If IX or IY is active, then the next byte is not
 	 a instruction, but a displacement for IX or IY
    */
    // inc_R(); // ??
@@ -126,7 +135,7 @@ static void execute_IXCB()
  *=========================================================================*/
 static void execute_IYCB()
 {
-   /*If IX or IY is active, then the next byte isnït
+   /* If IX or IY is active, then the next byte is not
 	 a instruction, but a displacement for IX or IY
    */
    // inc_R(); // ??

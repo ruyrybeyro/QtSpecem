@@ -14,13 +14,13 @@
    LOCAL USHORT tmp; \
    \
    T(TS); \
-   flags._N = 0; \
-   flags._C = ( (tmp = (USHORT)(hl + (ss))) < hl ) || ((tmp==hl) && (ss)); \
-   flags._H = (((hl & (USHORT)0xFFF) + ((ss) & (USHORT)0xFFF) ) & (USHORT)0x1000 ) > 0; \
+   Z80_N = 0; \
+   Z80_C = ( (tmp = (USHORT)(hl + (ss))) < hl ) || ((tmp==hl) && (ss)); \
+   Z80_H = (((hl & (USHORT)0xFFF) + ((ss) & (USHORT)0xFFF) ) & (USHORT)0x1000 ) > 0; \
    WZ=hl+1; /* OK */ \
    hl = tmp; \
-   flags._X = hh & (UCHAR)BIT_5; \
-   flags._Y = hh & (UCHAR)BIT_3; \
+   Z80_X = hh & (UCHAR)BIT_5; \
+   Z80_Y = hh & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
@@ -30,12 +30,12 @@ void add_hl_hl() add_hl_ss(HL,HL,H,11);
 /*void add_hl_hl()
 {
    T(11);
-   flags._H = ((HL & (USHORT)0xFFF) > (USHORT)0x7FF) > 0;
-   flags._N = 0;
-   flags._C = (HL > (USHORT)0x7FFF);
+   Z80_H = ((HL & (USHORT)0xFFF) > (USHORT)0x7FF) > 0;
+   Z80_N = 0;
+   Z80_C = (HL > (USHORT)0x7FFF);
    HL += HL;
-   flags._X = H & (UCHAR)BIT_5;
-   flags._Y = H & (UCHAR)BIT_3;
+   Z80_X = H & (UCHAR)BIT_5;
+   Z80_Y = H & (UCHAR)BIT_3;
 } */
 
 void add_hl_sp() add_hl_ss(HL,SP,H,11);
@@ -60,17 +60,17 @@ void add_iy_sp() add_hl_ss(IY,SP,HY,15);
 	LOCAL USHORT tmp; \
 	\
 	T(15); \
-	flags._N = 0; \
-	flags._C = ( (tmp = (USHORT)(HL + (ss) + (USHORT) \
-		 (flags._C != 0 ))) < HL ) || ((tmp==HL) && (ss)); \
-	flags._P = ( ((H & BIT_7) == ((r) & BIT_7)) && ((HL ^ tmp) \
+	Z80_N = 0; \
+	Z80_C = ( (tmp = (USHORT)(HL + (ss) + (USHORT) \
+		 (Z80_C != 0 ))) < HL ) || ((tmp==HL) && (ss)); \
+	Z80_P = ( ((H & BIT_7) == ((r) & BIT_7)) && ((HL ^ tmp) \
 				& (USHORT)0x8000) ); \
-    flags._H = (((HL & (USHORT)0xFFF) + ((ss) & (USHORT)0xFFF)  + (flags._C != 0)  ) & (USHORT)0x1000 ) > 0; \
+    Z80_H = (((HL & (USHORT)0xFFF) + ((ss) & (USHORT)0xFFF)  + (Z80_C != 0)  ) & (USHORT)0x1000 ) > 0; \
     WZ = HL+1; /* OK */ \
-	flags._Z = !(HL = tmp); \
-	flags._S = (H & BIT_7); \
-	flags._X = H & (UCHAR)BIT_5; \
-	flags._Y = H & (UCHAR)BIT_3; \
+	Z80_Z = !(HL = tmp); \
+	Z80_S = (H & BIT_7); \
+	Z80_X = H & (UCHAR)BIT_5; \
+	Z80_Y = H & (UCHAR)BIT_3; \
     Q = 1; \
 }
 
@@ -86,15 +86,15 @@ void adc_hl_hl()
 	LOCAL USHORT tmp;
 
 	T(15);
-	flags._H = ((HL & (USHORT)0xFFF) > (USHORT)0x7FF) > 0;
-	flags._N = 0;
-	flags._C = (HL > (USHORT)0x7FFF);
-	flags._P = ( (HL ^ tmp) & (USHORT)0x8000);
+	Z80_H = ((HL & (USHORT)0xFFF) > (USHORT)0x7FF) > 0;
+	Z80_N = 0;
+	Z80_C = (HL > (USHORT)0x7FFF);
+	Z80_P = ( (HL ^ tmp) & (USHORT)0x8000);
     WZ = HL +1;
-	flags._Z = !(HL += HL + (flags._C != 0));
-	flags._S = (H & BIT_7);
-	flags._X = H & (UCHAR)BIT_5;
-	flags._Y = H & (UCHAR)BIT_3;
+	Z80_Z = !(HL += HL + (Z80_C != 0));
+	Z80_S = (H & BIT_7);
+	Z80_X = H & (UCHAR)BIT_5;
+	Z80_Y = H & (UCHAR)BIT_3;
 }
 */
 void adc_hl_sp() adc_hl_ss(SP, SP >> 8);
@@ -109,21 +109,21 @@ void adc_hl_sp() adc_hl_ss(SP, SP >> 8);
 	 LOCAL USHORT tmp; \
 	 \
 	 T(15); \
-     flags._H = ((((ss)+(flags._C!=0)) & (USHORT)0xFFF) > (HL & (USHORT)0xFFF) ); \
-	 flags._N = 1; \
-	 flags._Z = !(tmp = (USHORT)(HL - (ss) - \
-			(USHORT)(flags._C != 0)) ); \
-	 flags._C = ((ss) > HL)||(tmp>HL); \
-	 flags._P = ( ((H & BIT_7) != ((r) & BIT_7)) && ((HL ^ tmp) \
+     Z80_H = ((((ss)+(Z80_C!=0)) & (USHORT)0xFFF) > (HL & (USHORT)0xFFF) ); \
+	 Z80_N = 1; \
+	 Z80_Z = !(tmp = (USHORT)(HL - (ss) - \
+			(USHORT)(Z80_C != 0)) ); \
+	 Z80_C = ((ss) > HL)||(tmp>HL); \
+	 Z80_P = ( ((H & BIT_7) != ((r) & BIT_7)) && ((HL ^ tmp) \
 				& (USHORT)0x8000) ); \
      WZ = HL +1; /* OK */ \
-	 flags._S = ((HL = tmp) & (USHORT)0x8000); \
-     flags._X = H & (UCHAR)BIT_5; \
-	 flags._Y = H & (UCHAR)BIT_3; \
+	 Z80_S = ((HL = tmp) & (USHORT)0x8000); \
+     Z80_X = H & (UCHAR)BIT_5; \
+	 Z80_Y = H & (UCHAR)BIT_3; \
      Q = 1; \
 }
 
-// flags._H = (((HL & (USHORT)0xFFF) - ((ss) & (USHORT)0xFFF)  - (flags._C != 0)  ) & (USHORT)0x1000 ) > 0; 
+// Z80_H = (((HL & (USHORT)0xFFF) - ((ss) & (USHORT)0xFFF)  - (Z80_C != 0)  ) & (USHORT)0x1000 ) > 0; 
 
 /**** SBC overflow: -+ = + ou +- = - */
 
@@ -136,10 +136,10 @@ void sbc_hl_hl()
 	 LOCAL USHORT tmp;
 
 	 T(15);
-	 flags._N = 1;
-	 flags._Z = !(flags._S = flags._X = flags._Y =
-			 HL = (flags._C ? (USHORT)0xffff:(USHORT)0));
-	 flags._P = flags._C = flags._H = 0;
+	 Z80_N = 1;
+	 Z80_Z = !(Z80_S = Z80_X = Z80_Y =
+			 HL = (Z80_C ? (USHORT)0xffff:(USHORT)0));
+	 Z80_P = Z80_C = Z80_H = 0;
 	 HL = tmp;
 }
 */

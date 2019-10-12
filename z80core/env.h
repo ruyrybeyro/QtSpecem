@@ -37,17 +37,17 @@ extern unsigned char FlashState;       /* Are colours inverted or normal?   */
 
 
 /* Main registers        */
-extern union Z80Regs  Z80Regs;
+extern union Z80Regs  * Z80Regs;
 
 /* Alternative registers */
-extern union Z80Regs  Z80Regs2;
+extern union Z80Regs  * Z80Regs2;
 
-extern struct Z80vars Z80vars;
+extern struct Z80vars * Z80vars;
 
-extern union Z80IX Z80IX;
-extern union Z80IY Z80IY;
+extern union Z80IX * Z80IX;
+extern union Z80IY * Z80IY;
 
-extern struct CPU_flags  flags;
+extern struct CPU_flags  * flags;
 
 /* Used in DDCB or FDCB to keep shift of IX or IY
  */
@@ -56,6 +56,8 @@ extern UCHAR lastbyte;
 /* 64k Mem
  */
 extern UCHAR * mem;
+
+extern UCHAR * vars;
 
 /* 'flag' WriteRom :
  *  0 : 16k of ROM, 48k of RAM
@@ -105,16 +107,16 @@ extern USHORT parity_table[256];
 
 /* build F from interpreter flags when needed
  */
-#define build_F() F = (UCHAR)((flags._C != 0) | ((flags._N != 0) << 1) | \
-((flags._P != 0) << 2) | ((flags._Y != 0) << 3)| ((flags._H != 0) << 4) | \
-((flags._X != 0) << 5) | ((flags._Z != 0) << 6) | ((flags._S != 0) << 7));
+#define build_F() F = (UCHAR)((Z80_C != 0) | ((Z80_N != 0) << 1) | \
+((Z80_P != 0) << 2) | ((Z80_Y != 0) << 3)| ((Z80_H != 0) << 4) | \
+((Z80_X != 0) << 5) | ((Z80_Z != 0) << 6) | ((Z80_S != 0) << 7));
 
 /* build interpreter flags from F
  */
-#define read_F() flags._S=F & (UCHAR)BIT_7, flags._Z=F & (UCHAR)BIT_6, \
-flags._X=F & (UCHAR)BIT_5, flags._H=F & (UCHAR)BIT_4, flags._Y=F & \
-(UCHAR)BIT_3, flags._P=F & (UCHAR)BIT_2, flags._N = F & (UCHAR)BIT_1, \
-flags._C =F & (UCHAR)BIT_0;
+#define read_F() Z80_S=F & (UCHAR)BIT_7, Z80_Z=F & (UCHAR)BIT_6, \
+Z80_X=F & (UCHAR)BIT_5, Z80_H=F & (UCHAR)BIT_4, Z80_Y=F & \
+(UCHAR)BIT_3, Z80_P=F & (UCHAR)BIT_2, Z80_N = F & (UCHAR)BIT_1, \
+Z80_C =F & (UCHAR)BIT_0;
 
 
 

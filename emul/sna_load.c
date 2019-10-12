@@ -1192,7 +1192,7 @@ static int tap_load(FILE * hfp)
    }
    else        
    {
-      flags._Z = 0;
+      Z80_Z = 0;
       ret();
    }
 

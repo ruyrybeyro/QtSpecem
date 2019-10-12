@@ -17,43 +17,43 @@ void daa()
     
    T(4);
     
-   if(flags._H || (((A & (UCHAR)0xF) > (UCHAR)9) ))
+   if(Z80_H || (((A & (UCHAR)0xF) > (UCHAR)9) ))
          t++;
     
-   if(flags._C || ((UCHAR)A) > (UCHAR)0x99)
+   if(Z80_C || ((UCHAR)A) > (UCHAR)0x99)
    {
             t += 2;
-            flags._C = 1;
+            Z80_C = 1;
    }
     
-    if ( flags._N && !flags._H )
-      flags._H=0;
+    if ( Z80_N && !Z80_H )
+      Z80_H=0;
     else
     {
-       if ( flags._N && flags._H )
-          flags._H = (((UCHAR)(A & 0x0F)) < 6);
+       if ( Z80_N && Z80_H )
+          Z80_H = (((UCHAR)(A & 0x0F)) < 6);
       else
-           flags._H = (((UCHAR)(A & 0x0F)) >= 0x0A);
+           Z80_H = (((UCHAR)(A & 0x0F)) >= 0x0A);
     }
     
     switch(t)
     {
         case 1:
-            A += (flags._N)?(UCHAR)0xFA:(UCHAR)6; // -6:6
+            A += (Z80_N)?(UCHAR)0xFA:(UCHAR)6; // -6:6
             break;
         case 2:
-            A += (flags._N)?(UCHAR)0xA0:(UCHAR)0x60; // -0x60:0x60
+            A += (Z80_N)?(UCHAR)0xA0:(UCHAR)0x60; // -0x60:0x60
             break;
         case 3:
-            A += (flags._N)?(UCHAR)0x9A:(UCHAR)0x66; // -0x66:0x66
+            A += (Z80_N)?(UCHAR)0x9A:(UCHAR)0x66; // -0x66:0x66
             break;
     }
     
-   flags._S = ( A & (UCHAR)BIT_7);
-   flags._Z = !A;
-   flags._P = parity(A);
-   flags._X = A & (UCHAR)BIT_5;
-   flags._Y = A & (UCHAR)BIT_3;
+   Z80_S = ( A & (UCHAR)BIT_7);
+   Z80_Z = !A;
+   Z80_P = parity(A);
+   Z80_X = A & (UCHAR)BIT_5;
+   Z80_Y = A & (UCHAR)BIT_3;
    Q = 1;
 }
 
@@ -64,9 +64,9 @@ void cpl()
 {
    T(4);
    A = (UCHAR)~A;
-   flags._H = flags._N = 1;
-   flags._X = A & (UCHAR)BIT_5;
-   flags._Y = A & (UCHAR)BIT_3;
+   Z80_H = Z80_N = 1;
+   Z80_X = A & (UCHAR)BIT_5;
+   Z80_Y = A & (UCHAR)BIT_3;
    Q = 1;
 }
 
@@ -76,14 +76,14 @@ void cpl()
 void neg()
 {
    T(8);
-   flags._S = ((A =(UCHAR)(~A + 1)) & (UCHAR)BIT_7);
-   flags._P = (A == (UCHAR)BIT_7);
-   flags._H = A & 0x0F;
-   flags._C = A;
-   flags._Z = !A;
-   flags._N = 1;
-   flags._X = A & (UCHAR)BIT_5;
-   flags._Y = A & (UCHAR)BIT_3;
+   Z80_S = ((A =(UCHAR)(~A + 1)) & (UCHAR)BIT_7);
+   Z80_P = (A == (UCHAR)BIT_7);
+   Z80_H = A & 0x0F;
+   Z80_C = A;
+   Z80_Z = !A;
+   Z80_N = 1;
+   Z80_X = A & (UCHAR)BIT_5;
+   Z80_Y = A & (UCHAR)BIT_3;
    Q = 1;
 }
 
@@ -93,17 +93,17 @@ void neg()
 void ccf()
 {
    T(4);
-   flags._C = !(flags._H = flags._C);
-   flags._N = 0;
+   Z80_C = !(Z80_H = Z80_C);
+   Z80_N = 0;
    if (Q)
    {
-   flags._X = (A & (UCHAR)BIT_5) > 0;
-   flags._Y = (A & (UCHAR)BIT_3) > 0;
+   Z80_X = (A & (UCHAR)BIT_5) > 0;
+   Z80_Y = (A & (UCHAR)BIT_3) > 0;
    }
    else
    {
-   flags._X = flags._X || (A & (UCHAR)BIT_5);
-   flags._Y = flags._Y || (A & (UCHAR)BIT_3);
+   Z80_X = Z80_X || (A & (UCHAR)BIT_5);
+   Z80_Y = Z80_Y || (A & (UCHAR)BIT_3);
    }
    Q = 1;
 }
@@ -114,17 +114,17 @@ void ccf()
 void scf()
 {
    T(4);
-   flags._C = 1;
-   flags._H = flags._N = 0;
+   Z80_C = 1;
+   Z80_H = Z80_N = 0;
    if (Q)
    {
-   flags._X = (A & (UCHAR)BIT_5) > 0;
-   flags._Y = (A & (UCHAR)BIT_3) > 0;
+   Z80_X = (A & (UCHAR)BIT_5) > 0;
+   Z80_Y = (A & (UCHAR)BIT_3) > 0;
    }
    else
    {
-   flags._X = flags._X || (A & (UCHAR)BIT_5);
-   flags._Y = flags._Y || (A & (UCHAR)BIT_3);
+   Z80_X = Z80_X || (A & (UCHAR)BIT_5);
+   Z80_Y = Z80_Y || (A & (UCHAR)BIT_3);
    }
    Q = 1;
 }

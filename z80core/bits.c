@@ -13,12 +13,12 @@
 #define bit_b_r(R, BIT,TS)  {\
    LOCAL UCHAR tmp; \
    T(TS); \
-   flags._Z = flags._P = !(tmp =((R) & (UCHAR)(BIT))); \
-   flags._H = 1; \
-   flags._N = 0; \
-   flags._S = BIT_7 & tmp; \
-   flags._X = BIT_5 & R; \
-   flags._Y = BIT_3 & R; \
+   Z80_Z = Z80_P = !(tmp =((R) & (UCHAR)(BIT))); \
+   Z80_H = 1; \
+   Z80_N = 0; \
+   Z80_S = BIT_7 & tmp; \
+   Z80_X = BIT_5 & R; \
+   Z80_Y = BIT_3 & R; \
    Q = 1; \
 }
 
@@ -121,13 +121,13 @@ void bit_0_a() bit_b_r(A, BIT_0, 8);
 	LOCAL UCHAR tmp; \
 	\
 	T(TS); \
-	flags._Z = flags._P = !(tmp = ((readbyte(expr)) \
+	Z80_Z = Z80_P = !(tmp = ((readbyte(expr)) \
 	    & (UCHAR)(BIT))); \
-	flags._H = 1; \
-	flags._N = 0; \
-    flags._S = BIT_7 & tmp; \
-	flags._X = (BIT_5 & W) > 0; \
-	flags._Y = (BIT_3 & W) > 0; \
+	Z80_H = 1; \
+	Z80_N = 0; \
+    Z80_S = BIT_7 & tmp; \
+	Z80_X = (BIT_5 & W) > 0; \
+	Z80_Y = (BIT_3 & W) > 0; \
     Q = 1; \
 }
 
@@ -146,13 +146,13 @@ void bit_0_phl() bit_b_phl(BIT_0, HL, 12);
     LOCAL USHORT tmp2; \
     \
     T(TS); \
-    flags._Z = flags._P = !(tmp = ((readbyte(tmp2 = expr)) \
+    Z80_Z = Z80_P = !(tmp = ((readbyte(tmp2 = expr)) \
         & (UCHAR)(BIT))); \
-    flags._H = 1; \
-    flags._N = 0; \
-    flags._S = BIT_7 & tmp; \
-    flags._X = BIT_13 & tmp2; \
-    flags._Y = BIT_11 & tmp2; \
+    Z80_H = 1; \
+    Z80_N = 0; \
+    Z80_S = BIT_7 & tmp; \
+    Z80_X = BIT_13 & tmp2; \
+    Z80_Y = BIT_11 & tmp2; \
     Q = 1; \
 }
 

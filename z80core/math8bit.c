@@ -14,20 +14,20 @@
    LOCAL UCHAR tmp; \
    \
    T(TS); \
-   flags._N = 0; \
+   Z80_N = 0; \
    tmp = (UCHAR)(A + (r)); \
-   flags._C = (A + (unsigned int)(r)) >= 0x100; \
-   flags._H = ( ((A & (UCHAR)0xF) + ((r) & (UCHAR)0xF) ) > (UCHAR)0xF ); \
-   flags._P = (~A^(r)) & (UCHAR)BIT_7 & (tmp^A); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._Z = !A; \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_C = (A + (unsigned int)(r)) >= 0x100; \
+   Z80_H = ( ((A & (UCHAR)0xF) + ((r) & (UCHAR)0xF) ) > (UCHAR)0xF ); \
+   Z80_P = (~A^(r)) & (UCHAR)BIT_7 & (tmp^A); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_Z = !A; \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q=1; \
 }
 
-// flags._H = ((tmp & (UCHAR)0x0f) < (A & (UCHAR)0x0f));
-// flags._P = (((A ^ ~(r)) & (A ^ tmp)) > (UCHAR)0x7f);
+// Z80_H = ((tmp & (UCHAR)0x0f) < (A & (UCHAR)0x0f));
+// Z80_P = (((A ^ ~(r)) & (A ^ tmp)) > (UCHAR)0x7f);
 
 void add_a_b()  add_a_r(B, 4);
 void add_a_c()  add_a_r(C, 4);
@@ -52,20 +52,20 @@ void add_a_a()  add_a_r(A, 4);
    \
    T(TS); \
    n = ss; \
-   flags._N = 0; \
+   Z80_N = 0; \
    tmp = (UCHAR)(A + (UCHAR)n); \
-   flags._C = (A + (unsigned int)n) >= 0x100; \
-   flags._H = ( ((A & (UCHAR)0xF) + (n & (UCHAR)0xF) ) > (UCHAR)0xF ); \
-   flags._P = (~A^n) & (UCHAR)BIT_7 & (tmp^A); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._Z = !A; \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_C = (A + (unsigned int)n) >= 0x100; \
+   Z80_H = ( ((A & (UCHAR)0xF) + (n & (UCHAR)0xF) ) > (UCHAR)0xF ); \
+   Z80_P = (~A^n) & (UCHAR)BIT_7 & (tmp^A); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_Z = !A; \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
-// flags._P = ((A ^ ~(n) & (A ^ tmp)) > (UCHAR)0x7f);
-// flags._H = ((tmp & (UCHAR)0x0f) < (A & (UCHAR)0x0f));
+// Z80_P = ((A ^ ~(n) & (A ^ tmp)) > (UCHAR)0x7f);
+// Z80_H = ((tmp & (UCHAR)0x0f) < (A & (UCHAR)0x0f));
 
 void add_a_n() add_a_pss(Getnextbyte(), 7);
 
@@ -86,21 +86,21 @@ void add_a_piy() add_a_pss(readbyte(pIY), 19);
    LOCAL UCHAR tmp; \
    \
    T(TS); \
-   flags._N = 0; \
-   tmp = (UCHAR)(A + (r) + (UCHAR)(flags._C != 0)); \
-   flags._C = ((unsigned int)A + (unsigned int)(r) + (unsigned int)(flags._C != 0) ) >= 0x100; \
-   flags._H = (((A ^ r ^ tmp) & 0x10) != 0); \
-   flags._P = (((A ^ ~(r)) & (A ^ tmp)) > (UCHAR)0x7f); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._Z = !A; \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_N = 0; \
+   tmp = (UCHAR)(A + (r) + (UCHAR)(Z80_C != 0)); \
+   Z80_C = ((unsigned int)A + (unsigned int)(r) + (unsigned int)(Z80_C != 0) ) >= 0x100; \
+   Z80_H = (((A ^ r ^ tmp) & 0x10) != 0); \
+   Z80_P = (((A ^ ~(r)) & (A ^ tmp)) > (UCHAR)0x7f); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_Z = !A; \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
-// flags._H = (((A ^ (r) ^ tmp) & 0x10) != 0);
-// flags._P = (((A ^ ~(r)) & (A ^ tmp)) > 0x7f);
-//// flags._H = ((tmp & (UCHAR)0x0f) <= (A & (UCHAR)0x0f));
+// Z80_H = (((A ^ (r) ^ tmp) & 0x10) != 0);
+// Z80_P = (((A ^ ~(r)) & (A ^ tmp)) > 0x7f);
+//// Z80_H = ((tmp & (UCHAR)0x0f) <= (A & (UCHAR)0x0f));
 
 
 void adc_a_b()  adc_a_r(B,  4);
@@ -125,16 +125,16 @@ void adc_a_a()  adc_a_r(A,  4);
    LOCAL UCHAR tmp, n; \
    \
    T(TS); \
-   flags._N = 0; \
+   Z80_N = 0; \
    n = ss; \
-   tmp = (UCHAR)(A + n + (UCHAR)(flags._C != 0)); \
-   flags._C = ((unsigned int)A + (unsigned int) n + (unsigned int)(flags._C != 0) ) >= 0x100; \
-   flags._H = (((A ^ n ^ tmp) & 0x10) != 0); \
-   flags._P = (((A ^ ~(n)) & (A ^ tmp)) > 0x7f); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._Z = !A; \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   tmp = (UCHAR)(A + n + (UCHAR)(Z80_C != 0)); \
+   Z80_C = ((unsigned int)A + (unsigned int) n + (unsigned int)(Z80_C != 0) ) >= 0x100; \
+   Z80_H = (((A ^ n ^ tmp) & 0x10) != 0); \
+   Z80_P = (((A ^ ~(n)) & (A ^ tmp)) > 0x7f); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_Z = !A; \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
@@ -157,18 +157,18 @@ void adc_a_piy() adc_a_pss(readbyte(pIY), 19);
    LOCAL UCHAR tmp; \
    \
    T(TS); \
-   flags._N = 1; \
-   flags._Z = !(tmp = (UCHAR)(A - (r))); \
-   flags._H = ((tmp & 0x0f) > (A & 0x0f)); \
-   flags._C = ((signed int)A - (signed int)(r) ) < 0; \
-   flags._P = (A^(r)) & (UCHAR)BIT_7 & (tmp^A); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_N = 1; \
+   Z80_Z = !(tmp = (UCHAR)(A - (r))); \
+   Z80_H = ((tmp & 0x0f) > (A & 0x0f)); \
+   Z80_C = ((signed int)A - (signed int)(r) ) < 0; \
+   Z80_P = (A^(r)) & (UCHAR)BIT_7 & (tmp^A); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
-// flags._C = ((r) > A);
+// Z80_C = ((r) > A);
 
 void sub_b()  sub_r(B,  4);
 void sub_c()  sub_r(C,  4);
@@ -185,8 +185,8 @@ void sub_a()  sub_r(A,  4);
 /* void sub_a()
 {
    T(8);
-   flags._Z = flags._N = 1;
-   A = flags._X = flags._Y = flags._H = flags._C = flags._P = flags._S = 0;
+   Z80_Z = Z80_N = 1;
+   A = Z80_X = Z80_Y = Z80_H = Z80_C = Z80_P = Z80_S = 0;
 } */
 
 #undef sub_r
@@ -199,19 +199,19 @@ void sub_a()  sub_r(A,  4);
    LOCAL UCHAR tmp, n; \
    \
    T(7); \
-   flags._N = 1; \
+   Z80_N = 1; \
    n = ss; \
-   flags._Z = !(tmp = (UCHAR)(A - n)); \
-   flags._H = ((tmp & 0x0f) > (A & 0x0f)); \
-   flags._C = ((signed int)A - (signed int)(n) ) < 0; \
-   flags._P = (A^n) & (UCHAR)BIT_7 & (tmp^A); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_Z = !(tmp = (UCHAR)(A - n)); \
+   Z80_H = ((tmp & 0x0f) > (A & 0x0f)); \
+   Z80_C = ((signed int)A - (signed int)(n) ) < 0; \
+   Z80_P = (A^n) & (UCHAR)BIT_7 & (tmp^A); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
-// flags._C = (n > A);
+// Z80_C = (n > A);
 
 void sub_n() sub_pss(Getnextbyte(), 7);
 
@@ -232,18 +232,18 @@ void sub_piy() sub_pss(readbyte(pIY), 19);
    LOCAL UCHAR tmp; \
    \
    T(TS); \
-   flags._N = 1; \
-   flags._Z = !(tmp = (UCHAR)(A - (r) - (UCHAR)(flags._C != 0))); \
-   flags._H = (((A ^ (r) ^ tmp) & 0x10) != 0); \
-   flags._C = ((signed int)A - (signed int)(r) -  (flags._C != 0) ) < 0; \
-   flags._P = (((A ^ (r)) & (A ^ tmp)) > (UCHAR)0x7f); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_N = 1; \
+   Z80_Z = !(tmp = (UCHAR)(A - (r) - (UCHAR)(Z80_C != 0))); \
+   Z80_H = (((A ^ (r) ^ tmp) & 0x10) != 0); \
+   Z80_C = ((signed int)A - (signed int)(r) -  (Z80_C != 0) ) < 0; \
+   Z80_P = (((A ^ (r)) & (A ^ tmp)) > (UCHAR)0x7f); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
-// flags._C = ((r - (UCHAR)(flags._C != 0)) > A) || (tmp > A);
+// Z80_C = ((r - (UCHAR)(Z80_C != 0)) > A) || (tmp > A);
 
 void sbc_a_b()  sbc_a_r(B,  4);
 void sbc_a_c()  sbc_a_r(C,  4);
@@ -260,9 +260,9 @@ void sbc_a_a()  sbc_a_r(A,  4);
 /* void sbc_a_a()
 {
    T(4);
-   flags._N = 1;
-   flags._P = 0;
-   A = (flags._Z = !(flags._X = flags._Y = flags._H = flags._C) ) ?
+   Z80_N = 1;
+   Z80_P = 0;
+   A = (Z80_Z = !(Z80_X = Z80_Y = Z80_H = Z80_C) ) ?
        0 : (UCHAR)0xFF;
 } */
 
@@ -275,19 +275,19 @@ void sbc_a_a()  sbc_a_r(A,  4);
    LOCAL UCHAR tmp, n; \
    \
    T(TS); \
-   flags._N = 1; \
+   Z80_N = 1; \
    n = ss; \
-   flags._Z = !(tmp = (UCHAR)(A - n - (flags._C != 0))); \
-   flags._H = (((A ^ (n) ^ tmp) & 0x10) != 0); \
-   flags._C = ((signed int)A - (signed int)n -  (flags._C != 0) ) < 0; \
-   flags._P = (((A ^ (n)) & (A ^ tmp)) > (UCHAR)0x7f); \
-   flags._S = ((A = tmp) & (UCHAR)BIT_7); \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_Z = !(tmp = (UCHAR)(A - n - (Z80_C != 0))); \
+   Z80_H = (((A ^ (n) ^ tmp) & 0x10) != 0); \
+   Z80_C = ((signed int)A - (signed int)n -  (Z80_C != 0) ) < 0; \
+   Z80_P = (((A ^ (n)) & (A ^ tmp)) > (UCHAR)0x7f); \
+   Z80_S = ((A = tmp) & (UCHAR)BIT_7); \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
-// flags._C = (n > A)||(tmp>A);
+// Z80_C = (n > A)||(tmp>A);
 
 void sbc_a_n() sbc_a_pss(Getnextbyte(), 7);
 
@@ -306,13 +306,13 @@ void sbc_a_piy() sbc_a_pss(readbyte(pIY), 19);
 
 #define and_r(r, TS) { \
    T(TS); \
-   flags._H = 1; \
-   flags._N = flags._C = 0; \
-   flags._Z = !(A=A & (r)); \
-   flags._P = parity(A); \
-   flags._S = A & (UCHAR)BIT_7; \
-   flags._X = A & (UCHAR)BIT_5; \
-   flags._Y = A & (UCHAR)BIT_3; \
+   Z80_H = 1; \
+   Z80_N = Z80_C = 0; \
+   Z80_Z = !(A=A & (r)); \
+   Z80_P = parity(A); \
+   Z80_S = A & (UCHAR)BIT_7; \
+   Z80_X = A & (UCHAR)BIT_5; \
+   Z80_Y = A & (UCHAR)BIT_3; \
    Q = 1; \
 }
 
@@ -331,13 +331,13 @@ void and_a()  and_r(A,  4);
 /* void and_a()
 {
 	T(4);
-	flags._H = 1;
-	flags._N = flags._C = 0;
-	flags._S = A & (UCHAR)BIT_7;
-	flags._Z = !A;
-	flags._P = parity(A);
-	flags._X = A & (UCHAR)BIT_5;
-	flags._Y = A & (UCHAR)BIT_3;
+	Z80_H = 1;
+	Z80_N = Z80_C = 0;
+	Z80_S = A & (UCHAR)BIT_7;
+	Z80_Z = !A;
+	Z80_P = parity(A);
+	Z80_X = A & (UCHAR)BIT_5;
+	Z80_Y = A & (UCHAR)BIT_3;
 } */
 
 /*=========================================================================*
@@ -360,12 +360,12 @@ void and_piy() and_r(readbyte(pIY), 19);
 
 #define or_r(r,TS) { \
 	T(TS); \
-	flags._N = flags._C = flags._H = 0; \
-	flags._Z = !(A = A | (r)); \
-	flags._P = parity(A); \
-	flags._S = A & (UCHAR)BIT_7; \
-	flags._X = A & (UCHAR)BIT_5; \
-	flags._Y = A & (UCHAR)BIT_3; \
+	Z80_N = Z80_C = Z80_H = 0; \
+	Z80_Z = !(A = A | (r)); \
+	Z80_P = parity(A); \
+	Z80_S = A & (UCHAR)BIT_7; \
+	Z80_X = A & (UCHAR)BIT_5; \
+	Z80_Y = A & (UCHAR)BIT_3; \
         Q = 1; \
 }
 
@@ -385,12 +385,12 @@ void or_a() or_r(A, 4);
 /* void or_a()
 {
 	T(4);
-	flags._N = flags._C = flags._H = 0;
-	flags._S = (A & (UCHAR)BIT_7);
-	flags._Z = !A;
-	flags._P = parity(A);
-	flags._X = A & (UCHAR)BIT_5;
-	flags._Y = (UCHAR)BIT_3;
+	Z80_N = Z80_C = Z80_H = 0;
+	Z80_S = (A & (UCHAR)BIT_7);
+	Z80_Z = !A;
+	Z80_P = parity(A);
+	Z80_X = A & (UCHAR)BIT_5;
+	Z80_Y = (UCHAR)BIT_3;
 } */
 
 /*=========================================================================*
@@ -413,12 +413,12 @@ void or_piy() or_r(readbyte(pIY), 19);
 
 #define xor_r(r, TS) { \
 	T(TS); \
-	flags._N = flags._C = flags._H = 0; \
-	flags._Z = !(A = A ^ (r)); \
-	flags._P = parity(A); \
-	flags._S = A & (UCHAR)BIT_7; \
-	flags._X = A & (UCHAR)BIT_5; \
-	flags._Y = A & (UCHAR)BIT_3; \
+	Z80_N = Z80_C = Z80_H = 0; \
+	Z80_Z = !(A = A ^ (r)); \
+	Z80_P = parity(A); \
+	Z80_S = A & (UCHAR)BIT_7; \
+	Z80_X = A & (UCHAR)BIT_5; \
+	Z80_Y = A & (UCHAR)BIT_3; \
         Q = 1; \
 }
 
@@ -437,8 +437,8 @@ void xor_a() xor_r(A, 4);
 /* void xor_a()
 {
 	T(4);
-	A = flags._X = flags._Y = flags._N = flags._C = flags._H = flags._S = 0;
-	flags._P = flags._Z = 1;
+	A = Z80_X = Z80_Y = Z80_N = Z80_C = Z80_H = Z80_S = 0;
+	Z80_P = Z80_Z = 1;
 } */
 
 /*=========================================================================*
@@ -463,19 +463,19 @@ void xor_piy() xor_r(readbyte(pIY), 19);
 	LOCAL UCHAR tmp; \
 	\
 	T(TS); \
-	flags._N = 1; \
-	flags._Z = !(tmp = (UCHAR)(A - (r)) ); \
-    flags._H = ((tmp & 0x0f) > (A & 0x0f)); \
-	flags._C = ((r) > A); \
-	flags._P = (A^(r)) & (UCHAR)BIT_7 & (tmp^A); \
-	flags._S = (tmp & (UCHAR)BIT_7); \
-	flags._X = (r) & (UCHAR)BIT_5; \
-	flags._Y = (r) & (UCHAR)BIT_3; \
+	Z80_N = 1; \
+	Z80_Z = !(tmp = (UCHAR)(A - (r)) ); \
+    Z80_H = ((tmp & 0x0f) > (A & 0x0f)); \
+	Z80_C = ((r) > A); \
+	Z80_P = (A^(r)) & (UCHAR)BIT_7 & (tmp^A); \
+	Z80_S = (tmp & (UCHAR)BIT_7); \
+	Z80_X = (r) & (UCHAR)BIT_5; \
+	Z80_Y = (r) & (UCHAR)BIT_3; \
         Q = 1; \
 }
 
-// flags._Z = !(tmp = (UCHAR)(A - (r)) - (flags._H != 0));
-// flags._H = ((r) & (UCHAR)0xF) > (A & (UCHAR)0xF);
+// Z80_Z = !(tmp = (UCHAR)(A - (r)) - (Z80_H != 0));
+// Z80_H = ((r) & (UCHAR)0xF) > (A & (UCHAR)0xF);
 
 void cp_b()  cp_r(B, 4);
 void cp_c()  cp_r(C, 4);
@@ -492,8 +492,8 @@ void cp_a()  cp_r(A, 4);
 /* void cp_a()
 {
 	T(4);
-	flags._Z = flags._N = 1;
-	flags._X = flags._Y = flags._H = flags._C = flags._P = flags._S = 0;
+	Z80_Z = Z80_N = 1;
+	Z80_X = Z80_Y = Z80_H = Z80_C = Z80_P = Z80_S = 0;
 } */
 
 #undef cp_r
@@ -506,20 +506,20 @@ void cp_a()  cp_r(A, 4);
 	LOCAL UCHAR tmp, n; \
 	\
 	T(TS); \
-	flags._N = 1; \
-    flags._H = ((n = (ss)) & (UCHAR)0xF) > (A & (UCHAR)0xF); \
-	flags._Z = !(tmp = (UCHAR)(A - n )); \
-	flags._C = (n > A); \
-	flags._P = (A^(n)) & (UCHAR)BIT_7 & (tmp^A); \
-	flags._S = (tmp & (UCHAR)BIT_7); \
-	flags._X = n & (UCHAR)BIT_5; \
-	flags._Y = n & (UCHAR)BIT_3; \
+	Z80_N = 1; \
+    Z80_H = ((n = (ss)) & (UCHAR)0xF) > (A & (UCHAR)0xF); \
+	Z80_Z = !(tmp = (UCHAR)(A - n )); \
+	Z80_C = (n > A); \
+	Z80_P = (A^(n)) & (UCHAR)BIT_7 & (tmp^A); \
+	Z80_S = (tmp & (UCHAR)BIT_7); \
+	Z80_X = n & (UCHAR)BIT_5; \
+	Z80_Y = n & (UCHAR)BIT_3; \
         Q = 1; \
 }
 
-// flags._Z = !(tmp = (UCHAR)(A - n - (flags._H != 0)));
+// Z80_Z = !(tmp = (UCHAR)(A - n - (Z80_H != 0)));
 
-// flags._H = (((n = (ss)) & (UCHAR)0xF) > (A & (UCHAR)0xF) );
+// Z80_H = (((n = (ss)) & (UCHAR)0xF) > (A & (UCHAR)0xF) );
 
 void cp_n() cp_pss(Getnextbyte(), 7);
 
@@ -538,17 +538,17 @@ void cp_piy() cp_pss(readbyte(pIY), 19);
 
 #define inc_r(r, TS) { \
 	T(TS); \
-	flags._P = ((r) == 0x7F); \
-	flags._N = 0; \
-    flags._H = ((r) & (UCHAR)0x0F) == 0x0F; \
-	flags._S = (++(r) & (UCHAR)BIT_7); \
-	flags._Z = !(r); \
-    flags._X = (r) & (UCHAR)BIT_5; \
-    flags._Y = (r) & (UCHAR)BIT_3; \
+	Z80_P = ((r) == 0x7F); \
+	Z80_N = 0; \
+    Z80_H = ((r) & (UCHAR)0x0F) == 0x0F; \
+	Z80_S = (++(r) & (UCHAR)BIT_7); \
+	Z80_Z = !(r); \
+    Z80_X = (r) & (UCHAR)BIT_5; \
+    Z80_Y = (r) & (UCHAR)BIT_3; \
     Q = 1; \
 }
 
-// flags._P = ((r) == 0xFF);
+// Z80_P = ((r) == 0xFF);
 
 void inc_b() inc_r(B, 4);
 void inc_c() inc_r(C, 4);
@@ -573,14 +573,14 @@ void inc_a() inc_r(A, 4);
 	LOCAL USHORT tmp; \
 	\
 	T(TS); \
-	flags._P = ((n = readbyte(tmp = (ss))) == 0x7F); \
-	flags._N = 0; \
-        flags._H = ((n) & (UCHAR)0x0F) == 0x0F; \
-	flags._S = (++n & (UCHAR)BIT_7); \
+	Z80_P = ((n = readbyte(tmp = (ss))) == 0x7F); \
+	Z80_N = 0; \
+        Z80_H = ((n) & (UCHAR)0x0F) == 0x0F; \
+	Z80_S = (++n & (UCHAR)BIT_7); \
 	writebyte(tmp, n); \
-	flags._Z = !n; \
-	flags._X = n & (UCHAR)BIT_5; \
-	flags._Y = n & (UCHAR)BIT_3; \
+	Z80_Z = !n; \
+	Z80_X = n & (UCHAR)BIT_5; \
+	Z80_Y = n & (UCHAR)BIT_3; \
         Q = 1; \
 }
 
@@ -596,17 +596,17 @@ void inc_piy() inc_pss(pIY, 23);
 
 #define dec_r(r,TS) { \
 	T(TS); \
-	flags._P = ((r) == (UCHAR)BIT_7); \
-	flags._N = 1; \
-    flags._H = ((r) & (UCHAR)0x0F) == 0x00; \
-	flags._S = ((--(r)) & (UCHAR)BIT_7); \
-	flags._Z = !(r); \
-	flags._X = (r) & (UCHAR)BIT_5; \
-	flags._Y = (r) & (UCHAR)BIT_3; \
+	Z80_P = ((r) == (UCHAR)BIT_7); \
+	Z80_N = 1; \
+    Z80_H = ((r) & (UCHAR)0x0F) == 0x00; \
+	Z80_S = ((--(r)) & (UCHAR)BIT_7); \
+	Z80_Z = !(r); \
+	Z80_X = (r) & (UCHAR)BIT_5; \
+	Z80_Y = (r) & (UCHAR)BIT_3; \
         Q = 1; \
 }
 
-// flags._P = ((r) == (UCHAR)0);
+// Z80_P = ((r) == (UCHAR)0);
 
 
 void dec_b() dec_r(B,4);
@@ -633,14 +633,14 @@ void dec_a() dec_r(A,4);
 		  \
 	T(TS);    \
     n = readbyte(tmp = (ss)); \
-	flags._P = (n == (UCHAR)BIT_7); \
-	flags._N = 1; \
-    flags._H = ((n) & (UCHAR)0x0F) == 0x00; \
-	flags._S = ((--n) & (UCHAR)BIT_7); \
+	Z80_P = (n == (UCHAR)BIT_7); \
+	Z80_N = 1; \
+    Z80_H = ((n) & (UCHAR)0x0F) == 0x00; \
+	Z80_S = ((--n) & (UCHAR)BIT_7); \
 	writebyte(tmp, n); \
-	flags._Z = !n;     \
-	flags._X = n & (UCHAR)BIT_5; \
-	flags._Y = n & (UCHAR)BIT_3;  \
+	Z80_Z = !n;     \
+	Z80_X = n & (UCHAR)BIT_5; \
+	Z80_Y = n & (UCHAR)BIT_3;  \
         Q = 1; \
 }
 

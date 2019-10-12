@@ -16,9 +16,9 @@ void build_F()
 {
    /* defined as macro in z80.h */
    /* Build F from interpreter flags only we need them */
-   F = (flags._C != 0) | ((flags._N != 0) << 1) | ((flags._P != 0) << 2) |
-   ((flags._Y != 0) << 3) | ((flags._H != 0) << 4) | ((flags._X != 0) << 5) |
-   ((flags._Z != 0) << 6) | ((flags._S != 0) << 7);
+   F = (Z80_C != 0) | ((Z80_N != 0) << 1) | ((Z80_P != 0) << 2) |
+   ((Z80_Y != 0) << 3) | ((Z80_H != 0) << 4) | ((Z80_X != 0) << 5) |
+   ((Z80_Z != 0) << 6) | ((Z80_S != 0) << 7);
 }
 
 /*=========================================================================*
@@ -28,14 +28,14 @@ void read_F()
 {
    /* defined as macro in z80.h */
    /* Build interpreter flags with F */
-   flags._S = (F & (UCHAR)BIT_7);
-   flags._Z = (F & (UCHAR)BIT_6);
-   flags._X = (F & (UCHAR)BIT_5);
-   flags._H = (F & (UCHAR)BIT_4);
-   flags._Y = (F & (UCHAR)BIT_3);
-   flags._P = (F & (UCHAR)BIT_2);
-   flags._N = (F & (UCHAR)BIT_1);
-   flags._C = (F & (UCHAR)BIT_0);
+   Z80_S = (F & (UCHAR)BIT_7);
+   Z80_Z = (F & (UCHAR)BIT_6);
+   Z80_X = (F & (UCHAR)BIT_5);
+   Z80_H = (F & (UCHAR)BIT_4);
+   Z80_Y = (F & (UCHAR)BIT_3);
+   Z80_P = (F & (UCHAR)BIT_2);
+   Z80_N = (F & (UCHAR)BIT_1);
+   Z80_C = (F & (UCHAR)BIT_0);
 }
 
 /* EOF: Flags.c */

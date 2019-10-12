@@ -33,14 +33,14 @@ void jp_nn()
 }
 
 
-void jp_nz_nn() jp_cc_nn(!flags._Z);
-void jp_z_nn()  jp_cc_nn(flags._Z);
-void jp_nc_nn() jp_cc_nn(!flags._C);
-void jp_c_nn()  jp_cc_nn(flags._C);
-void jp_po_nn() jp_cc_nn(!flags._P);
-void jp_pe_nn() jp_cc_nn(flags._P);
-void jp_p_nn()  jp_cc_nn(!flags._S);
-void jp_m_nn()  jp_cc_nn(flags._S);
+void jp_nz_nn() jp_cc_nn(!Z80_Z);
+void jp_z_nn()  jp_cc_nn(Z80_Z);
+void jp_nc_nn() jp_cc_nn(!Z80_C);
+void jp_c_nn()  jp_cc_nn(Z80_C);
+void jp_po_nn() jp_cc_nn(!Z80_P);
+void jp_pe_nn() jp_cc_nn(Z80_P);
+void jp_p_nn()  jp_cc_nn(!Z80_S);
+void jp_m_nn()  jp_cc_nn(Z80_S);
 
 #undef jp_cc_nn
 #undef jp_nn
@@ -75,10 +75,10 @@ void jr_e()
 }
 
 
-void jr_c_e()  jr_cc_e(flags._C);
-void jr_nc_e() jr_cc_e(!flags._C);
-void jr_z_e()  jr_cc_e(flags._Z);
-void jr_nz_e() jr_cc_e(!flags._Z);
+void jr_c_e()  jr_cc_e(Z80_C);
+void jr_nc_e() jr_cc_e(!Z80_C);
+void jr_z_e()  jr_cc_e(Z80_Z);
+void jr_nz_e() jr_cc_e(!Z80_Z);
 
 #undef jr_cc_e
 

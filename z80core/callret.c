@@ -35,14 +35,14 @@ void call_nn()
 
 //     PC += 2; 
 
-void call_nz_nn() call_cc_nn(!flags._Z);
-void call_z_nn() call_cc_nn(flags._Z);
-void call_nc_nn() call_cc_nn(!flags._C);
-void call_c_nn() call_cc_nn(flags._C);
-void call_po_nn() call_cc_nn(!flags._P);
-void call_pe_nn() call_cc_nn(flags._P);
-void call_p_nn() call_cc_nn(!flags._S);
-void call_m_nn() call_cc_nn(flags._S);
+void call_nz_nn() call_cc_nn(!Z80_Z);
+void call_z_nn() call_cc_nn(Z80_Z);
+void call_nc_nn() call_cc_nn(!Z80_C);
+void call_c_nn() call_cc_nn(Z80_C);
+void call_po_nn() call_cc_nn(!Z80_P);
+void call_pe_nn() call_cc_nn(Z80_P);
+void call_p_nn() call_cc_nn(!Z80_S);
+void call_m_nn() call_cc_nn(Z80_S);
 
 #undef call_cc_nn
 #undef call_nn
@@ -75,14 +75,14 @@ void ret()
 }
 
 
-void ret_nz() ret_cc(!flags._Z);
-void ret_z() ret_cc(flags._Z);
-void ret_nc() ret_cc(!flags._C);
-void ret_c() ret_cc(flags._C);
-void ret_po() ret_cc(!flags._P);
-void ret_pe() ret_cc(flags._P);
-void ret_p() ret_cc(!flags._S);
-void ret_m() ret_cc(flags._S);
+void ret_nz() ret_cc(!Z80_Z);
+void ret_z() ret_cc(Z80_Z);
+void ret_nc() ret_cc(!Z80_C);
+void ret_c() ret_cc(Z80_C);
+void ret_po() ret_cc(!Z80_P);
+void ret_pe() ret_cc(Z80_P);
+void ret_p() ret_cc(!Z80_S);
+void ret_m() ret_cc(Z80_S);
 
 #undef ret_cc
 

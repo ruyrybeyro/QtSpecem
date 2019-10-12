@@ -284,15 +284,15 @@ void ld_a_i()
 {
 	T(9);
 	A = I;
-	flags._P = IFF2;
+	Z80_P = IFF2;
 	/* IFF2 got IFF1 copy, so this instruction can be used in Z80 programming
 	  to know the former state of interrupts in the middle of a NMI interrupt
 	*/
-	flags._S = (A & BIT_7);
-	flags._Z = !A;
-	flags._H = flags._N = 0;
-	flags._X = A & (UCHAR)BIT_5;
-	flags._Y = A & (UCHAR)BIT_3;
+	Z80_S = (A & BIT_7);
+	Z80_Z = !A;
+	Z80_H = Z80_N = 0;
+	Z80_X = A & (UCHAR)BIT_5;
+	Z80_Y = A & (UCHAR)BIT_3;
         Q = 1;
 }
 
@@ -303,16 +303,16 @@ void ld_a_r()
 {
 	T(9);
 	A = ((R-1) & ~BIT_7) | R_BIT7;
-	flags._P = IFF2;
+	Z80_P = IFF2;
 	/* IFF2 got IFF1 copy, so this instruction can be used in Z80 programming
 	  to know the former state of interrupts in the middle of a NMI interrupt
 	*/
-	flags._S = (A & BIT_7);
-	flags._Z = !A;
-	//flags._S = flags._X = flags._Y =
-	flags._H = flags._N = 0;
-	flags._X = A & (UCHAR)BIT_5;
-	flags._Y = A & (UCHAR)BIT_3;
+	Z80_S = (A & BIT_7);
+	Z80_Z = !A;
+	//Z80_S = Z80_X = Z80_Y =
+	Z80_H = Z80_N = 0;
+	Z80_X = A & (UCHAR)BIT_5;
+	Z80_Y = A & (UCHAR)BIT_3;
         Q = 1;
 }
 

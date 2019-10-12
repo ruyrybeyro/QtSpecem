@@ -3,14 +3,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../z80core/env.h"
+
 #define SHMSZ     65536
+#define SHMVARS sizeof(struct Z80vars)+(sizeof(union Z80Regs)*2)+sizeof(struct CPU_flags) \
+		+sizeof(union Z80IX)+sizeof(union Z80IY)
 
 unsigned char * alloc_speccy_shared_ram(void)
 {
-    char c;
     int shmid;
     key_t key;
-    char *shm, *s;
+    char *shm;
 
     /*
      * We'll name our shared memory segment
@@ -34,6 +37,37 @@ unsigned char * alloc_speccy_shared_ram(void)
         exit(1);
     }
 
-    return shm;
+    return (unsigned char *)shm;
+}
+
+unsigned char * alloc_speccy_shared_vars(void)
+{
+    int shmid;
+    key_t key;
+    char *shm;
+
+    /*
+     * We'll name our shared memory segment
+     * "5678".
+     */
+    key = 1234;
+
+    /*
+     * Create the segment.
+     */
+    if ((shmid = shmget(key, SHMVARS, IPC_CREAT | 0666)) < 0) {
+        perror("shmget");
+        exit(1);
+    }
+
+    /*
+     * Now we attach the segment to our data space.
+     */
+    if ((shm = shmat(shmid, NULL, 0)) == (char *) -1) {
+        perror("shmat");
+        exit(1);
+    }
+
+    return (unsigned char *)shm;
 }
 

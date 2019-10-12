@@ -10,6 +10,7 @@
 #include "../z80core/iglobal.h"
 
 unsigned char * alloc_speccy_shared_ram(void);
+unsigned char * alloc_speccy_shared_vars(void);
 
 /* vars to keep states of options for emulator */
 unsigned char 	     bModel3 = 1;   /* Model 3 or Model 2   */
@@ -25,16 +26,16 @@ unsigned char   keyb_template = 0;   /* keyb template
 				      */
 
 /* Main registers   */
-union Z80Regs  Z80Regs;
+union Z80Regs  * Z80Regs;
 
 /* Alternative registers */
-union Z80Regs  Z80Regs2;
+union Z80Regs  * Z80Regs2;
 
-union Z80IX	Z80IX;
-union Z80IY	Z80IY;
+union Z80IX * Z80IX;
+union Z80IY * Z80IY; 
 
-struct CPU_flags  flags;
-struct Z80vars Z80vars;
+struct CPU_flags  * flags;
+struct Z80vars * Z80vars;
 
 /* 'ticks' counter ; SPECTRUM Z80A - 3,5469MHz - 70938 ticks between each INT */
 // unsigned long clock_ticks;
@@ -51,6 +52,7 @@ UCHAR lastbyte;
 
 /* Memory 64k */
 UCHAR * mem;
+UCHAR * vars;
 
 /* ROM flag:
  *  0 : 16k of ROM, 48k of RAM
@@ -84,6 +86,13 @@ void Init_Z80Emu(void)
 
 	  // mem =  (UCHAR *)calloc( 65536, 1 );
 	  mem =  alloc_speccy_shared_ram();
+          vars = alloc_speccy_shared_vars();
+          Z80vars  = (struct Z80vars *)  vars;
+          Z80Regs  = (union Z80Regs *)   vars + sizeof(struct Z80vars);
+          Z80Regs2 = (union Z80Regs *)   vars + sizeof(struct Z80vars) + sizeof(union Z80Regs);
+          flags    = (struct CPU_flags *)vars + sizeof(struct Z80vars) + sizeof(union Z80Regs) + sizeof(union Z80Regs);
+          Z80IX    = (union Z80IX *)     vars + sizeof(struct Z80vars) + sizeof(union Z80Regs) + sizeof(union Z80Regs) + sizeof(struct CPU_flags);
+          Z80IY    = (union Z80IY *)     vars + sizeof(struct Z80vars) + sizeof(union Z80Regs) + sizeof(union Z80Regs) + sizeof(struct CPU_flags) + sizeof(union Z80IX);
 	}
 }
 
