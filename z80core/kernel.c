@@ -54,10 +54,10 @@ void execute()
       till instruction end [but not in instructions prefixed by ED]
      --> 0xED, 0xCB are 'gates' to another sets of instructions
    */
-     while( (clock_ticks < INT_TIME) && !TraceOn )
+        do
 	{
 
-        if (TraceOn < 3)
+        if (!TraceOn)
         {
 	inc_R();
 	/* Call funtion indexed by opcode */
@@ -72,7 +72,17 @@ void execute()
                                    sprintf(s, "/tmp/w%06d.z80", n++);
                                     save_sna(s);
                                    }  */
+        else
+        {
+           if (TraceOn >  2)
+           {
+              TraceOn--;
+              inc_R();
+              (*instruc_tabl[Getnextbyte()])();
+           }
+        }
 	}
+        while( (clock_ticks < INT_TIME) && !TraceOn );
    
   /* do_int_tasks(); */
   /* if interrupts activated */
