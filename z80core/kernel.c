@@ -76,9 +76,9 @@ void execute()
         {
            if (TraceOn >  2)
            {
-              TraceOn--;
               inc_R();
               (*instruc_tabl[Getnextbyte()])();
+              TraceOn--;
            }
         }
 	}
