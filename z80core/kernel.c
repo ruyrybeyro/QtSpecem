@@ -78,7 +78,7 @@ void execute()
            {
               inc_R();
               (*instruc_tabl[Getnextbyte()])();
-              TraceOn--;
+                 TraceOn--;
            }
         }
 	}

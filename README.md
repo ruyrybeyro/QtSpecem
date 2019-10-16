@@ -42,4 +42,8 @@ qmake
 
 make
 
+For Mac deployment in a self-contained executable:
+
+macdeployqt QtSpecem.app
+
 . Tested in MacOS Mojave and Debian 10.
