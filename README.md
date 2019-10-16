@@ -13,7 +13,7 @@ Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improv
 
 Real time emulator, no sound support. Still (very) rudimentary user interface.
 
-The project idea will be being an debugger, for the moment just uploaded for backup and for people to test the Z80 part.
+The project idea is being a emulator framework for having independt utilities, running in the same machine as different programs. For now it has a command line debugger.
 
 Supports drag-and-drop, file as arguments, and SLT, TAP, Z80, SNA, SNX, SIT, RAW, ZX, PRG, ACH, ROM, DAT, SCR, SEM snapshot emulation formats.
 
