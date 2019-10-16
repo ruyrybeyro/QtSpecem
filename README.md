@@ -7,6 +7,8 @@ Z80A core emulation
 
 New Qt5 ZX Spectrum emulator
 
+It also has a companion debugger, https://github.com/ruyrybeyro/debugZ80
+
 Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog (including WZ/MEMPTR). It passes all the zxeall/z80test tests.
 
 Real time emulator, no sound support. Still (very) rudimentary user interface.
@@ -49,3 +51,4 @@ For Mac deployment in a self-contained executable:
 macdeployqt QtSpecem.app
 
 . Tested in MacOS Mojave and Debian 10.
+
