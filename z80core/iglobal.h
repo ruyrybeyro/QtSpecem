@@ -1386,7 +1386,7 @@ USHORT xtoi(char *);
 USHORT read_xnum(void);
 
 /* HEXDUMP.c  */
-void hexdump(USHORT, int);
+void hexdump(USHORT);
 
 /* BOX.c      */
 void box(short, short, short, short);
