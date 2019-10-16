@@ -15,6 +15,8 @@ The project idea will be being an debugger, for the moment just uploaded for bac
 
 Supports drag-and-drop, file as arguments, and SLT, TAP, Z80, SNA, SNX, SIT, RAW, ZX, PRG, ACH, ROM, DAT, SCR, SEM snapshot emulation formats.
 
+For loading a TAP file, drag&drop and then do LOAD "".
+
 For now pressing F2 saves Z80 snapshots at /tmp.
 
 Kempston Joystick ALT + cursor keys
