@@ -37,7 +37,7 @@ TODO:
 - Debugger
 - Save/Load Menu
 
-For compiling:
+COMPILING:
 
 
 You need to install the Qt5 development framework.
