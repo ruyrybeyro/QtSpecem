@@ -147,7 +147,7 @@ void do_flash()
 	     */
 	    adress = ((y & 7)<<5) | ((y & 0x18)<<8) | x | 0x4000;
 
-	    /* put ïtextï coords in graphic coords
+	    /* put text coords in graphic coords
 	     */
 	    y <<= 3;
 	    x <<= 3;

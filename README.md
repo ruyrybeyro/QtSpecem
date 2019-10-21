@@ -1,5 +1,5 @@
 
-QtSpecem v0.82
+QtSpecem v0.83
 (C) 2019 Rui Fernando Ferreira Ribeiro
 
 Z80A core emulation
@@ -33,7 +33,6 @@ Loading a TAP file introduces patches to the ROM. A ROM checksum will fail after
 
 TODO:
 
-- Flash
 - Debugger
 - Save/Load Menu
 

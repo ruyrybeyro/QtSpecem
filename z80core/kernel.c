@@ -19,6 +19,8 @@ void save_sna(const char * file_name);
 /* Opcode being interpreted - in IX or IY */
 //static UCHAR opcode;
 
+int ChangeFlashTime = 0;
+
 /*=========================================================================*
  *                            do_reset                                     *
  *=========================================================================*/
@@ -42,6 +44,8 @@ void do_reset()
    ResetTickCounter();
    /* Program Counter */
    PutPC(0);
+
+   ChangeFlashTime = 0;
 }
 
 /*=========================================================================*
@@ -94,6 +98,14 @@ void execute()
      }
   else
      ResetTickCounter();
+
+  // ULA inverts FLASH every 16 frames
+  if(++ChangeFlashTime == 16)
+  {
+     ChangeFlashTime = 0; // reset counter
+     FlashState ^= 1;     // signal colours inverted
+     do_flash();
+  }
   }
 }
 
