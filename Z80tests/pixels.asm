@@ -25,7 +25,7 @@ X4_X0:
 	LD	(HL),A
 	INC	L
 
-        CALL    W_KEY
+        CALL    W_DELAY
 
 	DJNZ	X4_X0
 
@@ -37,7 +37,7 @@ X4_X0:
 	LD	L,A
 
 	INC	H		; NEXT CHAR "LINE"
-        CALL    W_KEY
+        CALL    W_DELAY
 
 
 	POP	BC
@@ -70,7 +70,7 @@ X4_X0:
 
 	RET
 
-W_KEY:
+W_DELAY:
         PUSH    BC
 
 	LD	B,255
