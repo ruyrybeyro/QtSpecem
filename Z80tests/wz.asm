@@ -14,3 +14,6 @@
         AND     $08        ; AND with $08 - i.e. mask out bit 3
         LD      C, A        ; Push into C (for return to BASIC) should return 8200
         RET
+
+	END 50000
+

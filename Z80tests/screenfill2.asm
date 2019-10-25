@@ -80,3 +80,6 @@ WAIT2:	DJNZ	WAIT2
 
         POP     BC
 	RET
+
+	END 50000
+

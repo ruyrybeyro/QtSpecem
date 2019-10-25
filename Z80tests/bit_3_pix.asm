@@ -190,3 +190,6 @@ ISDIGIT:
         RET
 
 VAR2:	DB	0
+
+	END	50000
+

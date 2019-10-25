@@ -209,3 +209,6 @@ ISDIGIT:
 
         POP     DE
         RET
+
+	END 50000
+

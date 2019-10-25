@@ -70,3 +70,6 @@ Keyboard_Map:				DB &FE,"#","Z","X","C","V"
 					DB &BF,"#","L","K","J","H"
 					DB &7F," ","#","M","N","B"
 					DB 0
+
+					END 50000
+

@@ -766,3 +766,5 @@ CHROP: 	PUSH 	HL
 
        	RET
 
+	END 50000
+
