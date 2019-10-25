@@ -27,6 +27,10 @@ X4_X0:
 	LD	A,H
 	CP	$58
 	JR	NZ,LOOP
+
+        ; need to return to lower screen
+        LD      A,1             ; lower screen
+        CALL    5633            ; open channel
 	
         CALL    $15DE           ; WAIT-KEY1
 
