@@ -39,18 +39,6 @@ P_DOWN: INC H           ; Go down onto the next pixel line
 	LD 	H,A
         RET
 
-
-W_DELAY:
-        PUSH    BC
-
-	LD	B,255
-WAIT:	DJNZ	WAIT
-	LD	B,255
-WAIT2:	DJNZ	WAIT2
-
-        POP     BC
-	RET
-
 PRINT_HL:
 	LD	A,H
 	CALL	PRINT_A
