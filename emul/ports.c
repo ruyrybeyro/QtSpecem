@@ -198,7 +198,7 @@ UCHAR readport(USHORT port)
 		 // Any other port --- this is not well implemented
 		 if((clock_ticks  > 14346) && (clock_ticks < 57246))
                  {
-                        value = floating_bus(clock_ticks - 1437);
+                        value = floating_bus(clock_ticks - 14347);
                  }
          else
 		    value = 0xFF;
