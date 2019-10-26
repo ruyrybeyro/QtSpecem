@@ -1,9 +1,8 @@
 
 #include "../z80core/env.h"
 
-int screen_lines[192 + 1] =
+int screen_lines[192] =
 {
-   0,
    0x4000,
    0x4100,
    0x4200,
@@ -202,7 +201,7 @@ int screen_lines[192 + 1] =
 // not total machine T states
 int floating_bus(unsigned int t_states)
 {
-   int line = t_states / 224 + 1;
+   int line = t_states / 224;
    int h  = ( t_states % 224 ) / 8;
    int x, col;
 
@@ -229,7 +228,7 @@ int floating_bus(unsigned int t_states)
             
    }
    if ( (x == 5) || (x == 7) )
-      return readbyte( 0x5800 + line * col );
+      return readbyte( 0x5800 + line * 32 + col );
    if ( (x == 6) || (x == 0) )
       return readbyte( screen_lines[line] + col );
 }
