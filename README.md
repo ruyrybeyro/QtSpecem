@@ -38,7 +38,6 @@ TODO:
 
 COMPILING:
 
-
 You need to install the Qt5 development framework.
 
 qmake
