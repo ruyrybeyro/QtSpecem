@@ -228,7 +228,7 @@ int floating_bus(unsigned int t_states)
             
    }
    if ( (x == 5) || (x == 7) )
-      return readbyte( 0x5800 + line * 32 + col );
+      return readbyte( 0x5800 + line / 8 + col );
    if ( (x == 6) || (x == 0) )
       return readbyte( screen_lines[line] + col );
 }
