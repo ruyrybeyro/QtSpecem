@@ -205,7 +205,7 @@ int floating_bus(unsigned int t_states)
    int h  = ( t_states % 224 ) / 8;
    int x, col;
 
-   if ( h > 16 )
+   if ( h > 15 )
       return 0xFF;
 
    x = ( t_states % 224 ) % 8;
