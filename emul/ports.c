@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "env.h"
+#include "../z80core/env.h"
 
 /* keeps last out to ula --- current border colour */
 static UCHAR out_ula = 190;
@@ -198,10 +198,7 @@ UCHAR readport(USHORT port)
 		 // Any other port --- this is not well implemented
 		 if((clock_ticks  > 14346) && (clock_ticks < 57246))
                  {
-			if ( ((clock_ticks - 1437 ) % 224 ) > 127 )   
-                           value = 0xFF;
-                        else
-		           value = rand() % 255;
+                        value = floating_bus(clock_ticks - 1437);
                  }
          else
 		    value = 0xFF;

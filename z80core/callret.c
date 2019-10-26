@@ -141,10 +141,13 @@ void rst_10()
     push((USHORT)PC);
     PutPC(0x10);
     out = fopen("/tmp/out", "a");
-    fputc(A, out);
+    if ( A == 13 )
+       fputc('\n', out);
+    else
+       fputc(A, out);
+
     fclose(out);
 }
- 
 */
-
+ 
 /* EOF: CallRet.c */

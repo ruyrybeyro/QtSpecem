@@ -24,10 +24,12 @@ HEADERS += QtSpecem.h \
 SOURCES += main.cpp \
            QtSpecem.cpp \
            emul/error.c \
+           emul/floating_bus.c \
            emul/initmem.c \
            emul/shm_server.c \
            emul/sna_load.c \
            emul/sna_save.c \
+           emul/ports.c \
            emul/video.c \
            z80core/bits.c \
            z80core/callret.c \
@@ -45,7 +47,6 @@ SOURCES += main.cpp \
            z80core/mem.c \
            z80core/misc.c \
            z80core/ndebgz80.c \
-           z80core/ports.c \
            z80core/rotate.c \
            z80core/shutdown.c \
            z80core/stack.c

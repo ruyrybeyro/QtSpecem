@@ -1421,4 +1421,8 @@ void do_flash(void);
 /* NOTHING.C */
 int do_nothing(USHORT *);
 
+/* floating_bus.c */
+int floating_bus(unsigned int t_states);
+
 /* EOF: IGlobal.h */
+
