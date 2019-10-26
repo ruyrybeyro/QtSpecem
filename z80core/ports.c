@@ -196,8 +196,13 @@ UCHAR readport(USHORT port)
 		 else
                  {
 		 // Any other port --- this is not well implemented
-		 if((clock_ticks  > 14346) && (clock_ticks < 43008))
-		    value = rand() % 255;
+		 if((clock_ticks  > 14346) && (clock_ticks < 57246))
+                 {
+			if ( ((clock_ticks - 1437 ) % 224 ) > 127 )   
+                           value = 0xFF;
+                        else
+		           value = rand() % 255;
+                 }
          else
 		    value = 0xFF;
                  }
