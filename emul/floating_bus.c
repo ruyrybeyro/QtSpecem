@@ -211,19 +211,19 @@ int floating_bus(unsigned int t_states)
    x = ( t_states % 224 ) % 8;
    switch ( x )
    {
-      case 5: // 0x5801
-      case 6: // 0x4001
+      case 3: // 0x5801
+      case 2: // 0x4001
             col = h * 2 + 1;
             break;
       case 0: // 0x4000
-      case 7: // 0x5800
+      case 1: // 0x5800
             col = h * 2;
             break;
             
    }
-   if ( (x == 5) || (x == 7) )
+   if ( (x == 1) || (x == 3) )
       return readbyte( 0x5800 + line / 8 * 32 + col );
-   if ( (x == 6) || (x == 0) )
+   if ( (x == 0) || (x == 2) )
       return readbyte( screen_lines[line] + col );
    return 0xFF;
 }
