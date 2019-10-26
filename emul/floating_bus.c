@@ -211,12 +211,6 @@ int floating_bus(unsigned int t_states)
    x = ( t_states % 224 ) % 8;
    switch ( x )
    {
-      case 1:
-      case 2:
-      case 3:
-      case 4:
-            return 0xFF;
-            break;
       case 5: // 0x5801
       case 6: // 0x4001
             col = x/2 + 1;
@@ -231,5 +225,6 @@ int floating_bus(unsigned int t_states)
       return readbyte( 0x5800 + line / 8 + col );
    if ( (x == 6) || (x == 0) )
       return readbyte( screen_lines[line] + col );
+   return 0xFF;
 }
 
