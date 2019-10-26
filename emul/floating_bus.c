@@ -213,11 +213,11 @@ int floating_bus(unsigned int t_states)
    {
       case 5: // 0x5801
       case 6: // 0x4001
-            col = x/2 + 1;
+            col = h * 2 + 1;
             break;
       case 0: // 0x4000
       case 7: // 0x5800
-            col = x/2;
+            col = h * 2;
             break;
             
    }
