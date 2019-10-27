@@ -1,3 +1,10 @@
+ /* floating_bus.c: implement behaviour of floating bus in unused ports
+ *
+ * Copyright 2019 Rui Fernando Ferreira Ribeiro.
+ *
+ */
+
+// see http://ramsoft.bbk.org.omegahg.com/floatingbus.html
 
 #include "../z80core/env.h"
 
@@ -198,9 +205,6 @@ int screen_lines[192] =
    0x57E0
 };
 
-// implement behaviour of floating bus in unused ports
-// see http://ramsoft.bbk.org.omegahg.com/floatingbus.html
-//
 // t_states is T states from first line pixel
 // not total machine T states
 //
