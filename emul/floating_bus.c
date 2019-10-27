@@ -239,6 +239,7 @@ int floating_bus(unsigned int t_states)
    }
 
    // if ULA scanning attributes
+   // 0x5800 RAM address of attributes area
    if ( (x == 1) || (x == 3) )
       return readbyte( 0x5800 + line / 8 * 32 + col );
 
