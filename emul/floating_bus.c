@@ -217,17 +217,17 @@ int floating_bus(unsigned int t_states)
    // 224T per scan line (96T for border)
    int line = t_states / 224;
    int h  = ( t_states % 224 ) / 8;  // T per 2 columns
-   int x, col;
+   int pos, col;
 
    if ( h > 15 )	// if T*2 = 32 columns, starting from 0
       return 0xFF;	// not valid - ULA scanning border
 
    // get element pos
    // P1 A1 P2 A2 255 255 255 255
-   x = ( t_states % 224 ) % 8;
+   pos = ( t_states % 224 ) % 8;
 
    // check if to add +1 or not
-   switch ( x )
+   switch ( pos  )
    {
       case 2: // 0x4001 (P2)
       case 3: // 0x5801 (A2)
@@ -241,12 +241,12 @@ int floating_bus(unsigned int t_states)
    }
 
   // if ULA scanning pixels area
-   if ( (x == 0) || (x == 2) )
+   if ( (pos == 0) || (pos == 2) )
       return readbyte( screen_lines[line] + col );
 
    // if ULA scanning attributes
    // 0x5800 RAM address of attributes area
-   if ( (x == 1) || (x == 3) )
+   if ( (pos == 1) || (pos == 3) )
       return readbyte( 0x5800 + line / 8 * 32 + col );
 
    // if ULA neither scanning attributes or pixel area
