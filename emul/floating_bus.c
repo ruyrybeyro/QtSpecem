@@ -240,7 +240,7 @@ int floating_bus(unsigned int t_states)
             
    }
 
-  // if ULA scanning pixel area
+  // if ULA scanning pixels area
    if ( (x == 0) || (x == 2) )
       return readbyte( screen_lines[line] + col );
 
