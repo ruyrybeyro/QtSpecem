@@ -1,6 +1,7 @@
 
 #include "../z80core/env.h"
 
+// RAM address of each pixel line on screen
 int screen_lines[192] =
 {
    0x4000,
@@ -197,34 +198,47 @@ int screen_lines[192] =
    0x57E0
 };
 
+// implement behaviour of floating bus in unused ports
+//
 // t_states is T states from first line pixel
 // not total machine T states
 int floating_bus(unsigned int t_states)
 {
+   // 224T per scan line (96T for border)
    int line = t_states / 224;
-   int h  = ( t_states % 224 ) / 8;
+   int h  = ( t_states % 224 ) / 8;  // T per 2 columns
    int x, col;
 
-   if ( h > 15 )
-      return 0xFF;
+   if ( h > 15 )	// if T*2 = 32 columns, starting from 0
+      return 0xFF;	// not valid
 
+   // get elements - they return
+   // P1 A1 P2 A2 255 255 255 255
    x = ( t_states % 224 ) % 8;
+
+   // check if to add +1 or not
    switch ( x )
    {
-      case 3: // 0x5801
-      case 2: // 0x4001
+      case 3: // 0x5801 (A2)
+      case 2: // 0x4001 (P2)
             col = h * 2 + 1;
             break;
-      case 0: // 0x4000
-      case 1: // 0x5800
+      case 0: // 0x4000 (P1)
+      case 1: // 0x5800 (A1)
             col = h * 2;
             break;
             
    }
+
+   // if ULA scanning attributes
    if ( (x == 1) || (x == 3) )
       return readbyte( 0x5800 + line / 8 * 32 + col );
+
+   // if ULA scanning pixel area
    if ( (x == 0) || (x == 2) )
       return readbyte( screen_lines[line] + col );
+
+   // if ULA neither scanning attributes or pixel area
    return 0xFF;
 }
 
