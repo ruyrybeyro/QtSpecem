@@ -11,7 +11,7 @@
 // RAM address of each pixel line on screen
 int screen_lines[192] =
 {
-   0x4000,
+   0x4000, // 1st section of screen
    0x4100,
    0x4200,
    0x4300,
@@ -75,7 +75,7 @@ int screen_lines[192] =
    0x45E0,
    0x46E0,
    0x47E0,
-   0x4800,
+   0x4800, // 2nd section of screen
    0x4900,
    0x4A00,
    0x4B00,
@@ -139,7 +139,7 @@ int screen_lines[192] =
    0x4DE0,
    0x4EE0,
    0x4FE0,
-   0x5000,
+   0x5000, // 3rd section of screen
    0x5100,
    0x5200,
    0x5300,
