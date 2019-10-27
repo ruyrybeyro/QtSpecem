@@ -218,7 +218,7 @@ int floating_bus(unsigned int t_states)
    int x, col;
 
    if ( h > 15 )	// if T*2 = 32 columns, starting from 0
-      return 0xFF;	// not valid
+      return 0xFF;	// not valid - ULA scanning border
 
    // get element pos
    // P1 A1 P2 A2 255 255 255 255
