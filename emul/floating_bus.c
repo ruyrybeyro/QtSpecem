@@ -199,6 +199,7 @@ int screen_lines[192] =
 };
 
 // implement behaviour of floating bus in unused ports
+// see http://ramsoft.bbk.org.omegahg.com/floatingbus.html
 //
 // t_states is T states from first line pixel
 // not total machine T states
