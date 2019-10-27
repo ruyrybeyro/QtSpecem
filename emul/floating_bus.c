@@ -240,14 +240,14 @@ int floating_bus(unsigned int t_states)
             
    }
 
+  // if ULA scanning pixel area
+   if ( (x == 0) || (x == 2) )
+      return readbyte( screen_lines[line] + col );
+
    // if ULA scanning attributes
    // 0x5800 RAM address of attributes area
    if ( (x == 1) || (x == 3) )
       return readbyte( 0x5800 + line / 8 * 32 + col );
-
-   // if ULA scanning pixel area
-   if ( (x == 0) || (x == 2) )
-      return readbyte( screen_lines[line] + col );
 
    // if ULA neither scanning attributes or pixel area
    return 0xFF;
