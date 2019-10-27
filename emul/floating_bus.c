@@ -229,8 +229,8 @@ int floating_bus(unsigned int t_states)
    // check if to add +1 or not
    switch ( x )
    {
-      case 3: // 0x5801 (A2)
       case 2: // 0x4001 (P2)
+      case 3: // 0x5801 (A2)
             col = h * 2 + 1;
             break;
       case 0: // 0x4000 (P1)
