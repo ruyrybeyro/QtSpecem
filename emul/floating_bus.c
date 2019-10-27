@@ -203,6 +203,9 @@ int screen_lines[192] =
 //
 // t_states is T states from first line pixel
 // not total machine T states
+//
+// invoked from ports.c:readport()
+//
 int floating_bus(unsigned int t_states)
 {
    // 224T per scan line (96T for border)
