@@ -7,6 +7,9 @@
 
 	ORG	50000
 
+        LD      A,2             ; upper screen
+        CALL    5633            ; open channel
+
 	LD	HL,$4000	; SCREEN START
 LOOP:
 	CALL	PRINT_HL	
