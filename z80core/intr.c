@@ -26,11 +26,14 @@ void do_interrupt()
       case (UCHAR)1: /* IM 1 */
 			/* If IM_1 calls 0x38
             */
-            clock_ticks = /*6*/ 13; /* Time : Ian Collier */
+            clock_ticks = 13; /* Time : Ian Collier */
             PutPC(0x38);
          break;
       case (UCHAR)2: /* IM 2 */
-	    clock_ticks = /*16*/ 19; /* Time : Ian Collier */
+	    // clock_ticks = 19; /* Time : Ian Collier */
+            // Ian Collier says 19, RAMSOFT in their floatspy say 29
+            // and 28 works ok....
+	    clock_ticks = 28;
             /* PC = readword( (USHORT) ( ((USHORT)I << 8) + DATA_BUS) );
             */
             PutPC(readword( (USHORT) ( ((USHORT)I << 8) + 0xff) ));
@@ -42,7 +45,7 @@ void do_interrupt()
 	     with the 8080). In the Spectrum 0xFF is inserted in the
 	     data bus, wich is 0x38 opcode, being so IM_0 = IM_1
             */
-            clock_ticks = 10;
+            clock_ticks = 17;
             /* execute_one_inst(DATA_BUS);
             */
             PutPC(0x38);
@@ -57,7 +60,6 @@ void do_interrupt()
 void do_nmi_int()
 {
    T(11); /* Acording to Ian Collier */
-   /*T(6); */
 
    /* Deactivate interrupts -- but IIF2 keeps copy of last IFF1 */
    IFF1 = 0;

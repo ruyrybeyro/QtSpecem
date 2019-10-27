@@ -211,12 +211,12 @@ union Z80IY
 	sum IX+n             -->  5T
 	read a memory byte   -->  3T
 	read a port   byte   -->  4T (3T + 1T in Wait)
-	Nmi int              -->  6T (3T + 3T - push two words in stack)
-	Int IM 0             --> 10T (3T + 3T + 4T from data bus read)
-	Int IM 1             -->  6T (3T + 3T)
-	Int IM 2             --> 16T (3T + 3T + 4T + 3T + 3T -- the last
-				6T being 2 memory acesses to read the pointer
-				built by reg I and the data bus value)
+
+        http://www.z80.info/interrup.htm
+	Nmi int              --> 11T 
+	Int IM 0             --> 17T 
+	Int IM 1             --> 13T 
+	Int IM 2             --> 19T
 */
 
 /* EOF: Z80.h */

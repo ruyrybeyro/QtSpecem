@@ -42,6 +42,7 @@ void do_reset()
    Z80_P = Z80_N = Z80_C = 0;
    /* Interrupt counter */
    ResetTickCounter();
+   T(3);
    /* Program Counter */
    PutPC(0);
 
