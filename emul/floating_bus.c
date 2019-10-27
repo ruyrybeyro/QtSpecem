@@ -220,7 +220,7 @@ int floating_bus(unsigned int t_states)
    if ( h > 15 )	// if T*2 = 32 columns, starting from 0
       return 0xFF;	// not valid
 
-   // get elements - they return
+   // get element pos
    // P1 A1 P2 A2 255 255 255 255
    x = ( t_states % 224 ) % 8;
 
