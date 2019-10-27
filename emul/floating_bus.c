@@ -208,6 +208,8 @@ int screen_lines[192] =
 // t_states is T states from first line pixel
 // not total machine T states
 //
+// all timings are the 48K model timings
+//
 // invoked from ports.c:readport()
 //
 int floating_bus(unsigned int t_states)
