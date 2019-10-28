@@ -212,6 +212,8 @@ int screen_lines[192] =
 //
 // invoked from ports.c:readport()
 //
+// called as value = floating_bus(clock_ticks - 14347);
+//
 int floating_bus(unsigned int t_states)
 {
    // 224T per scan line (96T for border)
