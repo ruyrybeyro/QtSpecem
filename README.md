@@ -11,7 +11,11 @@ It also has a companion debugger, https://github.com/ruyrybeyro/debugZ80
 
 Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog (including WZ/MEMPTR). It passes all the zxeall/z80test tests.
 
-Real time emulator, no sound support. Still (very) rudimentary user interface.
+Floating bus behaviour implemented and passing Ramsoft's floatspy tests.
+
+Real time emulator, no sound support. 
+
+Still (very) rudimentary user interface.
 
 The project idea is being a emulator framework for having independt utilities, running in the same machine as different programs. For now it has a command line debugger.
 
