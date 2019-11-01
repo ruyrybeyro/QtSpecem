@@ -22,32 +22,29 @@ int main(int argc, char **argv) {
         int i;
 
         
-        QFile file(":/rom/spectrum.rom");        
+    QFile file(":/rom/spectrum.rom");        
 
-    //const char * s = "/Users/ruiribeiro/emz80/Pheenix.z80";
-  
     init_pallete();
     
     init_emul();
 
-    // writebyte(29375, 0);
-	//draw.show();
+    //draw.show();
 
-if(file.open(QIODevice::ReadOnly)){
-data=file.readAll();
-file.close();
-p=data;
-for (i=0; i < 16384 ; i++)
-    *(mem+i) = *(p++);
-}
+   if(file.open(QIODevice::ReadOnly)){
+      data=file.readAll();
+      file.close();
+      p=data;
+      for (i=0; i < 16384 ; i++)
+         *(mem+i) = *(p++);
+   }
 
-    if ( argc > 1 )
-    {
-       open_sna(argv[1]);
-    }
+   if ( argc > 1 )
+   {
+      open_sna(argv[1]);
+   }
 
-        keyPress->show();
+   keyPress->show();
 
-	return app.exec();
+   return app.exec();
 }
 
