@@ -39,7 +39,7 @@ void do_interrupt()
             // overflow bug???
             // PutPC(readword( (USHORT) ( ((USHORT)I << 8) | (USHORT)0x00ff) ));
 
-            PutPC( readbyte( (I << 8) | (USHORT)0x00ff ) | readbyte( (I << 8) + 1 ) << 8 ); 
+            PutPC( readbyte( (I << 8) | (USHORT)0x00ff ) | (readbyte((I+1)<<8) << 8) ); 
          break;
 	  default:
 	    /*
