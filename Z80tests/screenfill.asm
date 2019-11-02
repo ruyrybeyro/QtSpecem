@@ -289,7 +289,7 @@ ISDIGIT:
 PRINTDEC:
 	PUSH	DE
 	PUSH	HL
-	LD	E,$20
+	LD	E,$20	; SPACES
 
 	LD	BC,$D8F0 ; -10000
 	CALL	$192A ; routine OUT-SP-NO outputs space or number
