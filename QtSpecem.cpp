@@ -72,7 +72,6 @@ int lParam;
 
 void DrawnWindow::keyPressEvent(QKeyEvent *event)
 {
-
     switch (event->key() )
     {
        case Qt::Key_1:      keybd_buff[3] |= ~0xFE; break;

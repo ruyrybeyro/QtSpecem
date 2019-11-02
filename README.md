@@ -1,5 +1,5 @@
 
-QtSpecem v0.84
+QtSpecem v0.85
 (C) 2019 Rui Fernando Ferreira Ribeiro
 
 Z80A core emulation

@@ -155,8 +155,8 @@ void ldi()
    Z80_P = (--BC != 0); \
    Z80_H = Z80_N = 0; \
    n += A; \
-   Z80_X = n & (UCHAR)BIT_1; \
-   Z80_Y = n & (UCHAR)BIT_3; \
+   Z80_X = (n & (UCHAR)BIT_1) >> 1; \
+   Z80_Y = (n & (UCHAR)BIT_3) > 0; \
    Q = 1;
 
 

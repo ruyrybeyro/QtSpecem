@@ -64,19 +64,19 @@ void execute()
 
         if (!TraceOn)
         {
-	inc_R();
-	/* Call funtion indexed by opcode */
-	(*instruc_tabl[Getnextbyte()])();
-        }
-        
-     /*   if (PC > 16383)
+	   inc_R();
+	   /* Call funtion indexed by opcode */
+	   (*instruc_tabl[Getnextbyte()])();
+            /* if (PC > 16383)
                  {
-                                    static int n = 0;
-                                    char s[200];
+                    static int n = 0;
+                    char s[200];
 
-                                   sprintf(s, "/tmp/w%06d.z80", n++);
-                                    save_sna(s);
-                                   }  */
+                    sprintf(s, "/tmp/w%06d.z80", n++);
+                    save_sna(s);
+                 }   */
+
+        }
         else
         {
            if (TraceOn >  2)

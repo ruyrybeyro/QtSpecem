@@ -150,11 +150,10 @@ void halt()
 
    /* This loop is cut because timing software is already
       working
-    */
-   /*while(!int_time())
+   while(!int_time())
    {
       nop();
-   } */
+   }  */
    clock_ticks = INT_TIME + (clock_ticks % 4 );
    Q = 0;
 }
@@ -165,6 +164,12 @@ void halt()
 void di()
 {
    T(4);
+
+   // Instead of delay setting IFF1/IFF", play with int Time
+   // not entirely compatible with the original chipset
+   if(int_time())
+      clock_ticks = INT_TIME - 3;
+
    IFF1 = IFF2 = 0;
    Q = 0;
 }
@@ -175,8 +180,11 @@ void di()
 void ei()
 {
    T(4);
+
+   // Instead of delay setting IFF1/IFF", play with int Time
+   // not entirely compatible with the original chipset
    if(int_time())
-      clock_ticks = INT_TIME - 1;
+      clock_ticks = INT_TIME - 3;
 
    IFF1 = IFF2 = 1;
    Q = 0;

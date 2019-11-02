@@ -36,7 +36,10 @@ void do_interrupt()
 	    clock_ticks = 28;
             /* PC = readword( (USHORT) ( ((USHORT)I << 8) + DATA_BUS) );
             */
-            PutPC(readword( (USHORT) ( ((USHORT)I << 8) + 0xff) ));
+            // overflow bug???
+            // PutPC(readword( (USHORT) ( ((USHORT)I << 8) | (USHORT)0x00ff) ));
+
+            PutPC( readbyte( (I << 8) | (USHORT)0x00ff ) | readbyte( (I << 8) + 1 ) << 8 ); 
          break;
 	  default:
 	    /*
@@ -52,6 +55,7 @@ void do_interrupt()
          break;
    }
    WZ = PC;
+   R++;	     // having an interrupt increases R 
 }
 
 /*=========================================================================*
