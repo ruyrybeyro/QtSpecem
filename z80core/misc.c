@@ -165,10 +165,13 @@ void di()
 {
    T(4);
 
-   // Instead of delay setting IFF1/IFF", play with int Time
+   // Instead of delay setting IFF1/IFF2, play with int Time
    // not entirely compatible with the original chipset
-   if(int_time())
-      clock_ticks = INT_TIME - 3;
+   //
+   // Useless for DI
+   //
+   //if(int_time())
+   // clock_ticks = INT_TIME - 3;
 
    IFF1 = IFF2 = 0;
    Q = 0;
