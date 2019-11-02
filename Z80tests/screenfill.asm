@@ -19,9 +19,9 @@
         LD      A,2             ; upper screen
         CALL    5633            ; open channel
 
-        LD	A,(23695)
+        LD	A,(23695)	; ATTR T
 	XOR	A
-	OR	$32
+	OR	$32		; Yellow PAPER ; Red INK
 	LD	(23695),A
 
 	LD	HL,$4000	; SCREEN START
@@ -30,7 +30,7 @@ LOOP:
 
 	LD	B,32		; 32 COLUMNS
 X4_X0:	
-	CALL	PRINT_STAT
+	CALL	PRINT_STAT	; PRINT HL/COORDS
 
 	LD	(HL),A
 	INC	L
@@ -44,7 +44,7 @@ X4_X0:
 	CALL	P_DOWN
 
 	LD	A,H
-	CP	$58
+	CP	$58		; TEST FOR ATTR AREA
 	JR	NZ,LOOP
 
         ; need to return to lower screen
@@ -85,14 +85,14 @@ WAIT:	DJNZ	WAIT
         POP     BC
 	RET
 
+; PRINT HL/COORDS
 PRINT_STAT:
 
-	; PRINT AT
 	PUSH	HL
 	PUSH	AF
 	PUSH	BC
 
-	; PRINT HL
+	; PRINT HL (hexa)
 	LD	B,20	 ; COL
 	LD	C,1	 ; LINE
 	CALL	PRINT_AT
@@ -105,7 +105,7 @@ PRINT_STAT:
 	LD	A,L
 	CALL	PRINT_A
 
-       ; PRINT HL
+       ; PRINT HL (decimal)
         LD      B,20     ; COL
         LD      C,2      ; LINE
         CALL    PRINT_AT
@@ -133,10 +133,11 @@ PRINT_STAT:
 	CALL    PRINTHEXA
 	POP	AF
 
+	; BUILDING Y
+	RLA     ; ACCOUNT FOR LINE
 	RLA
 	RLA
-	RLA
-	LD	D,A
+	LD	D,A	; SAVE ON D
 
         ; PRINT LINE 
         LD      B,20     ; COL
@@ -157,9 +158,10 @@ PRINT_STAT:
 	CALL	PRINTHEXA
 	POP	AF
 
-	ADD	A,D
-	RLA
-	RLA
+	; STILL BUILDING Y
+	ADD	A,D     ; SEC + LINE
+	RLA             ; ACCOUNTING FOR
+	RLA             ; LINECHR
 	RLA
 	LD	D,A	
 	
@@ -178,7 +180,8 @@ PRINT_STAT:
         CALL    PRINTHEXA
 	POP	AF
 
-	ADD	A,D
+	; BUILDING Y
+	ADD	A,D	; + LINECHR
 	LD	D,A
 
         ; PRINT COL
@@ -207,10 +210,10 @@ PRINT_STAT:
 
         PUSH    HL
         LD      A,L
-        AND     $1F
+        AND     $1F	; COL
         RLA
         RLA
-        RLA
+        RLA		; * 8
         LD      L,A
         LD      H,0
         CALL    PRINTDEC
@@ -233,6 +236,10 @@ PRINT_STAT:
 	POP	HL
 	RET
 
+; PRINT AT LINE, COL
+; B = COL
+; C = LINE
+;
 PRINT_AT:
 	LD      A,$16    ; PRINT AT
 
@@ -241,6 +248,9 @@ PRINT_AT:
         POP     HL
 	RET
 
+; PRINT A NULL TERMINATED STRING
+; IX = STRING
+;
 PRINT_STRING:
 	LD	A,(IX)
 	CP	0
@@ -285,7 +295,9 @@ ISDIGIT:
 
         POP     DE
         RET
-
+; PRINT 16 BIT SIGNED NUMBER
+; HL = NUMBER
+;
 PRINTDEC:
 	PUSH	DE
 	PUSH	HL
