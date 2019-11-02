@@ -24,18 +24,6 @@
 	OR	$32
 	LD	(23695),A
 
-        LD      HL,$4000        ; SCREEN START
-
-LOOPC:  CALL	PRINT_STAT
-        LD      (HL),A
-        INC     HL
-
-        CALL    W_DELAY
-
-        LD      A,H
-        CP      $58
-        JR      NZ, LOOPC
-
 	LD	HL,$4000	; SCREEN START
 LOOP:
 	PUSH	HL
