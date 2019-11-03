@@ -55,7 +55,7 @@ USHORT readword(USHORT addr)
 {
 	/* Remember: Z80 word is in reversed order */
 	return( ((USHORT) *(mem+addr) ) |
-			  ( ( (USHORT) *(mem+addr + 1) ) << 8 ) );
+			  ( ( (USHORT) *(mem+(USHORT)(addr + 1)) ) << 8 ) );
 }
 
 
