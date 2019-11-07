@@ -52,5 +52,5 @@ For Mac deployment in a self-contained executable:
 
 macdeployqt QtSpecem.app
 
-. Tested in MacOS Catalina, Mojave and Debian 10.
+. Tested in MacOS Catalina, Mojave, High Sierra and Debian 10.
 
