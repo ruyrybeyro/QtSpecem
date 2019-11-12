@@ -33,6 +33,8 @@ void writebyte(unsigned short adress, unsigned char byte)
 
    *(mem + adress) = byte;
 
+   // if ( adress == 0x8786 )
+   //   TraceOn = 3;
 
    if(adress < 0x5800) /* If adress lower than attributes adress */
    {
