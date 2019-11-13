@@ -9,6 +9,8 @@
 
 	CALL	SAVE_SCREEN
 
+        CALL    3503            ; CLS
+
 	CALL	LOAD_SCREEN
 
         ; need to return to lower screen

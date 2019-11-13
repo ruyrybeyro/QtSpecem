@@ -9,6 +9,8 @@
 
 	CALL	SAVE_SCREEN
 
+	CALL    3503            ; CLS
+
 	CALL	LOAD_SCREEN
 
         ; need to return to lower screen
@@ -42,4 +44,5 @@ LOAD_SCREEN:
 	LD 	DE,6912
 	CALL 	$0556 ; call LD_BYTES
 	RET
+	END 	50000
 
