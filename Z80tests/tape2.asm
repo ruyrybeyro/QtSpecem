@@ -56,8 +56,9 @@ LOAD_SCREEN:
 
 ExpectedHeader:
 	DB 	3 ;expected type (Bytes)
-	DB	0ffh ;name = ""
-	DS 	9
+        DEFM    "ECRA      " ; 10 BYTES
+	;DB	0ffh ;name = ""
+	;DS 	9
 	DW 	0 ; size = 0 (use tamanho do header em cassette)
 	DW 	0 ; start = 0 (usar começo do header em cassette)
 	DW 	0 ;
