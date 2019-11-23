@@ -61,7 +61,11 @@ void execute()
    */
         do
 	{
-
+        if ( PC == 0X04C2 )
+        {
+           TraceOn = 3;
+           clock_ticks = 0;
+        }
         if (!TraceOn)
         {
 	   inc_R();
