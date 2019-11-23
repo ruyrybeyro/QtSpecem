@@ -1,3 +1,9 @@
+; Turbo loader routing, adapted from the official
+; ROM routines (Rui Ribeiro)
+;
+; RANDOMIZE USR 50000 - SCREEN LOAD ROUTINE
+; RANDOMIZE USR 50001 - SCREEN SAVE ROUTING
+
 ; ------------------------------------
 ; Load header or block of information
 ; ------------------------------------
@@ -7,12 +13,12 @@
 
 	ORG	50000
         NOP
-	LD	IX,16384
-	LD	DE,6912
-	LD	A,$FF
+	LD	IX,16384	; START OF SCREEN ADDRESS
+	LD	DE,6912		; LENGHT
+	LD	A,$FF		; DATA BLOCK
 	BIT	0,C
-	JR	Z,LD_ENTRY
-        JP      SA_BYTES
+	JR	Z,LD_ENTRY	; IF 50000 (ODD), LOAD
+        JP      SA_BYTES	; ELSE SAVE
 
 LD_ENTRY:
         SCF
