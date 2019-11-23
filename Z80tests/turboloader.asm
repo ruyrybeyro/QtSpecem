@@ -1,6 +1,9 @@
 ; Turbo loader routing, adapted from the official
 ; ROM routines (Rui Ribeiro)
 ;
+; LD0-LD9 timing of load routines
+; SA0-SA9 timing of save routines
+;
 ; RANDOMIZE USR 50000 - SCREEN LOAD ROUTINE
 ; RANDOMIZE USR 50001 - SCREEN SAVE ROUTING
 
