@@ -274,9 +274,10 @@ LD_SAMPLE:
 	XOR	$FB
         LD      C,A             ; and put back in C for long-term.
 
-;	LD	A,IXL
-;	db $DD, $7D  
-;	XOR	L
+;	LD	A,IXL		; multicolor
+;	db $DD, $7D  		; makes difficult to debug
+;	XOR	L		; tape loading problems
+
         AND     $07             ; isolate new colour bits.
         OR      $08             ; set bit 3 - MIC off.
         OUT     ($FE),A         ; send to port to effect the change of colour. 
@@ -511,12 +512,12 @@ SA9:    LD      B,$1F           ; set up timing. no-turbo: $31
 ;;   The accumulator is set to  $00 for a header, $FF for data.
 ;
 ;;; SA-BYTES
-;L04C2:  LD      HL,L053F        10; address: SA/LD-RET
-;        PUSH    HL              11; is pushed as common exit route.
+;L04C2:  LD      HL,L053F        10T; address: SA/LD-RET
+;        PUSH    HL              11T; is pushed as common exit route.
 ;                                ; however there is only one non-terminal exit 
 ;                                ; point.
 ;
-;        LD      HL,$1F80        10; a timing constant H=$1F, L=$80
+;        LD      HL,$1F80        10T; a timing constant H=$1F, L=$80
 ;                                ; inner and outer loop counters
 ;                                ; a five second lead-in is used for a header.
 ;
@@ -965,11 +966,11 @@ SA9:    LD      B,$1F           ; set up timing. no-turbo: $31
 ;        LD      C,A             4; and put back in C for long-term.
 ;
 ;        AND     $07             7; isolate new colour bits.
-;        OR      $08             7; set bit 3 - MIC off.
-;        OUT     ($FE),A         11; send to port to effect the change of colour. 
+;        OR      $08             7T; set bit 3 - MIC off.
+;        OUT     ($FE),A         11T; send to port to effect the change of colour. 
 ;
-;        SCF                     4; set carry flag signaling edge found within
+;        SCF                     4T; set carry flag signaling edge found within
 ;                                ; time allowed.
-;        RET        		10 
+;        RET        		10T
 ;
 ;
