@@ -31,15 +31,15 @@ LOOP:	LD	(HL),A
 	RET
 
 SAVE_SCREEN:
-	LD 	HL,16384
+	LD 	HL,$4000 ; 16384
 	LD  	IX,HEADER
 	CALL 	$0970 ; SA-CONTRL
 	RET
 
 HEADER: DEFB 	$03
         DEFM 	"ECRA      " ; 10 BYTES
-        DEFW 	6912	     ; LEN
-        DEFW 	16384        ; BEGIN
+        DEFW 	$1B00	     ; LEN - 6912
+        DEFW 	$4000        ; BEGIN - 16384
         DEFW 	0
 
 LOAD_SCREEN:
