@@ -3,7 +3,8 @@
 	; BASED IN YS/WOS ROUTINE
 	; RUI RIBEIRO/2019
 
-	ORG	$5CD0
+	;ORG	$5CD0
+	ORG	60000
 START:
 	; HL,(HANDLER)
 	LD HL,HANDLER-START
@@ -38,8 +39,8 @@ HANDLER:
 	CP $14			;L BREAK into program
 	JR Z,label1		; =
 	CP $0C			;  D BREAK - CONT repeats
-	JP NZ,$1303             ;!= GO  MAIN_4
 				; usual value pushed in (ERR_SP) 
+	JP NZ,$1303             ;!= GO  MAIN_4
 label1:  
 	PUSH HL			; PUSH HANDLER
 	LD (IY+0),$FF           ;  $5C3A ERR-NR - 
