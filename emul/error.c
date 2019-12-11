@@ -28,7 +28,7 @@ void Panic(msg)
 const char * msg;
 {
    Warning(msg);
-   // do_reset();
+   do_reset();
 }
 
 /* EOF: Error.c */
