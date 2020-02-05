@@ -278,7 +278,7 @@ int open_sna(const char * file_name)
 	    status = rom_load(stream);
 	    // LIXO
 	    //if(reset)
-	    //   do_reset();
+	    do_reset();
 	    break;
 
 	 case SCR_FMT:
