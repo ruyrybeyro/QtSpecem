@@ -14,6 +14,8 @@
 /* buffer caching the Spectrum attributes state */
 static char attrib_z80[24][32];
 
+// #include <stdio.h>
+
 //  Write a byte on Spectrum memory, at the attribute cache,
 // and at the WinG buffer if needed
 void writebyte(unsigned short adress, unsigned char byte)
@@ -30,6 +32,16 @@ void writebyte(unsigned short adress, unsigned char byte)
     */
    if(adress < 0x4000)
       return; 
+   /*
+   if ( (adress > readword(0x8002)) && (adress < (readword(0x8002)+793)))
+   {
+      FILE * out;
+
+      out = fopen("/tmp/out", "a");
+      fprintf(out, "%04X\n", PC );
+      fclose(out);
+   }
+   */
 
    *(mem + adress) = byte;
 

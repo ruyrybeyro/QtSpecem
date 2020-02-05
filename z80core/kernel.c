@@ -60,17 +60,17 @@ void execute()
      --> 0xED, 0xCB are 'gates' to another sets of instructions
    */
         do
-	{
-        if ( PC == 0X04C2 )
-        {
-           TraceOn = 3;
-           clock_ticks = 0;
-        }
+        {	
         if (!TraceOn)
         {
 	   inc_R();
 	   /* Call funtion indexed by opcode */
 	   (*instruc_tabl[Getnextbyte()])();
+         //if ( PC == 0x0562 )
+         //{
+         //  TraceOn = 2;
+         //  break;
+         //}
             /* if (PC > 16383)
                  {
                     static int n = 0;
