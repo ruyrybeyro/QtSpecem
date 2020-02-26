@@ -281,6 +281,16 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                    save_sna(s);
                    }
                    break;
+
+               case Qt::Key_F5:
+                   {
+                   static int n = 0;
+                   char s[200];
+
+                   sprintf(s, "/tmp/w%04d.tap", n++);
+                   save_sna(s);
+                   }
+                   break;
        
                //case VK_F3:
                //        PostMessage(hwnd, WM_COMMAND, IDM_OPEN, 0L);
