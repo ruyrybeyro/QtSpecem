@@ -17,12 +17,15 @@
 ; see https://www.worldofspectrum.org/faq/reference/128kreference.htm
 ;
 ; CLEAR 30999: LOAD "THIS" CODE : RAND USR 31000 : LOAD "ROM" CODE 49152 : RAND USR 31001 
+;
+; Short note: USR BASIC routine loads BC with called address
 
 	ORG	31000
 	NOP
-	LD	A,C
-	AND	1
-	JR	NZ,SPECIAL_MODE
+	LD	A,C               ; point of entry for 2nd time calling
+	AND	1		  
+	JR	NZ,SPECIAL_MODE   ; if BC odd, go to SPECIAL_MODE
+
 
 ; First moves bank 4 to $C000 (49152) replacing  Bank 0
 ;
