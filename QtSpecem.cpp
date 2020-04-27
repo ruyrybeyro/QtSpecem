@@ -223,7 +223,8 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_Escape:
                      keybd_buff[0] &= 0xFE; /* CAPS SHIFT */
        
-               case Qt::Key_Space:      keybd_buff[7] &= 0xFE; break;
+               case Qt::Key_Space:      
+                     keybd_buff[7] &= 0xFE; break;
                 case Qt::Key_M: keybd_buff[7] &= 0xFB; break;
                case Qt::Key_N: keybd_buff[7] &= 0xF7; break;
                 //case VK_MULTIPLY:

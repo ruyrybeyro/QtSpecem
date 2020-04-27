@@ -77,7 +77,21 @@ SPECIAL_MODE:
 	OUT     (C),A		; change for special mode 2
 				; 4->5->6->3
 
-	JP      0	; JUMP to the beggining of the "new" "ROM"
+	; possible addition to improve 48K compatibility
+        ; disabling paging
+        ;
+        ;LD      A,($5b5c)      ; system copy of $7ffd
+
+        ;OR      $20            ; disable paging
+
+        ;LD      BC,$7ffd
+        ;DI
+        ;LD      ($5b5c),A      ; save copy of the new value
+
+        ;OUT     (C),A          ; disable paging
+
+
+	JP      0	; JUMP to the beginning of the "new" "ROM"
 
 	END	31000
 
