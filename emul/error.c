@@ -6,7 +6,7 @@
 
 #include <string.h>
 #include <ctype.h>
-#include "../z80core/env.h"
+#include "../h/env.h"
 
 /*=========================================================================*
  *                            warning                                      *

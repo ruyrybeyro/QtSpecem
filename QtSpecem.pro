@@ -17,26 +17,30 @@ CONFIG += app_bundle
 HEADERS += QtSpecem.h \
            h/quirks.h \
            h/snap.h \
-           z80core/env.h \
-           z80core/iglobal.h \
-           z80core/ivars.h \
-           z80core/z80.h
+           h/env.h \
+           h/iglobal.h \
+           h/ivars.h \
+           h/z80.h
 SOURCES += main.cpp \
            QtSpecem.cpp \
            emul/error.c \
            emul/floating_bus.c \
+           emul/init.c \
            emul/initmem.c \
+           emul/mem.c \
            emul/shm_server.c \
+           emul/shutdown.c \
            emul/sna_load.c \
            emul/sna_save.c \
            emul/ndebgz80.c \
+           emul/parity.c \
            emul/ports.c \
            emul/video.c \
+           emul/stack.c \
            z80core/bits.c \
            z80core/callret.c \
            z80core/exctranf.c \
            z80core/flags.c \
-           z80core/init.c \
            z80core/inout.c \
            z80core/intr.c \
            z80core/jump.c \
@@ -45,9 +49,6 @@ SOURCES += main.cpp \
            z80core/ld8bits.c \
            z80core/math16bi.c \
            z80core/math8bit.c \
-           z80core/mem.c \
            z80core/misc.c \
-           z80core/rotate.c \
-           z80core/shutdown.c \
-           z80core/stack.c
+           z80core/rotate.c 
 RESOURCES += QtSpecem.qrc

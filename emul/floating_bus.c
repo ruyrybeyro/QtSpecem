@@ -6,7 +6,7 @@
 
 // see http://ramsoft.bbk.org.omegahg.com/floatingbus.html
 
-#include "../z80core/env.h"
+#include "../h/env.h"
 
 // RAM address of each pixel line on screen
 int screen_lines[192] =

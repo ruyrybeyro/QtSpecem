@@ -5,7 +5,7 @@
  */
 
 //#include "../h/quirks.h"
-#include "env.h"
+#include "../h/env.h"
 
 //static UCHAR inited = 0;
 

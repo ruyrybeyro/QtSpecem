@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../z80core/env.h"
+#include "../h/env.h"
 
 /* keeps last out to ula --- current border colour */
 static UCHAR out_ula = 190;

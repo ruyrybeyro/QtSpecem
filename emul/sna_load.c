@@ -23,7 +23,7 @@
 #include <string.h>
 #include <ctype.h>
 //#include <dir.h>
-#include "../z80core/env.h"
+#include "../h/env.h"
 #include "../h/snap.h"
 
 // as defined in WSpecem.c

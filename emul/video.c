@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../z80core/env.h"
+#include "../h/env.h"
 
 
 /* buffer caching the Spectrum attributes state */

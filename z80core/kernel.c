@@ -4,8 +4,8 @@
  *
  */
 
-#include "env.h"
-#include "ivars.h"
+#include "../h/env.h"
+#include "../h/ivars.h"
 
 #include <stdio.h>
 #include <string.h>
