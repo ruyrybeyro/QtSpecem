@@ -19,11 +19,16 @@ extern "C" void save_sna(const char * file_name);
 #define BORDER_HORIZONTAL 32
 #define BORDER_VERTICAL 16
 
+#define BORDER_THRESHOLD_LOW 4096              /* Border scan start in T-states */
+#define BORDER_THRESHOLD_HIGH 4096+(65535)     /* Border scan end in T-states */
+
+
 static QImage background(256+(2*BORDER_HORIZONTAL), 192+(2*BORDER_VERTICAL), QImage::Format_Indexed8);
 
+/* This stores one color for a specific border line */
 static uint8_t border_colors[192+(2*BORDER_VERTICAL)];
-
-//unsigned char * img = background.bits();
+static uint8_t border_color; // Last border color seen
+static uint16_t border_ptr; // Current border line being updated */
 
 /* RGB 'Spectrum' colors */
 static unsigned char rgbvals[16][3]={
@@ -54,11 +59,6 @@ extern "C" void pixel_host(unsigned short x, unsigned short  y, unsigned char co
     background.setPixel(x + BORDER_HORIZONTAL, y+BORDER_VERTICAL, colour);
 }
 
-#define BORDER_THRESHOLD_LOW 4096
-
-static uint8_t border_color;
-static uint16_t border_ptr;
-
 void complete_border()
 {
     while (border_ptr<(BORDER_VERTICAL*2)+192) {
@@ -67,66 +67,43 @@ void complete_border()
 
 }
 
-#define BORDER_THRESHOLD_LOW 4096
-#define BORDER_THRESHOLD_HIGH 4096+(65535)
-
 extern "C" void border_updated(uint8_t color, unsigned long ticks)
 {
-//    printf("Border updated %02x ticks %ld\n", color, ticks);
-    border_color = color;
-
     if (ticks<BORDER_THRESHOLD_LOW || ticks>BORDER_THRESHOLD_HIGH) {
+        // Even if we do not draw anything, we need to save the color here.
+        border_color = color;
         return;
     }
     // Compute border ptr
     unsigned new_border_ptr = ticks - BORDER_THRESHOLD_LOW;
+
+    // Total number of screen lines including border
+    const unsigned lines = sizeof(border_colors)/sizeof(border_colors[0]);
+
     const unsigned height = 192+(BORDER_VERTICAL*2);
     const unsigned delta = BORDER_THRESHOLD_HIGH - BORDER_THRESHOLD_LOW;
+
+    // Remap the range LOW-HIGH into the image vertical area
 
     new_border_ptr *= height;
     new_border_ptr /= delta;
 
-   // printf("Border updated %02x ticks %ld border_ptr %d\n", color, ticks, new_border_ptr);
-
-    while (border_ptr < new_border_ptr) {
-        border_colors[border_ptr] = border_color;
-        border_ptr++;
+    // Do not let overflow.
+    if (new_border_ptr>lines) {
+        new_border_ptr = lines; // This is still 1-past the array size. No problem here.
     }
 
-    /*Border updated 05 ticks 84
-Border updated 02 ticks 2252
-Border updated 05 ticks 4420
-Border updated 02 ticks 6588
-Border updated 05 ticks 8756
-Border updated 02 ticks 10924
-Border updated 05 ticks 13092
-Border updated 02 ticks 15260
-Border updated 05 ticks 17428
-Border updated 02 ticks 19596
-Border updated 05 ticks 21764
-Border updated 02 ticks 23932
-Border updated 05 ticks 26100
-Border updated 02 ticks 28268
-Border updated 05 ticks 30436
-Border updated 02 ticks 32604
-Border updated 05 ticks 34772
-Border updated 02 ticks 36940
-Border updated 05 ticks 39108
-Border updated 02 ticks 41276
-Border updated 05 ticks 43444
-Border updated 02 ticks 45612
-Border updated 05 ticks 47780
-Border updated 02 ticks 49948
-Border updated 05 ticks 52116
-Border updated 02 ticks 54284
-Border updated 05 ticks 56452
-Border updated 02 ticks 58620
-Border updated 05 ticks 60788
-Border updated 02 ticks 62956
-Border updated 05 ticks 65124
-Border updated 02 ticks 67292
-Border updated 05 ticks 69460 */
+    while (border_ptr < new_border_ptr) {
+        border_colors[border_ptr] = border_color; // Old color
+        border_ptr++;
+    }
+    // If we already drawn the last line, skip, otherwise place the color there.
+    if (border_ptr<lines) {
+        border_colors[border_ptr++] = color; // new color
+    }
 
+    // Save color.
+    border_color = color;
 }
 
 DrawnWindow::DrawnWindow(QWidget *parent) : QMainWindow(parent) {
