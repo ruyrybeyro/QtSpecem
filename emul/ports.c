@@ -44,7 +44,9 @@ void writeport(USHORT port, UCHAR value)
         //              4:  1 activates EAR / Internal Speaker
 
         borderColor = value & 7;
-        
+
+        border_updated(borderColor, clock_ticks);
+
         out_ula = value;
        
                 /*        if (out_ula & 0x10)
