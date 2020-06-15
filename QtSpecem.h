@@ -16,6 +16,7 @@ public:
 	void paintEvent(QPaintEvent *) override;
 	void KeyPress(QMainWindow *parent = 0);
 protected:
+    void drawBorder();
     void keyPressEvent(QKeyEvent *) override;
     void keyReleaseEvent(QKeyEvent *) override;
     void dragEnterEvent(QDragEnterEvent *event) override;
