@@ -56,6 +56,7 @@ struct Z80vars
    UCHAR TraceOnCopy;
    USHORT PC;
    USHORT SP;
+   USHORT BreakPoint;
    // define if last operation affected flags
    USHORT Q;
    /* 'ticks' counter ; SPECTRUM Z80A - 3,5469MHz -
@@ -98,6 +99,7 @@ struct Z80vars
 
 #define PC Z80vars->PC
 #define SP Z80vars->SP
+#define BreakPoint Z80vars->BreakPoint
 #define Q Z80vars->Q
 #define clock_ticks Z80vars->clock_ticks
 #define R Z80vars->R

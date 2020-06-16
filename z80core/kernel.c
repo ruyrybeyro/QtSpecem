@@ -66,12 +66,12 @@ void execute()
 	   inc_R();
 	   /* Call funtion indexed by opcode */
 	   (*instruc_tabl[Getnextbyte()])();
-         // if ( PC == 0x0562 )
-         //if ( PC == 0x05c8 )
-         //{
-         //  TraceOn = 2;
-         //  break;
-         //}
+
+         if ( PC == BreakPoint )
+         {
+           TraceOn = 2;
+           break;
+         }
             /* if (PC > 16383)
                  {
                     static int n = 0;
