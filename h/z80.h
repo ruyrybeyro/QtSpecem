@@ -7,6 +7,8 @@
 
 #include "../h/quirks.h"
 
+#include <stdint.h>
+
 /* Do not change the order!
 */
 struct Z80word_reg
@@ -56,7 +58,7 @@ struct Z80vars
    UCHAR TraceOnCopy;
    USHORT PC;
    USHORT SP;
-   USHORT BreakPoint;
+   uint32_t BreakPoint;
    // define if last operation affected flags
    USHORT Q;
    /* 'ticks' counter ; SPECTRUM Z80A - 3,5469MHz -
