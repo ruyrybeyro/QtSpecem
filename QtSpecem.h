@@ -9,6 +9,13 @@
 #include<QTimer>
 #include <QtGui>
 
+QT_BEGIN_NAMESPACE
+class QAction;
+class QActionGroup;
+class QLabel;
+class QMenu;
+QT_END_NAMESPACE
+
 class DrawnWindow: public QMainWindow {
 Q_OBJECT
 public:
@@ -22,9 +29,21 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
+
+private slots:
+	void reset();
+        void nmi();
 
 private:
+	void createActions();
+    	void createMenus();
+
 	QTimer *timer;
+
+        QMenu * miscMenu;
+        QAction *resetAct;
+        QAction *nmiAct;
 };
 
 #endif

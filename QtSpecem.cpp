@@ -8,8 +8,12 @@
 
 
 #include <QMessageBox>
+#include <QMenu>
+#include <QMenuBar>  
 
 extern "C" void execute();
+extern "C" void do_reset();
+extern "C" void do_nmi_int();
 
 extern "C" unsigned char keybd_buff[8];
 extern "C" unsigned char joystick;
@@ -106,7 +110,53 @@ extern "C" void border_updated(uint8_t color, unsigned long ticks)
     border_color = color;
 }
 
+void DrawnWindow::contextMenuEvent(QContextMenuEvent *event)
+{
+    QMenu menu(this);
+
+    //menu.addAction(cutAct);
+    //menu.addAction(copyAct);
+    //menu.addAction(pasteAct);
+    menu.exec(event->globalPos());
+}
+
+void DrawnWindow::reset()
+{
+    do_reset();
+}
+
+void DrawnWindow::nmi()
+{
+    do_nmi_int();
+}
+
+void DrawnWindow::createActions()
+{
+//! [5]
+    resetAct = new QAction(tr("&Reset"), this);
+    //newAct->setShortcuts(QKeySequence::New);
+    resetAct->setStatusTip(tr("Reset Spectrum"));
+    connect(resetAct, &QAction::triggered, this, &DrawnWindow::reset);
+//! [4]
+
+    nmiAct = new QAction(tr("&NMI"), this);
+    //openAct->setShortcuts(QKeySequence::Open);
+    nmiAct->setStatusTip(tr("NMI"));
+    connect(nmiAct, &QAction::triggered, this, &DrawnWindow::nmi);
+}
+
+void DrawnWindow::createMenus()
+{
+    miscMenu = menuBar()->addMenu(tr("&Misc"));
+    miscMenu->addAction(resetAct);
+    miscMenu->addAction(nmiAct);
+    //miscMenu->addSeparator();
+}
+
 DrawnWindow::DrawnWindow(QWidget *parent) : QMainWindow(parent) {
+
+    createActions();
+    createMenus();
 
     setGeometry(0,0, ((256+(BORDER_HORIZONTAL*2))*2),
                 (192+(BORDER_VERTICAL*2))*2);
