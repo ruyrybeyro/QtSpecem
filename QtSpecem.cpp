@@ -142,7 +142,7 @@ void DrawnWindow::about()
     //infoLabel->setText(tr("<b>Help|About</b>"));
     QMessageBox::about(this, tr("About Menu"),
             tr("QtSpecem\n" 
-               "Rui Ribeiro\n"
+               "https://github.com/ruyrybeyro/QtSpecem"
                __DATE__));
 }
 
