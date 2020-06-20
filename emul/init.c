@@ -94,7 +94,17 @@ void Init_Z80Emu(void)
           Z80IX    = (union Z80IX *)     vars + sizeof(struct Z80vars) + sizeof(union Z80Regs) + sizeof(union Z80Regs) + sizeof(struct CPU_flags);
           Z80IY    = (union Z80IY *)     vars + sizeof(struct Z80vars) + sizeof(union Z80Regs) + sizeof(union Z80Regs) + sizeof(struct CPU_flags) + sizeof(union Z80IX);
 	}
+        do_fullreset();
+}
+
+/*=========================================================================*
+ *                            do_fullreset                                 *
+ *=========================================================================*/
+void do_fullreset()
+{
         BreakPoint = -1;
+        TraceOn    = 0;
+        do_reset();
 }
 
 /*=========================================================================*

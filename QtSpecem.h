@@ -7,7 +7,7 @@
 #include<QPainter>
 #include<QImage>
 #include<QTimer>
-#include <QtGui>
+#include<QtGui>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -33,17 +33,23 @@ protected:
 
 private slots:
 	void reset();
+	void fullreset();
         void nmi();
+	void about();
 
 private:
 	void createActions();
     	void createMenus();
 
-	QTimer *timer;
+	QTimer  * timer;
 
-        QMenu * miscMenu;
-        QAction *resetAct;
-        QAction *nmiAct;
+        QMenu   * miscMenu;
+        QMenu   * helpMenu;
+        QAction * resetAct;
+        QAction * fullresetAct;
+        QAction * nmiAct;
+        QAction * aboutAct;
+        QLabel  * infoLabel;
 };
 
 #endif

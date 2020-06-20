@@ -10,9 +10,11 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QMenuBar>  
+#include <QtWidgets> 
 
 extern "C" void execute();
 extern "C" void do_reset();
+extern "C" void do_fullreset();
 extern "C" void do_nmi_int();
 
 extern "C" unsigned char keybd_buff[8];
@@ -125,32 +127,57 @@ void DrawnWindow::reset()
     do_reset();
 }
 
+void DrawnWindow::fullreset()
+{
+    do_fullreset();
+}
+
 void DrawnWindow::nmi()
 {
     do_nmi_int();
 }
 
+void DrawnWindow::about()
+{
+    //infoLabel->setText(tr("<b>Help|About</b>"));
+    QMessageBox::about(this, tr("About Menu"),
+            tr("QtSpecem\n" 
+               "Rui Ribeiro\n"
+               __DATE__));
+}
+
 void DrawnWindow::createActions()
 {
-//! [5]
     resetAct = new QAction(tr("&Reset"), this);
-    //newAct->setShortcuts(QKeySequence::New);
+    //resetAct->setShortcuts(QKeySequence::New);
     resetAct->setStatusTip(tr("Reset Spectrum"));
     connect(resetAct, &QAction::triggered, this, &DrawnWindow::reset);
-//! [4]
+
+    fullresetAct = new QAction(tr("&FullReset"), this);
+    //fullresetAct->setShortcuts(QKeySequence::New);
+    fullresetAct->setStatusTip(tr("Power cyle Spectrum"));
+    connect(fullresetAct, &QAction::triggered, this, &DrawnWindow::fullreset);
 
     nmiAct = new QAction(tr("&NMI"), this);
-    //openAct->setShortcuts(QKeySequence::Open);
+    //nmiAct->setShortcuts(QKeySequence::Open);
     nmiAct->setStatusTip(tr("NMI"));
     connect(nmiAct, &QAction::triggered, this, &DrawnWindow::nmi);
+
+    // About is bellow the app name
+    aboutAct = new QAction(tr("&About"), this);
+    aboutAct->setStatusTip(tr("Show About box"));
+    connect(aboutAct, &QAction::triggered, this, &DrawnWindow::about);
 }
 
 void DrawnWindow::createMenus()
 {
     miscMenu = menuBar()->addMenu(tr("&Misc"));
     miscMenu->addAction(resetAct);
+    miscMenu->addAction(fullresetAct);
     miscMenu->addAction(nmiAct);
     //miscMenu->addSeparator();
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+    helpMenu->addAction(aboutAct);
 }
 
 DrawnWindow::DrawnWindow(QWidget *parent) : QMainWindow(parent) {
@@ -482,9 +509,9 @@ void DrawnWindow::dropEvent(QDropEvent *e)
         QString fileName = url.toLocalFile();
         const char * filename = fileName.toUtf8().constData();
         open_sna(filename);
-//QMessageBox msgBox;
-//msgBox.setText(filename);
-//msgBox.exec();
+        //QMessageBox msgBox;
+        //msgBox.setText(filename);
+        //msgBox.exec();
     }
    }
 
