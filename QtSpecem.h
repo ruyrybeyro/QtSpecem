@@ -32,6 +32,9 @@ protected:
     void contextMenuEvent(QContextMenuEvent *event) override;
 
 private slots:
+     	void newFile();
+    	void open();
+    	void save();
 	void reset();
 	void fullreset();
         void nmi();
@@ -43,8 +46,13 @@ private:
 
 	QTimer  * timer;
 
+        QMenu   * fileMenu;
         QMenu   * miscMenu;
         QMenu   * helpMenu;
+   	QAction *newAct;
+    	QAction *openAct;
+    	QAction *saveAct;
+    	QAction *exitAct;
         QAction * resetAct;
         QAction * fullresetAct;
         QAction * nmiAct;

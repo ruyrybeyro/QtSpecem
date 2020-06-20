@@ -122,6 +122,19 @@ void DrawnWindow::contextMenuEvent(QContextMenuEvent *event)
     menu.exec(event->globalPos());
 }
 
+void DrawnWindow::newFile()
+{
+}
+
+void DrawnWindow::open()
+{
+}
+
+void DrawnWindow::save()
+{
+}
+
+
 void DrawnWindow::reset()
 {
     do_reset();
@@ -148,6 +161,26 @@ void DrawnWindow::about()
 
 void DrawnWindow::createActions()
 {
+    newAct = new QAction(tr("&New"), this);
+    newAct->setShortcuts(QKeySequence::New);
+    newAct->setStatusTip(tr("Create a new file"));
+    connect(newAct, &QAction::triggered, this, &DrawnWindow::newFile);
+
+    openAct = new QAction(tr("&Open..."), this);
+    openAct->setShortcuts(QKeySequence::Open);
+    openAct->setStatusTip(tr("Open an existing file"));
+    connect(openAct, &QAction::triggered, this, &DrawnWindow::open);
+
+    saveAct = new QAction(tr("&Save"), this);
+    saveAct->setShortcuts(QKeySequence::Save);
+    saveAct->setStatusTip(tr("Save the document to disk"));
+    connect(saveAct, &QAction::triggered, this, &DrawnWindow::save);
+
+    exitAct = new QAction(tr("E&xit"), this);
+    exitAct->setShortcuts(QKeySequence::Quit);
+    exitAct->setStatusTip(tr("Exit the application"));
+    connect(exitAct, &QAction::triggered, this, &QWidget::close);
+
     resetAct = new QAction(tr("&Reset"), this);
     //resetAct->setShortcuts(QKeySequence::New);
     resetAct->setStatusTip(tr("Reset Spectrum"));
@@ -171,6 +204,14 @@ void DrawnWindow::createActions()
 
 void DrawnWindow::createMenus()
 {
+    fileMenu = menuBar()->addMenu(tr("&File"));
+    fileMenu->addAction(newAct);
+    fileMenu->addAction(openAct);
+    fileMenu->addAction(saveAct);
+    fileMenu->addSeparator();
+    fileMenu->addAction(exitAct);
+
+
     miscMenu = menuBar()->addMenu(tr("&Misc"));
     miscMenu->addAction(resetAct);
     miscMenu->addAction(fullresetAct);
