@@ -52,7 +52,6 @@ private:
    	QAction *newAct;
     	QAction *openAct;
     	QAction *saveAct;
-    	QAction *exitAct;
         QAction * resetAct;
         QAction * fullresetAct;
         QAction * nmiAct;
