@@ -128,6 +128,11 @@ void DrawnWindow::newFile()
 
 void DrawnWindow::open()
 {
+   QString fileName = QFileDialog::getOpenFileName(this,
+    tr("Open Image"), "/home/jana", tr("Spectrum Files (*.z80 *.sna *.tap)"));
+   QByteArray ba = fileName.toLocal8Bit(); 
+   if (ba.data() != NULL)
+      open_sna(ba.data());
 }
 
 void DrawnWindow::save()
