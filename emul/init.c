@@ -11,6 +11,7 @@
 
 unsigned char * alloc_speccy_shared_ram(void);
 unsigned char * alloc_speccy_shared_vars(void);
+unsigned char * dealloc_shared(unsigned char *, unsigned char *);
 
 /* vars to keep states of options for emulator */
 unsigned char 	     bModel3 = 1;   /* Model 3 or Model 2   */
@@ -114,13 +115,9 @@ void Close_Z80Emu()
 {
    if(inited)
    {
-      /* close emulation */
-      if(mem != NULL ) // free memory used
-      {
-	 free(mem);
-      }
       inited--;
    }
+   dealloc_shared(mem, vars);   
 }
 
 /* EOF: Init.C */

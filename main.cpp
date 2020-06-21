@@ -11,6 +11,7 @@ extern "C" void init_pallete();
 extern "C" void open_sna(const char *);
 extern "C" void writebyte(unsigned short, unsigned char);
 extern "C" void patch_rom(int);
+extern "C" void Close_Z80Emu();
 extern unsigned char * mem;
 
 int main(int argc, char **argv) {
@@ -27,6 +28,8 @@ int main(int argc, char **argv) {
     init_pallete();
     
     init_emul();
+
+    atexit(Close_Z80Emu);
 
     //draw.show();
 

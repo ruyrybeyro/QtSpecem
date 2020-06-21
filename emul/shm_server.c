@@ -7,7 +7,7 @@
 
 #define SHMSZ     65536
 #define SHMVARS sizeof(struct Z80vars)+(sizeof(union Z80Regs)*2)+sizeof(struct CPU_flags) \
-		+sizeof(union Z80IX)+sizeof(union Z80IY)
+		+sizeof(union Z80IX)+sizeof(union Z80IY)+1
 
 unsigned char * alloc_speccy_shared_ram(void)
 {
@@ -36,7 +36,6 @@ unsigned char * alloc_speccy_shared_ram(void)
         perror("shmat");
         exit(1);
     }
-
     return (unsigned char *)shm;
 }
 
@@ -68,6 +67,16 @@ unsigned char * alloc_speccy_shared_vars(void)
         exit(1);
     }
 
+    // counts number of "shm clients"
+    (*(shm+SHMVARS-1))++;
     return (unsigned char *)shm;
 }
 
+void dealloc_shared(unsigned char * mem, unsigned char * vars)
+{
+   if ( (--(*(vars+SHMVARS-1))) == 0 )
+   {
+      shmdt(vars);
+      shmdt(mem);
+   }
+}
