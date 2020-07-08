@@ -76,6 +76,7 @@ L_DETECT:
 
 	; detect joystick type
 	CALL	DETECT_JOY
+
 	; go to loop if not detected
 	JR	C,L_DETECT
 
@@ -84,7 +85,7 @@ L_DETECT:
 
 	 
 L_TEST:	
-	; if space pressed leave to BASIC
+	; if space pressed leaves to BASIC
 	CALL	T_SPACE
 	RET	NZ
 
@@ -93,6 +94,7 @@ L_TEST:
 
         ; show joytstick actions	
         CALL	TEST_JOY
+
 	JR	L_TEST
 
 	; Never reachs here
