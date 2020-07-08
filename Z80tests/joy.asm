@@ -202,7 +202,7 @@ TEST_JOY:
 	; $F7FE row 1-5, for 5 (left)
 	IN	A,(C)
 	CPL	
-	AND	$10	; test key 5
+	AND	$10	; and with key 5
 	; shift it to an unused bit on the other port
         SRA     A 
 	SRA	A
