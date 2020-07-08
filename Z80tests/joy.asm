@@ -213,6 +213,7 @@ TEST_JOY:
 	CPL	
 	AND	$10	; and with key 5
 	; shift it to an unused bit on the other port
+	; store it in D'
         SRA     A 
 	SRA	A
 	SRA	A       
