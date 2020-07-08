@@ -50,6 +50,8 @@ A_FIRE   	EQU     2*32+2 ; ATTR+((LINE1+2)*32)+COL+2
 A_RIGHT  	EQU     2*32+4 ; ATTR+((LINE1+2)*32)+COL+4
 A_DOWN   	EQU     4*32+2 ; ATTR+((LINE1+4)*32)+COL+2
 
+; Begin of program/asm code
+
 	ORG	32768
 
 	; point UDGs to our table
@@ -95,6 +97,7 @@ L_TEST:
 	; Never reachs here
 	;RET
 
+;
 ; loads joystck port
 ; Entry:
 ;      HL=pointing to first element of detection array
@@ -102,6 +105,7 @@ L_TEST:
 ;      BC=joytick port to be tested
 ;      HL=pointing to second element of detection array
 ;      C=1 end of detection array
+;
 
 LOAD_JOY_PORT:
         LD      C,(HL)
@@ -120,12 +124,14 @@ ALL_OK:
         INC     HL
         RET
 
+;
 ; DETECT JOYSTICK
 ; Returns:
 ; C=1 error
 ; otherwise
 ; BC=PORT to read
 ; HL pointing to third element of detection array
+;
 
 DETECT_JOY:
         LD 	HL,KEMPSTON_P
@@ -145,10 +151,12 @@ DETECTED:
 	CCF
 	RET
 
+;
 ; PRINTS JOYSTICK NAME
 ; HL= pointer to detected joystick name
 ; Returns:
 ; HL pointing to fourth element of detection array
+;
 
 JOY_NAME:
 	PUSH	BC
@@ -168,6 +176,7 @@ SPACES:	LD	A,' '
 	POP	BC
 	RET
 
+;
 ; TEST JOYSTICK
 ; ENTRIES:
 ;        HL pointing to addr of 8 words mapping bits to ATTR
@@ -295,6 +304,7 @@ PRINT:	LD	A,(HL)
 	INC	HL
 	JP	PRINT
 
+;
 ;DELAY:	
 ;	HALT
 ;	RET
@@ -313,6 +323,7 @@ T_SPACE:
 ; DATA
 ;
 
+;
 ; We store it in D'
 ; status of left direction
 ;CURS_TMP:  DEFB	0
@@ -320,41 +331,45 @@ T_SPACE:
 ;Array: Detection port
 ;       Value
 ;       Pointer to descriptive text
-;       Pointer to bits behaviour    
+;       Pointer to bits behaviour 
+;   
 
 KEMPSTON_P:
            DEFW $1F		; kempston port
            DEFB $02		; left
            DEFW KEMPSTON_T	; "Kempston$"
-           DEFW KEMPSTON_B	; array pointer of Kempston bit behaviour
+           DEFW KEMPSTON_B	; array pointer of Kempston 8 bit behaviour
 FULLER_P:  DEFW $7F		; fuller port
            DEFB $04		; left
            DEFW FULLER_T	; "Fuller$"
-           DEFW FULLER_B	; array pointer of Fuller bit behaviour
+           DEFW FULLER_B	; array pointer of Fuller 8 bit behaviour
 CURSOR_P:  DEFW $F7FE		; Cursor first port (1-5 row)
            DEFB $10		; test for 5
            DEFW CURSOR_T	; "Cursor$"
-CURSORP:   DEFW CURSOR_B	; array pointer of Cursor bit behaviour
+CURSORP:   DEFW CURSOR_B	; array pointer of Cursor 8 bit behaviour
 SINCLAIR:  DEFW $F7FE		; Sinclair port (1-5 row)
            DEFB $01		; "Sinclair$"
            DEFW SINCLAIR_T
-           DEFW SINCLAIR_B	; array pointer of Sinclair bit behaviour
+           DEFW SINCLAIR_B	; array pointer of Sinclair 8 bit behaviour
 SINCLAIR_2: 
            DEFW	$EFFE		; Sinclair port (6-0 row)
 	   DEFB $10		; test for 6
 	   DEFW SINCLAIR_T	; "Sinclair$"
-           DEFW SINCLAIR_B2	; array pointer of Sinclair bit behaviour
+           DEFW SINCLAIR_B2	; array pointer of Sinclair 8 bit behaviour
 T2068_P1:  DEFW $01F6		; Timex 2068 port of 1st Joystick
            DEFB $04		; left
            DEFW T2068_T		; "Timex 2068$"
-           DEFW T2068_B		; array pointer of Sinclair bit behaviour
+           DEFW T2068_B		; array pointer of Timex 2068 8 bit behaviour
 T2068_P2:  DEFW $02F6		; Timex 2068 port of 2nd Joystick
            DEFB $04		; left
            DEFW T2068_T		; "Timex 2068$"
-           DEFW T2068_B		; array pointer of Sinclair bit behaviour
+           DEFW T2068_B		; array pointer of Timex 2068 8 bit behaviour
 END_P:	   DEFW	0		; end of array
 
+;
 ; name of joytick - need to print spaces after printing it
+;
+
 KEMPSTON_T:
            DEFB AT, 4, 8, "Kempston$"
 FULLER_T:  DEFB AT, 4, 8, "Fuller$"
@@ -363,9 +378,11 @@ SINCLAIR_T:
            DEFB AT, 4, 8, "Sinclair$"
 T2068_T:   DEFB AT, 4, 8, "Timex 2068$"
 
+;
 ; Bits of select ports behaviour, 7 to 0
 ; CURSOR bits are read from $EFFE except left from $f7fe
 ; 0 no action
+;
 
 KEMPSTON_B: DEFB A_FIRE, 0, 0, A_FIRE, A_UP,    A_DOWN,  A_LEFT,  A_RIGHT
 FULLER_B:   DEFB A_FIRE, 0, 0, 0,      A_RIGHT, A_LEFT,  A_DOWN,  A_UP
