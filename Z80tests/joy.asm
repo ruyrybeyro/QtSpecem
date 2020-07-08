@@ -43,7 +43,7 @@ FIRST_ATTR	EQU	ATTR+(LINE1*32)+COL
 
 ; memory offsets from first location
 ; so ATTR mapping tables can be 1 byte
-; ought not to be 0, it was selected for ignoring bit
+; ought not to be 0, it was selected for ignoring a bit
 
 A_UP     	EQU     2      ; ATTR+(LINE1*32)+COL+2              
 A_LEFT   	EQU     2*32   ; ATTR+((LINE1+2)*32)+COL              
