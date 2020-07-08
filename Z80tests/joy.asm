@@ -325,7 +325,7 @@ T_SPACE:
 
 ;
 ; We store it in D'
-; status of left direction
+; Cursor Joystick status of left direction
 ;CURS_TMP:  DEFB	0
 
 ;Array: Detection port
