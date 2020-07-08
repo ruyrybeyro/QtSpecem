@@ -39,16 +39,16 @@ ATTR_BIT_OFF	EQU	$38 ; black ink, white paper
 ATTR		EQU	$5800
 
 ; first actual memory ATTR location (UP)
-FIRST_ATTR	EQU	ATTR+(LINE1*32)
+FIRST_ATTR	EQU	ATTR+(LINE1*32)+COL
 
 ; memory offsets from first location
 ; so ATTR mapping tables can be 1 byte
 
-A_UP     	EQU     COL+2      ; ATTR+(LINE1*32)+COL+2              
-A_LEFT   	EQU     2*32+COL   ; ATTR+((LINE1+2)*32)+COL              
-A_FIRE   	EQU     2*32+COL+2 ; ATTR+((LINE1+2)*32)+COL+2
-A_RIGHT  	EQU     2*32+COL+4 ; ATTR+((LINE1+2)*32)+COL+4
-A_DOWN   	EQU     4*32+COL+2 ; ATTR+((LINE1+4)*32)+COL+2
+A_UP     	EQU     2      ; ATTR+(LINE1*32)+COL+2              
+A_LEFT   	EQU     2*32   ; ATTR+((LINE1+2)*32)+COL              
+A_FIRE   	EQU     2*32+2 ; ATTR+((LINE1+2)*32)+COL+2
+A_RIGHT  	EQU     2*32+4 ; ATTR+((LINE1+2)*32)+COL+4
+A_DOWN   	EQU     4*32+2 ; ATTR+((LINE1+4)*32)+COL+2
 
 	ORG	32768
 
