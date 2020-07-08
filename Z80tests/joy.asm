@@ -43,6 +43,7 @@ FIRST_ATTR	EQU	ATTR+(LINE1*32)+COL
 
 ; memory offsets from first location
 ; so ATTR mapping tables can be 1 byte
+; ought not to be 0, it was selected for ignoring bit
 
 A_UP     	EQU     2      ; ATTR+(LINE1*32)+COL+2              
 A_LEFT   	EQU     2*32   ; ATTR+((LINE1+2)*32)+COL              
@@ -122,8 +123,8 @@ LOAD_JOY_PORT:
 	SCF	; returns C=1 (end,error)
         RET     
 ALL_OK:        
-        IN      A,(C)
-        LD      E,(HL)
+        IN      A,(C)	;	A=read joystick port
+        LD      E,(HL)	;	E=expected left direction value from detection array
         INC     HL
         RET
 
@@ -282,26 +283,36 @@ IS_KEMPSTON:
 
         LD      C,L
 BITS:	
-	; get screen attribute offset
+	; get screen attribute offset in A
 	; from corresponding bit behaviour array
+	; if 0, the offset will be calculated
+	; but no action taken
 	LD	A,(DE)
 	INC	DE	; point to next bit
 
 	; build attribute byte in HL
 	LD	HL,FIRST_ATTR
+	; HL=HL+A
 	ADD	A,L
 	LD	L,A
 	JR	NC,NO_C
 	INC	H
 
+	; HL=attribute area address
+
 NO_C:	SLA	C	; shift left, bit 7 into carry
 	JR	NC,BIT_0
+
         CP	0	; if behaviour is 0, no action
 	JR	Z,BIT_1
-	
+
+	; in direction or fire, change UDG atribute colour	
 	LD	(HL),ATTR_BIT_ON  ; ink red
 	JR	BIT_1
+
+	; in inaction, possible restoration to former colour
 BIT_0:	LD	(HL),ATTR_BIT_OFF ; ink black
+
 BIT_1:	DJNZ	BITS	; B not 0, go to next bit
 
 	POP	BC
