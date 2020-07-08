@@ -173,10 +173,12 @@ JOY_NAME:
         PUSH	HL
 
 	; copy DE to HL
-	PUSH	DE
-	POP	HL	
+	;PUSH	DE
+	;POP	HL
+	EX	DE,HL
 
 	CALL	PRINT
+	EX	DE,HL
 
 	; print 10 spaces
 	LD	B,10
