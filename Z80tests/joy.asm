@@ -178,7 +178,6 @@ JOY_NAME:
 	EX	DE,HL
 
 	CALL	PRINT
-	EX	DE,HL
 
 	; print 10 spaces
 	LD	B,10
@@ -194,7 +193,6 @@ SPACES:	LD	A,' '
 ; TEST JOYSTICK
 ; ENTRIES:
 ;        HL pointing to addr of 8 words mapping bits to ATTR
-;        DE pointing to last element of detection array
 ;        BC port of joystick
 ;
 
