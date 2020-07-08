@@ -48,7 +48,7 @@ A_UP     	EQU     COL+2      ; ATTR+(LINE1*32)+COL+2
 A_LEFT   	EQU     2*32+COL   ; ATTR+((LINE1+2)*32)+COL              
 A_FIRE   	EQU     2*32+COL+2 ; ATTR+((LINE1+2)*32)+COL+2
 A_RIGHT  	EQU     2*32+COL+4 ; ATTR+((LINE1+2)*32)+COL+4
-A_DOWN   	EQU     4*32+COL+2 ;ATTR+((LINE1+4)*32)+COL+2
+A_DOWN   	EQU     4*32+COL+2 ; ATTR+((LINE1+4)*32)+COL+2
 
 	ORG	32768
 
