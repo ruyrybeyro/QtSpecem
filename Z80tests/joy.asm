@@ -14,7 +14,10 @@ CL_ALL		EQU     $0DAF ; clearing the whole display area
 ; sysvar for defining UDG
 UDG		EQU	$5C7B
 
+;
 ; UDG CHARs
+;
+
 UUP     	EQU     $90
 ULEFT   	EQU     $91
 UFIRE   	EQU     $92
@@ -323,9 +326,11 @@ BIT_1:	DJNZ	BITS	; B not 0, go to next bit
 	POP	BC
 	POP	HL
 	RET
-	
+
+;	
 ; Print a string in HL
 ; terminated by $
+;
 
 PRINT:	LD	A,(HL)
 	CP	'$'
@@ -339,7 +344,11 @@ PRINT:	LD	A,(HL)
 ;	HALT
 ;	RET
 
-; returns Z=0 if SPACE pressed
+;
+; INPUT: none
+; returns: Z=0 if SPACE pressed
+;
+
 T_SPACE:
         PUSH	BC
 	LD	BC,$7FFE	; keyboard row SPACE-B
@@ -357,7 +366,9 @@ T_SPACE:
 ; We store it in D'
 ; Cursor Joystick status of left direction
 ;CURS_TMP:  DEFB	0
+;
 
+;
 ;Array: Detection port
 ;       Value
 ;       Pointer to descriptive text
@@ -422,6 +433,11 @@ SINCLAIR_B: DEFB 0,      0, 0, A_FIRE, A_UP,    A_DOWN,  A_RIGHT, A_LEFT
 SINCLAIR_B2:
             DEFB 0,      0, 0, A_LEFT, A_RIGHT, A_DOWN,  A_UP,    A_FIRE
 
+;
+; Main text screen
+; LINE, COL positions are used to calculate video attribute addresses
+;
+
 MAIN_SCREEN: 
         DEFB	AT, 0, 4, "Joystick diagnostics v0.3"
         DEFB    AT, 4, 8, "Left on joystick"
@@ -430,6 +446,10 @@ MAIN_SCREEN:
 	DEFB	AT, LINE1+4, COL, ' ' , ' ', UDOWN, ' ', ' '
         DEFB    AT, 19, 9, "SPACE to quit"
 	DEFB	'$'
+
+;
+; UDGs
+;
 
 UDGs:	
 	; up
@@ -482,5 +502,6 @@ UDGs:
 	DEFB	%00111000
 	DEFB	%00010000
 
+; Pasmo uses this directive to USR to this value in the BASIC loader
 	END	32768	
 
