@@ -309,6 +309,10 @@ T_SPACE:
 	POP	BC
 	RET
 
+;
+; DATA
+;
+
 ; We store it in D'
 ; status of left direction
 ;CURS_TMP:  DEFB	0
