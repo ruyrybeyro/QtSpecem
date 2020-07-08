@@ -143,7 +143,7 @@ ALL_OK:
 ;
 
 DETECT_JOY:
-        LD 	HL,KEMPSTON_P	
+        LD 	HL,KEMPSTON_P	; point to beginning of joystick detection array
         CALL	LOAD_JOY_PORT   ; get joytick port in BC and A with read value, 
 				; E with value to test
         CP	E 		; exception, kempston must be detected as is
