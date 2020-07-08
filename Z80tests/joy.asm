@@ -98,13 +98,16 @@ L_TEST:
 	;RET
 
 ;
-; loads joystck port
+; loads joystick port
 ; Entry:
 ;      HL=pointing to first element of detection array
 ; Exit:
 ;      BC=joytick port to be tested
 ;      HL=pointing to second element of detection array
 ;      C=1 end of detection array
+;      if C=0, 
+;		A with IN value
+;		E with value to be tested
 ;
 
 LOAD_JOY_PORT:
@@ -116,7 +119,7 @@ LOAD_JOY_PORT:
         LD      A,B
         OR      C
 	JR	NZ,ALL_OK
-	SCF
+	SCF	; returns C=1 (end,error)
         RET     
 ALL_OK:        
         IN      A,(C)
@@ -134,21 +137,24 @@ ALL_OK:
 ;
 
 DETECT_JOY:
-        LD 	HL,KEMPSTON_P
-        CALL	LOAD_JOY_PORT
-        CP	E 
+        LD 	HL,KEMPSTON_P	
+        CALL	LOAD_JOY_PORT   ; get joytick port in BC and A with read value, 
+				; E with value to test
+        CP	E 		; exception, kempston must be detected as is
 	JR	Z,DETECTED
 LOOP_JOY:
-        LD	BC,4
+        LD	BC,4		; point to next joystick
 	ADD	HL,BC
-	CALL	LOAD_JOY_PORT
-	RET	C
-	CPL
-	AND	E
-	JR	Z,LOOP_JOY
+	CALL	LOAD_JOY_PORT	; get joytick port in BC and A with read value
+				; E with value to test
+	RET	C		; return if no more joyticks in table, C=1 error
+	CPL			; the rest of joystick makes are active low
+				; negate bits
+	AND	E		
+	JR	Z,LOOP_JOY	; if value not as expected, try next joystick in table
 DETECTED:
         SCF
-	CCF
+	CCF			; C=0, success
 	RET
 
 ;
@@ -162,16 +168,22 @@ JOY_NAME:
 	PUSH	BC
 	LD	E,(HL)
 	INC	HL
-	LD	D,(HL)
+	LD	D,(HL)		; DE=string of joystick name
 	INC	HL
         PUSH	HL
+
+	; copy DE to HL
 	PUSH	DE
-	POP	HL
+	POP	HL	
+
 	CALL	PRINT
+
+	; print 10 spaces
 	LD	B,10
 SPACES:	LD	A,' '
 	RST	$10
 	DJNZ	SPACES
+
         POP	HL
 	POP	BC
 	RET
@@ -200,6 +212,7 @@ TEST_JOY:
 	
 	LD	DE,CURSORP
 
+	; if no cursor joystick, goes to NO_CURSOR
 	LD	A,D
 	CP	H
 	JR	NZ,NO_CURSOR
