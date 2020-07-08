@@ -215,13 +215,11 @@ TEST_JOY:
 	
 	LD	DE,CURSORP
 
-	; if no cursor joystick, goes to NO_CURSOR
-	LD	A,D
-	CP	H
-	JR	NZ,NO_CURSOR
-	LD	A,E
-	CP	L
-	JR	NZ,NO_CURSOR
+	; 16 bit CP HL,DE	
+	OR	A
+	SBC	HL,DE
+	ADD	HL,DE
+	JR	NZ,NO_CURSOR	; jump if HL not equal CURSORP
 
 	; read from cursor Joystick, first port
 	; $F7FE row 1-5, for 5 (left)
@@ -238,7 +236,7 @@ TEST_JOY:
 	LD	D,A
 	EXX
 
-	; replace port for cursor joystick
+	; replace port for cursor joystick for rest of buttons
         ; keyboard row 6-0
 	LD	BC,$EFFE
 
@@ -250,6 +248,7 @@ NO_CURSOR:
 			; DE pointing to attr 8 word array now
 
 	IN	A,(C)   ; Read joystick port
+
 	LD	L,A     ; save it in L
 
         ; Kempston joytick is not active low
@@ -259,6 +258,7 @@ NO_CURSOR:
 	JR	Z,IS_KEMPSTON
 
 	; other joysticks besides kempston are active low
+	; invert bits
 	LD	A,L
 	CPL		; invert bits reading
 
@@ -268,16 +268,19 @@ NO_CURSOR:
         ; if not cursor joystick, D' will be 0
 
 	LD	L,A
+
+	; load D' into A
 	EXX
 	;LD	A,(CURS_TMP)
 	LD	A,D
 	EXX
-	OR	L
-	LD	L,A
+
+	OR	L	; OR joystick reading with A (formely D')
+	LD	L,A	; store it
 
 IS_KEMPSTON:
 
-; now is time for rotatin the 8 bits of joystick input
+; now is time for rotating the 8 bits of joystick input
 
 	LD	B,8
 
@@ -420,7 +423,7 @@ SINCLAIR_B2:
             DEFB 0,      0, 0, A_LEFT, A_RIGHT, A_DOWN,  A_UP,    A_FIRE
 
 MAIN_SCREEN: 
-        DEFB	AT, 0, 4, "Joystick diagnostics v0.2"
+        DEFB	AT, 0, 4, "Joystick diagnostics v0.3"
         DEFB    AT, 4, 8, "Left on joystick"
         DEFB	AT, LINE1  , COL, ' ' , ' ', UUP, ' ', ' '
 	DEFB    AT, LINE1+2, COL, ULEFT, ' ', UFIRE, ' ', URIGHT
