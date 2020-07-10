@@ -143,11 +143,19 @@ ALL_OK:
 ;
 
 DETECT_JOY:
+	; exception for Kempston
         LD 	HL,KEMPSTON_P	; point to beginning of joystick detection array
         CALL	LOAD_JOY_PORT   ; get joytick port in BC and A with read value, 
 				; E with value to test
         CP	E 		; exception, kempston must be detected as is
 	JR	Z,DETECTED
+	; less bytes duplicating code...
+        LD      HL,KEMPSTON_P2  ; point to beginning of joystick detection array
+        CALL    LOAD_JOY_PORT   ; get joytick port in BC and A with read value,
+                                ; E with value to test
+        CP      E               ; exception, kempston must be detected as is
+        JR      Z,DETECTED
+
 LOOP_JOY:
         LD	BC,4		; point to next joystick
 	ADD	HL,BC
@@ -259,6 +267,9 @@ NO_CURSOR:
 	LD	A,$1F
 	CP	C	
 	JR	Z,IS_KEMPSTON
+        LD      A,$37
+        CP      C
+        JR      Z,IS_KEMPSTON
 
 	; other joysticks besides kempston are active low
 	; invert bits
@@ -380,6 +391,11 @@ KEMPSTON_P:
            DEFB $02		; left
            DEFW KEMPSTON_T	; "Kempston$"
            DEFW KEMPSTON_B	; array pointer of Kempston 8 bit behaviour
+KEMPSTON_P2:
+           DEFW $37             ; 2nd kempston port
+           DEFB $02             ; left
+           DEFW KEMPSTON_T      ; "Kempston$"
+           DEFW KEMPSTON_B      ; array pointer of Kempston 8 bit behaviour
 FULLER_P:  DEFW $7F		; fuller port
            DEFB $04		; left
            DEFW FULLER_T	; "Fuller$"
@@ -439,7 +455,7 @@ SINCLAIR_B2:
 ;
 
 MAIN_SCREEN: 
-        DEFB	AT, 0, 4, "Joystick diagnostics v0.3"
+        DEFB	AT, 0, 4, "Joystick diagnostics v0.4"
         DEFB    AT, 4, 8, "Left on joystick"
         DEFB	AT, LINE1  , COL, ' ' , ' ', UUP, ' ', ' '
 	DEFB    AT, LINE1+2, COL, ULEFT, ' ', UFIRE, ' ', URIGHT
