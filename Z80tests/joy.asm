@@ -264,6 +264,9 @@ NO_CURSOR:
 
         ; Kempston joytick is not active low
 
+	; We can get away comparing only the lower byte
+	; since no other joytick uses those lower ports
+
 	LD	A,$1F
 	CP	C	
 	JR	Z,IS_KEMPSTON
