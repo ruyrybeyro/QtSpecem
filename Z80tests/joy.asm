@@ -11,7 +11,7 @@ CL_ALL		EQU     $0DAF ; clearing the whole display area
 
 ; UDGs EQUs
 
-; sysvar for defining UDG
+; ZX Spectrum sysvar for defining UDGs
 UDG		EQU	$5C7B
 
 ;
