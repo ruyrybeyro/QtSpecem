@@ -389,6 +389,9 @@ T_SPACE:
 ;       Pointer to bits behaviour 
 ;   
 
+; First must come the two kempston ports
+; ASM code counts on it
+
 KEMPSTON_P:
            DEFW $1F		; kempston port
            DEFB $02		; left
@@ -399,6 +402,9 @@ KEMPSTON_P2:
            DEFB $02             ; left
            DEFW KEMPSTON_T      ; "Kempston$"
            DEFW KEMPSTON_B      ; array pointer of Kempston 8 bit behaviour
+
+; joysticks with bits active low
+
 FULLER_P:  DEFW $7F		; fuller port
            DEFB $04		; left
            DEFW FULLER_T	; "Fuller$"
@@ -424,6 +430,9 @@ T2068_P2:  DEFW $02F6		; Timex 2068 port of 2nd Joystick
            DEFB $04		; left
            DEFW T2068_T		; "Timex 2068$"
            DEFW T2068_B		; array pointer of Timex 2068 8 bit behaviour
+
+; any new joystick with bits active low, can be added here
+
 END_P:	   DEFW	0		; end of array
 
 ;
