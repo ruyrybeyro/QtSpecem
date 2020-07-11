@@ -292,18 +292,18 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
     switch (event->key() )
     {
        case Qt::Key_1:      keybd_buff[3] |= ~0xFE; break;
-               case Qt::Key_2:      keybd_buff[3] |= ~0xFD; break;
-               case Qt::Key_3:      keybd_buff[3] |= ~0xFB; break;
-               case Qt::Key_4:      keybd_buff[3] |= ~0xF7; break;
-               case Qt::Key_5:      keybd_buff[3] |= ~0xEF; break;
-               case Qt::Key_Q:      keybd_buff[2] |= ~0xFE; break;
-               case Qt::Key_W:      keybd_buff[2] |= ~0xFD; break;
-               case Qt::Key_E:      keybd_buff[2] |= ~0xFB; break;
+              case Qt::Key_2:      keybd_buff[3] |= ~0xFD; break;
+              case Qt::Key_3:      keybd_buff[3] |= ~0xFB; break;
+              case Qt::Key_4:      keybd_buff[3] |= ~0xF7; break;
+              case Qt::Key_5:      keybd_buff[3] |= ~0xEF; break;
+              case Qt::Key_Q:      keybd_buff[2] |= ~0xFE; break;
+              case Qt::Key_W:      keybd_buff[2] |= ~0xFD; break;
+              case Qt::Key_E:      keybd_buff[2] |= ~0xFB; break;
               case Qt::Key_R:      keybd_buff[2] |= ~0xF7; break;
               case Qt::Key_T:      keybd_buff[2] |= ~0xEF; break;
               case Qt::Key_A:      keybd_buff[1] |= ~0xFE; break;
               case Qt::Key_S:      keybd_buff[1] |= ~0xFD; break;
-               case Qt::Key_D:      keybd_buff[1] |= ~0xFB; break;
+              case Qt::Key_D:      keybd_buff[1] |= ~0xFB; break;
               case Qt::Key_F:      keybd_buff[1] |= ~0xF7; break;
               case Qt::Key_G:      keybd_buff[1] |= ~0xEF; break;
               case Qt::Key_CapsLock:
@@ -314,7 +314,7 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
                         keybd_buff[7] |= ~0xFD; /* SYMBOL SHIFT */
                       break;
               case Qt::Key_Z:  keybd_buff[0] |= ~0xFD; break;
-               case Qt::Key_X:  keybd_buff[0] |= ~0xFB; break;
+              case Qt::Key_X:  keybd_buff[0] |= ~0xFB; break;
               case Qt::Key_C:  keybd_buff[0] |= ~0xF7; break;
               case Qt::Key_division:
                                keybd_buff[7] |= ~0xFD; break;
@@ -324,16 +324,16 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_8:  keybd_buff[4] |= ~0xFB; break;
               case Qt::Key_7:  keybd_buff[4] |= ~0xF7; break;
               case Qt::Key_6:  keybd_buff[4] |= ~0xEF; break;
-               case Qt::Key_P:  keybd_buff[5] |= ~0xFE; break;
-               case Qt::Key_O:  keybd_buff[5] |= ~0xFD; break;
+              case Qt::Key_P:  keybd_buff[5] |= ~0xFE; break;
+              case Qt::Key_O:  keybd_buff[5] |= ~0xFD; break;
               case Qt::Key_I:  keybd_buff[5] |= ~0xFB; break;
               case Qt::Key_U:  keybd_buff[5] |= ~0xF7; break;
               case Qt::Key_Y:  keybd_buff[5] |= ~0xEF; break;
-               case Qt::Key_Return: keybd_buff[6] |= ~0xFE; break;
-               case Qt::Key_L:  keybd_buff[6] |= ~0xFD; break;
+              case Qt::Key_Return: keybd_buff[6] |= ~0xFE; break;
+              case Qt::Key_L:  keybd_buff[6] |= ~0xFD; break;
               //case VK_ADD:
               //         keybd_buff[7] |= ~0xFD; break;
-               case Qt::Key_K:  keybd_buff[6] |= ~0xFB; break;
+              case Qt::Key_K:  keybd_buff[6] |= ~0xFB; break;
               //case VK_SUBTRACT:
               //       keybd_buff[7] |= ~0xFD; break;
               case Qt::Key_J:  keybd_buff[6] |= ~0xF7; break;
@@ -343,10 +343,10 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
                      keybd_buff[0] |= ~0xFE; /* CAPS SHIFT */
       
               case Qt::Key_Space:      keybd_buff[7] |= ~0xFE; break;
-               case Qt::Key_M:  keybd_buff[7] |= ~0xFB; break;
-               case Qt::Key_N:  keybd_buff[7] |= ~0xF7; break;
-              //case VK_MULTIPLY:
-              //       keybd_buff[7] |= ~0xFD;
+              case Qt::Key_M:  keybd_buff[7] |= ~0xFB; break;
+              case Qt::Key_N:  keybd_buff[7] |= ~0xF7; break;
+              case Qt::Key_Asterisk:
+                     keybd_buff[7] |= ~0xFD;
               case Qt::Key_B:  keybd_buff[7] |= ~0xEF; break;
       
       
@@ -400,7 +400,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
     switch (event->key() )
     {
                case Qt::Key_1: keybd_buff[3] &= 0xFE; break;
-                case Qt::Key_2: keybd_buff[3] &= 0xFD; break;
+               case Qt::Key_2: keybd_buff[3] &= 0xFD; break;
                case Qt::Key_3: keybd_buff[3] &= 0xFB; break;
                case Qt::Key_4: keybd_buff[3] &= 0xF7; break;
                case Qt::Key_5: keybd_buff[3] &= 0xEF; break;
@@ -411,8 +411,8 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_T: keybd_buff[2] &= 0xEF; break;
                case Qt::Key_A: keybd_buff[1] &= 0xFE; break;
                case Qt::Key_S: keybd_buff[1] &= 0xFD; break;
-                case Qt::Key_D: keybd_buff[1] &= 0xFB; break;
-                case Qt::Key_F: keybd_buff[1] &= 0xF7; break;
+               case Qt::Key_D: keybd_buff[1] &= 0xFB; break;
+               case Qt::Key_F: keybd_buff[1] &= 0xF7; break;
                case Qt::Key_G: keybd_buff[1] &= 0xEF; break;
                case Qt::Key_CapsLock:
                      keybd_buff[0] &= 0xFE; /* CAPS SHIFT */
@@ -421,7 +421,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_Shift:
                      keybd_buff[7] &= 0xFD; /* SYMBOL SHIFT */
                  break;
-                case Qt::Key_Z: keybd_buff[0] &= 0xFD; break;
+               case Qt::Key_Z: keybd_buff[0] &= 0xFD; break;
                case Qt::Key_X: keybd_buff[0] &= 0xFB; break;
                case Qt::Key_C: keybd_buff[0] &= 0xF7; break;
                case Qt::Key_division:
@@ -430,18 +430,18 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_0: keybd_buff[4] &= 0xFE; break;
                case Qt::Key_9: keybd_buff[4] &= 0xFD; break;
                case Qt::Key_8: keybd_buff[4] &= 0xFB; break;
-                case Qt::Key_7: keybd_buff[4] &= 0xF7; break;
+               case Qt::Key_7: keybd_buff[4] &= 0xF7; break;
                case Qt::Key_6: keybd_buff[4] &= 0xEF; break;
                case Qt::Key_P: keybd_buff[5] &= 0xFE; break;
-                case Qt::Key_O: keybd_buff[5] &= 0xFD; break;
+               case Qt::Key_O: keybd_buff[5] &= 0xFD; break;
                case Qt::Key_I: keybd_buff[5] &= 0xFB; break;
                case Qt::Key_U: keybd_buff[5] &= 0xF7; break;
                case Qt::Key_Y: keybd_buff[5] &= 0xEF; break;
-                case Qt::Key_Return: keybd_buff[6] &= 0xFE; break;
-                case Qt::Key_L: keybd_buff[6] &= 0xFD; break;
+               case Qt::Key_Return: keybd_buff[6] &= 0xFE; break;
+               case Qt::Key_L: keybd_buff[6] &= 0xFD; break;
                 //case VK_ADD:
                 //     keybd_buff[7] &= 0xFD;
-                case Qt::Key_K: keybd_buff[6] &= 0xFB; break;
+               case Qt::Key_K: keybd_buff[6] &= 0xFB; break;
                //case VK_SUBTRACT:
                //        keybd_buff[7] &= 0xFD;
                case Qt::Key_J: keybd_buff[6] &= 0xF7; break;
@@ -452,19 +452,23 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
        
                case Qt::Key_Space:      
                      keybd_buff[7] &= 0xFE; break;
-                case Qt::Key_M: keybd_buff[7] &= 0xFB; break;
+               case Qt::Key_M: keybd_buff[7] &= 0xFB; break;
                case Qt::Key_N: keybd_buff[7] &= 0xF7; break;
-                //case VK_MULTIPLY:
-                //     keybd_buff[7] &= 0xFD;
+               case Qt::Key_Asterisk:
+                 keybd_buff[7] &= 0xFD;
                case Qt::Key_B: keybd_buff[7] &= 0xEF; break;
-                case Qt::Key_Tab:
+               case Qt::Key_Tab:
                  keybd_buff[0] &= 0xFE;
                  keybd_buff[7] &= 0xFD;
                  break;
        
-                case Qt::Key_Backspace: keybd_buff[0] &= 0xFE; /* CAPS SHIFT */
+               case Qt::Key_Backspace: keybd_buff[0] &= 0xFE; /* CAPS SHIFT */
                      keybd_buff[4] &= 0xFE;
                      break;
+
+	       /* Key_Asterisk Key_Comma Key_Semicolon Key_Slash Key_Acircumflex 	
+                  Key_AsciiTilde Key_Backslash
+                */
        
                /* kempston joystick / CAPS + cursor 58760 */
                case Qt::Key_Left:  joystick &= ~2; 
