@@ -358,13 +358,23 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_Backspace: keybd_buff[0] |= ~0xFE; /* CAPS SHIFT */
                     keybd_buff[4] |= ~0xFE;
                     break;
-      
-              /* kempston joystick */
-              case Qt::Key_Left:  joystick |= 2; break;
-              case Qt::Key_Right: joystick |= 1; break;
-              case Qt::Key_Up:    joystick |= 8; break;
-              case Qt::Key_Down:  joystick |= 4; break;
-              case Qt::Key_Alt: joystick |= 16; break;
+
+              /* kempston joystick / CAPS + cursor 58760 */
+              case Qt::Key_Left:  joystick |= 2; 
+                                  keybd_buff[0] |= ~0xFE; keybd_buff[3] |= ~0xEF; 
+                                  break;
+              case Qt::Key_Right: joystick |= 1; 
+                                  keybd_buff[0] |= ~0xFE; keybd_buff[4] |= ~0xFB; 
+                                  break;
+              case Qt::Key_Up:    joystick |= 8; 
+                                  keybd_buff[0] |= ~0xFE; keybd_buff[4] |= ~0xF7; 
+                                  break;
+              case Qt::Key_Down:  joystick |= 4; 
+                                  keybd_buff[0] |= ~0xFE; keybd_buff[4] |= ~0xEF; 
+                                  break;
+              case Qt::Key_Alt:   joystick |= 16; 
+                                  keybd_buff[0] |= ~0xFE;keybd_buff[4] |= ~0xFE; 
+                                  break;
               /* Sinclair joystick */
               //case VK_NUMPAD5:
               //case VK_NUMPAD0: keybd_buff[0] |= ~0xFE;
@@ -456,12 +466,17 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                      keybd_buff[4] &= 0xFE;
                      break;
        
-               /* kempston joystick */
-               case Qt::Key_Left:  joystick &= ~2; break;
-               case Qt::Key_Right: joystick &= ~1; break;
-               case Qt::Key_Up:    joystick &= ~8; break;
-               case Qt::Key_Down:  joystick &= ~4; break;
-               case Qt::Key_Alt:   joystick &= ~16; break;
+               /* kempston joystick / CAPS + cursor 58760 */
+               case Qt::Key_Left:  joystick &= ~2; 
+                                   keybd_buff[4] &= 0xFE; keybd_buff[3] &= 0xEF;break;
+               case Qt::Key_Right: joystick &= ~1; 
+                                   keybd_buff[4] &= 0xFE; keybd_buff[4] &= 0xFB;break;
+               case Qt::Key_Up:    joystick &= ~8; 
+                                   keybd_buff[4] &= 0xFE; keybd_buff[4] &= 0xF7;break;
+               case Qt::Key_Down:  joystick &= ~4; 
+                                   keybd_buff[4] &= 0xFE; keybd_buff[4] &= 0xEF;break;
+               case Qt::Key_Alt:   joystick &= ~16;
+                                   keybd_buff[4] &= 0xFE; keybd_buff[4] &= 0xFE;break;
        
                 /* Sinclair joystick */
                //case VK_NUMPAD5:
