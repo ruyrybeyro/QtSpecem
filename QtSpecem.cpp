@@ -289,6 +289,7 @@ int lParam;
 
 void DrawnWindow::keyPressEvent(QKeyEvent *event)
 {
+    // qDebug() << QKeySequence(event->key()).toString();
     switch (event->key() )
     {
        case Qt::Key_1:      keybd_buff[3] |= ~0xFE; break;
@@ -331,11 +332,13 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_Y:  keybd_buff[5] |= ~0xEF; break;
               case Qt::Key_Return: keybd_buff[6] |= ~0xFE; break;
               case Qt::Key_L:  keybd_buff[6] |= ~0xFD; break;
-              //case VK_ADD:
-              //         keybd_buff[7] |= ~0xFD; break;
+              /*case Qt::"+":
+                               keybd_buff[7] |= ~0xFD; break;
+              */
               case Qt::Key_K:  keybd_buff[6] |= ~0xFB; break;
-              //case VK_SUBTRACT:
-              //       keybd_buff[7] |= ~0xFD; break;
+              /*case Qt::"-":
+                               keybd_buff[7] |= ~0xFD; break;
+              */
               case Qt::Key_J:  keybd_buff[6] |= ~0xF7; break;
               case Qt::Key_H:  keybd_buff[6] |= ~0xEF; break;
       
@@ -439,11 +442,13 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_Y: keybd_buff[5] &= 0xEF; break;
                case Qt::Key_Return: keybd_buff[6] &= 0xFE; break;
                case Qt::Key_L: keybd_buff[6] &= 0xFD; break;
-                //case VK_ADD:
-                //     keybd_buff[7] &= 0xFD;
+               /*case Qt::"+":
+                               keybd_buff[7] &= 0xFD;
+                */
                case Qt::Key_K: keybd_buff[6] &= 0xFB; break;
-               //case VK_SUBTRACT:
-               //        keybd_buff[7] &= 0xFD;
+               /*case Qt::"-":
+                               keybd_buff[7] &= 0xFD;
+                */
                case Qt::Key_J: keybd_buff[6] &= 0xF7; break;
                case Qt::Key_H: keybd_buff[6] &= 0xEF; break;
        
@@ -466,10 +471,11 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                      keybd_buff[4] &= 0xFE;
                      break;
 
-	       /* Key_Asterisk Key_Comma Key_Semicolon Key_Slash Key_Acircumflex 	
-                  Key_AsciiTilde Key_Backslash
+	       /* Key_Comma Key_Colon Key_Semicolon Key_Slash Key_Acircumflex 	
+                  Key_AsciiTilde Key_Backslash Key_Greater Key_Less
+                  Key_Period Key_Underscore
                 */
-       
+      
                /* kempston joystick / CAPS + cursor 58760 */
                case Qt::Key_Left:  joystick &= ~2; 
                                    keybd_buff[4] &= 0xFE; keybd_buff[3] &= 0xEF;break;
