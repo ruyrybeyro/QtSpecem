@@ -369,7 +369,12 @@ T_SPACE:
 	IN	A,(C)
 	CPL
 	AND	1		; test for SPACE
-	POP	BC
+	JR	Z,T_END
+	LD	BC,$FEFE	; keyboard row CAPS-V
+	IN	A,(C)
+	CPL
+	AND	1
+T_END:	POP	BC
 	RET
 
 ;
@@ -467,12 +472,13 @@ SINCLAIR_B2:
 ;
 
 MAIN_SCREEN: 
-        DEFB	AT, 0, 4, "Joystick diagnostics v0.4"
+        DEFB	AT, 0, 4, "Joystick diagnostics v0.5"
         DEFB    AT, 4, 8, "Left on joystick"
         DEFB	AT, LINE1  , COL, ' ' , ' ', UUP, ' ', ' '
 	DEFB    AT, LINE1+2, COL, ULEFT, ' ', UFIRE, ' ', URIGHT
 	DEFB	AT, LINE1+4, COL, ' ' , ' ', UDOWN, ' ', ' '
-        DEFB    AT, 19, 9, "SPACE to quit"
+        DEFB    AT, 19, 9, "CAPS+SPACE to quit"
+	DEFB	AT, 21, 9, "(c) Rui 2020"
 	DEFB	'$'
 
 ;
