@@ -49,11 +49,12 @@ void writeport(USHORT port, UCHAR value)
 
         out_ula = value;
        
-                /*        if (out_ula & 0x10)
-                            out_ula |= 0x40;
-                        else
-                            out_ula &= 0xBF;
-                  */
+        // in side, not out
+        //if (out_ula & 0x10)
+        //   out_ula |= 0x40;
+        //else
+        //   out_ula &= 0xBF;
+                  
     }
 }
 
@@ -172,7 +173,7 @@ UCHAR readport(USHORT port)
 			 value |= *(keybd_buff+i);
 	  }
 	  value = ~value;
-      value &= 0xbf;
+          // value &= 0xbf;
      }
          
          /*
@@ -182,6 +183,10 @@ UCHAR readport(USHORT port)
          where earon = bit 4 of the last OUT to the 0xFE port
          and   micon = bit 3 of the last OUT to the 0xFE port
        */
+       if ( out_ula & 0x10 )
+          value |= 0x40;
+       else
+          value &= 0xbf;
      
 
             
@@ -197,7 +202,7 @@ UCHAR readport(USHORT port)
                  } 
 		 else
                  {
-		 // Any other port --- this is not well implemented
+		 // Any other port - floating bus
 		 if((clock_ticks  > 14346) && (clock_ticks < 57246))
                  {
                         value = floating_bus(clock_ticks - 14347);

@@ -349,7 +349,7 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_M:  keybd_buff[7] |= ~0xFB; break;
               case Qt::Key_N:  keybd_buff[7] |= ~0xF7; break;
               case Qt::Key_Asterisk:
-                     keybd_buff[7] |= ~0xFD;
+                     keybd_buff[7] |= ~0xFD; break;
               case Qt::Key_B:  keybd_buff[7] |= ~0xEF; break;
       
       
@@ -460,7 +460,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_M: keybd_buff[7] &= 0xFB; break;
                case Qt::Key_N: keybd_buff[7] &= 0xF7; break;
                case Qt::Key_Asterisk:
-                 keybd_buff[7] &= 0xFD;
+                 keybd_buff[7] &= 0xFD; break;
                case Qt::Key_B: keybd_buff[7] &= 0xEF; break;
                case Qt::Key_Tab:
                  keybd_buff[0] &= 0xFE;
