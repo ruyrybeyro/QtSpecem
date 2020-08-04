@@ -9,6 +9,8 @@
 
 #include "../h/env.h"
 
+void border_updated(uint8_t color, unsigned long ticks);
+
 /* keeps last out to ula --- current border colour */
 static UCHAR out_ula = 190;
 /* keeps the current border color */
@@ -126,7 +128,7 @@ UCHAR readport(USHORT port)
 		if(lport & 1)
 		{
 	 UCHAR  i = 0, tmp_value, t_val = 1;
-	 UCHAR  scan_stat = ~(port >> 8);
+	 UCHAR  scan_stat = ~((UCHAR)(port >> 8));
      int key_read = 0;
 
 	 value = 0;
@@ -157,7 +159,7 @@ UCHAR readport(USHORT port)
 		 if(t_val & scan_stat)
 		 {
 			 value |= keybd_buff[i];
-             key_read = 1;
+                         key_read = 1;
 		 }
 		 t_val <<= 1;
 	 }
