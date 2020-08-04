@@ -313,7 +313,7 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_Control:
               case Qt::Key_Shift:
                         keybd_buff[7] |= ~0xFD; /* SYMBOL SHIFT */
-                      break;
+                        break;
               case Qt::Key_Z:  keybd_buff[0] |= ~0xFD; break;
               case Qt::Key_X:  keybd_buff[0] |= ~0xFB; break;
               case Qt::Key_C:  keybd_buff[0] |= ~0xF7; break;
