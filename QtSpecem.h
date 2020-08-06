@@ -38,7 +38,7 @@ private slots:
 	void reset();
 	void fullreset();
         void nmi();
-	void softreset();
+	void warmreset();
 	void about();
 
 private:
@@ -56,7 +56,7 @@ private:
         QAction * resetAct;
         QAction * fullresetAct;
         QAction * nmiAct;
-        QAction * softresetAct;
+        QAction * warmresetAct;
         QAction * aboutAct;
         QLabel  * infoLabel;
 };
