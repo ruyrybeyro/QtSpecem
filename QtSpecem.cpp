@@ -192,7 +192,7 @@ void DrawnWindow::createActions()
     resetAct->setStatusTip(tr("Reset Spectrum"));
     connect(resetAct, &QAction::triggered, this, &DrawnWindow::reset);
 
-    fullresetAct = new QAction(tr("&FullReset"), this);
+    fullresetAct = new QAction(tr("&Full Reset"), this);
     //fullresetAct->setShortcuts(QKeySequence::New);
     fullresetAct->setStatusTip(tr("Power cyle Spectrum"));
     connect(fullresetAct, &QAction::triggered, this, &DrawnWindow::fullreset);
@@ -202,9 +202,9 @@ void DrawnWindow::createActions()
     nmiAct->setStatusTip(tr("NMI"));
     connect(nmiAct, &QAction::triggered, this, &DrawnWindow::nmi);
 
-    warmresetAct = new QAction(tr("&WarmReset"), this);
+    warmresetAct = new QAction(tr("&Warm Reset"), this);
     //resetAct->setShortcuts(QKeySequence::New);
-    warmresetAct->setStatusTip(tr("SoftReset Spectrum"));
+    warmresetAct->setStatusTip(tr("Warm Reset Spectrum"));
     connect(warmresetAct, &QAction::triggered, this, &DrawnWindow::warmreset);
 
 
