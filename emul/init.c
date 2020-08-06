@@ -109,6 +109,43 @@ void do_fullreset()
 }
 
 /*=========================================================================*
+ *                            do_softreset                                 *
+ *=========================================================================*/
+void do_softreset()
+{
+   di(); 
+   writeport(0xFE, 7);
+   I=0x3F;
+   // Set the system variables RASP and PIP
+   writebyte(0x5c38,0x0040);
+   // Set RAMTOP
+   writeword(0x5CB2, 0xFF57);
+   //  CHARS
+   writeword(0x5C36, 0x3C00);
+   // The top location (RAMTOP) is made to hold +3E
+   writebyte(0xFF57, 0x3E);
+   // RAMTOP-1 = 0
+   writebyte(0xFF56,0);
+   SP=0xFF56;
+   // ERR-SP
+   writeword(0x5C3D,0xFF54);
+   im_1();
+   IY=0x5C3A;
+   // The system variable CHANS is set to the base address of the channel information area.
+   writeword(0x5C4F,0x5CB6);
+   // The initial channel data is moved from the table (CHANINFO) to the channel information area.
+   HL=0x15AF;
+   DE=0x5CB6;
+   BC=0x15;
+   ldir();
+   ei();
+   // E_LINE
+   HL=readbyte(0x5C59);
+   PC=0x1256;
+}
+
+
+/*=========================================================================*
  *                            Close_Z80Emu                                 *
  *=========================================================================*/
 void Close_Z80Emu()

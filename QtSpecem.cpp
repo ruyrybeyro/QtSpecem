@@ -16,6 +16,7 @@ extern "C" void execute();
 extern "C" void do_reset();
 extern "C" void do_fullreset();
 extern "C" void do_nmi_int();
+extern "C" void do_softreset();
 
 extern "C" unsigned char keybd_buff[8];
 extern "C" unsigned char joystick;
@@ -155,6 +156,11 @@ void DrawnWindow::nmi()
     do_nmi_int();
 }
 
+void DrawnWindow::softreset()
+{
+    do_softreset();
+}
+
 void DrawnWindow::about()
 {
     //infoLabel->setText(tr("<b>Help|About</b>"));
@@ -196,6 +202,12 @@ void DrawnWindow::createActions()
     nmiAct->setStatusTip(tr("NMI"));
     connect(nmiAct, &QAction::triggered, this, &DrawnWindow::nmi);
 
+    softresetAct = new QAction(tr("SoftReset"), this);
+    //resetAct->setShortcuts(QKeySequence::New);
+    softresetAct->setStatusTip(tr("SoftReset Spectrum"));
+    connect(softresetAct, &QAction::triggered, this, &DrawnWindow::softreset);
+
+
     // About is bellow the app name
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show About box"));
@@ -215,6 +227,7 @@ void DrawnWindow::createMenus()
     miscMenu->addAction(resetAct);
     miscMenu->addAction(fullresetAct);
     miscMenu->addAction(nmiAct);
+    miscMenu->addAction(softresetAct);
     //miscMenu->addSeparator();
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(aboutAct);

@@ -1348,6 +1348,7 @@ UCHAR get_sbrdr(void);
 void Init_Z80Emu(void);
 void Close_Z80Emu(void);
 void do_fullreset();
+void do_softreset();
 
 /* ERROR.c    */
 
