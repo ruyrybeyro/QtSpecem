@@ -802,7 +802,11 @@ static int save_options(FILE * hfp)
  */
 static int tap_save(FILE * fp)
 {
-#define START_AD 0x4E28
+// must be screen address
+// better after 0x4070
+//#define START_AD 0x4E28
+#define START_AD 0x4100
+
    short tmp;
    USHORT i;
    UCHAR save_mem[64];
@@ -825,36 +829,36 @@ static int tap_save(FILE * fp)
 	  /* 0x1c */         0xEA,            /* REM */
 
 	  /* 23760 */        0x31,            /* LD  SP,START_AD */
-			     START_AD & 0xFF,
-			     START_AD >> 8,
-			     0x21, 0xE1, 0x5C,/* LD HL,5CE1 */
-			     0x11, 0x00, 0x40,/* LD DE,4000h */
-			     0x01, 0x1A, 0x00,/* LD BC, LEN  */
+	  /* 0x1e */	     START_AD & 0xFF,
+          /* 0x1f */	     START_AD >> 8,
+          /* 0x20 */	     0x21, 0xE1, 0x5C,/* LD HL,5CE1 */
+	  /* 0x23 */	     0x11, 0x00, 0x40,/* LD DE,4000h */
+	  /* 0x26 */	     0x01, 0x1A, 0x00,/* LD BC, LEN  */
 
-			     0xED, 0xB0,      /* LDIR */
-			     0xC3, 0x00, 0x40,/* JP 4000h */
-	  /* 0x20 */         0x3E, 0xFF,      /* LD A,FFh */
-	  /* 0x22 */         0x37,            /* SCF */
-	  /* 0x23 */         0xDD, 0x21, 0x00, 0x5B, /* LD IX,5B00h */
-	  /* 0x27 */         0x11, 0x00, 0xA5,/* LD DE, 0xA500 */
-	  /* 0x2a */         0xCD, 0x56, 0x05,/* CALL 0556h */
-	  /* 0x2d */         0x3E, 0xFF,      /* LD A,FFh */
-	  /* 0x2f */         0x37,            /* SCF */
-	  /* 0x30 */         0xDD, 0x21, 0x00, 0x40, /* LD IX,4000h */
-	  /* 0x34 */         0x11, 0x00, 0x1B,/* LD DE, 0x1B00 */
-	  /* 0x37 */         0xC3, 0x56, 0x05,/* JP 0556h */
-	  /* 0x3A */         0x00, 0x14,      /* 20 */
-	  /* 0x3c */         0x19, 0x00,      /* len of line 20 */
-			     0xE7, 0xB0, '\"',/* BORDER VAL " */
-			     '0', '\"', ':',  /* 0": */
-			     0xDA, 0xB0, '\"',/* PAPER VAL " */
-			     '0', '\"', ':',  /* 0": */
-			     0xFB, ':',
-	  /* 0x3e */         0xF9, 0xC0, 0xB0,/* RANDOMIZE USR VAL */
-	  /* 0x41 */         '\"','2','3','7',
-	  /* 0x45 */         '6','0','\"',
-	  /* 0x48 */         0x0D,            /* End of Basic */
-	  /* 0x49 */         0x82             /* checksum */
+          /* 0x29 */	     0xED, 0xB0,      /* LDIR */
+	  /* 0x2b */	     0xC3, 0x00, 0x40,/* JP 4000h */
+	  /* 0x2e */         0x3E, 0xFF,      /* LD A,FFh */
+	  /* 0x30 */         0x37,            /* SCF */
+	  /* 0x31 */         0xDD, 0x21, 0x00, 0x5B, /* LD IX,5B00h */
+	  /* 0x35 */         0x11, 0x00, 0xA5,/* LD DE, 0xA500 */
+	  /* 0x38 */         0xCD, 0x56, 0x05,/* CALL 0556h */
+	  /* 0x3b */         0x3E, 0xFF,      /* LD A,FFh */
+	  /* 0x3e */         0x37,            /* SCF */
+	  /* 0x3f */         0xDD, 0x21, 0x00, 0x40, /* LD IX,4000h */
+	  /* 0x43 */         0x11, 0x00, 0x1B,/* LD DE, 0x1B00 */
+	  /* 0x46 */         0xC3, 0x56, 0x05,/* JP 0556h */
+	  /* 0x49 */         0x00, 0x14,      /* 20 */
+	  /* 0x4b */         0x19, 0x00,      /* len of line 20 */
+	  /* 0x4d */	     0xE7, 0xB0, '\"',/* BORDER VAL " */
+	  /* 0x4f */	     '0', '\"', ':',  /* 0": */
+	  /* 0x52 */	     0xDA, 0xB0, '\"',/* PAPER VAL " */
+          /* 0x55 */         '0', '\"', ':',  /* 0": */
+          /* 0x58 */	     0xFB, ':',
+	  /* 0x5a */         0xF9, 0xC0, 0xB0,/* RANDOMIZE USR VAL */
+	  /* 0x5d */         '\"','2','3','7',
+	  /* 0x61 */         '6','0','\"',
+	  /* 0x64 */         0x0D,            /* End of Basic */
+	  /* 0x65 */         0x82             /* checksum */
    };
 
    /* save bytes that will be corrupted */
@@ -963,6 +967,12 @@ static int tap_save(FILE * fp)
    for(i = 0x05 ; i < 0x14 ; i++)
       tmp ^= loader[i];
    loader[0x14] = tmp;
+
+   /* compute checksum of Basic body */
+   tmp = loader[0x17];
+   for(i = 0x18 ; i < sizeof(loader)-1 ; i++)
+      tmp ^= loader[i];
+   loader[sizeof(loader)-1] = tmp;
 
    /* write Basic loader */
    for(i=0 ; i<sizeof(loader); i++)
