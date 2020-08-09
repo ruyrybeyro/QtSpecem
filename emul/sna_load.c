@@ -53,6 +53,7 @@ static int dat_load(FILE * hfp);
 static int tap_load(FILE * hfp);
 static int scr_load(FILE * hfp);
 static int sem_load(FILE * hfp);
+static int pok_load(FILE * hfp);
 static int load_slt_level(FILE * hfp);
 static int load_options(FILE * hfp);
 
@@ -146,9 +147,10 @@ static int snap_type(char * file_name)
 	{ ".rom", ROM_FMT },
 	{ ".dat", DAT_FMT },
 	{ ".scr", SCR_FMT },
-    { ".sem", SEM_FMT },
+    	{ ".sem", SEM_FMT },
 	{ ".slt", SLT_FMT },
-	{ ".ini", INI_FMT }
+	{ ".ini", INI_FMT },
+        { ".pok", POK_FMT }
    };
 
       short i;
@@ -292,6 +294,10 @@ int open_sna(const char * file_name)
 	 case DAT_FMT:
 	    status = dat_load(stream);
 	    break;
+
+	 case POK_FMT:
+            status = pok_load(stream);
+            break;
 
 	 case TAP_FMT:
         
@@ -1115,6 +1121,28 @@ static int dat_load(FILE * hfp)
    while(!feof_file(hfp))
    {
       writebyte(i++, getbyte(hfp));
+   }
+   return 0;
+}
+
+static int pok_load(FILE * hfp)
+{
+   char s[20];
+   int  addr;
+
+   while(!feof_file(hfp))
+   {  
+      if ( fgets(s,20,hfp) != NULL )
+      {
+         if ( ( (s[0]=='M') || (s[0]=='Z') ) && (s[2] == '8') )
+         { 
+            addr= atoi(s+4);
+            if ( addr >= 16384 )
+            {
+               writebyte(addr, atoi(s+10));      
+            }
+         }
+      }
    }
    return 0;
 }
