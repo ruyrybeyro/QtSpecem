@@ -262,6 +262,8 @@ NO_CURSOR:
 
 	LD	L,A     ; save it in L
 
+	CALL	PRINT_JPORT_A
+
         ; Kempston joytick is not active low
 
 	; We can get away comparing only the lower byte
@@ -378,6 +380,78 @@ T_END:	POP	BC
 	RET
 
 ;
+; Print BC and A
+;
+PRINT_JPORT_A:
+	EXX
+	PUSH	DE
+	EXX
+;	PUSH	BC
+	PUSH	HL
+	LD      HL,JOY_PORT
+        CALL    PRINT
+
+	CALL	PRINT_BC
+	LD	A,' ' 
+	RST	$10
+	POP	HL
+	PUSH	HL
+	LD	A,L
+	CALL	PRINTA
+	POP	HL
+;	POP	BC
+	EXX	
+	POP	DE
+	EXX
+	RET
+
+;
+; Print BC
+;
+PRINT_BC:
+	LD	A,B
+	CALL	PRINTA
+	LD	A,C
+	;PRINTA
+
+; =============================
+; print "A" in hexa 
+; =============================
+PRINTA:
+	PUSH	AF
+        ; Highest 4 bits first
+        AND     $F0
+        RRA
+        RRA
+        RRA
+        RRA
+
+        CALL    PRINTHEXA
+
+        ; lower 4 bits of A
+	POP	AF
+        AND     $0F
+        CALL    PRINTHEXA
+        RET
+
+; =============================
+; print lower 4 bits of A in hexa
+; =============================
+PRINTHEXA:
+        PUSH    DE
+
+        LD      E,$30           ; "0"
+        CP      10
+        JR      C,ISDIGIT
+        LD      E,$37           ; "A" - 10
+ISDIGIT:
+        ADD    A,E
+        RST     $10
+
+        POP     DE
+        RET
+
+;
 ; DATA
 ;
 
@@ -472,7 +546,7 @@ SINCLAIR_B2:
 ;
 
 MAIN_SCREEN: 
-        DEFB	AT, 0, 4, "Joystick diagnostics v0.5"
+        DEFB	AT, 0, 4, "Joystick diagnostics v0.6"
         DEFB    AT, 4, 8, "Left on joystick"
         DEFB	AT, LINE1  , COL, ' ' , ' ', UUP, ' ', ' '
 	DEFB    AT, LINE1+2, COL, ULEFT, ' ', UFIRE, ' ', URIGHT
@@ -480,6 +554,9 @@ MAIN_SCREEN:
         DEFB    AT, 19, 9, "CAPS+SPACE to quit"
 	DEFB	AT, 21, 9, "(c) Rui 2020"
 	DEFB	'$'
+
+JOY_PORT:	
+	DEFB	AT, LINE1+2, COL+8, '$'
 
 ;
 ; UDGs
