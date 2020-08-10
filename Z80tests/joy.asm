@@ -380,24 +380,35 @@ T_END:	POP	BC
 	RET
 
 ;
-; Print BC and A
+; Print BC and A (Joystick port and reading)
 ;
 PRINT_JPORT_A:
+	; save registers use by routine
+        ; and by rst $10, that we need ahead
 	EXX
 	PUSH	DE
 	EXX
 ;	PUSH	BC
 	PUSH	HL
+	PUSH	AF
+
+	; position cursor
 	LD      HL,JOY_PORT
         CALL    PRINT
 
+	; print detected joystick port in BC
 	CALL	PRINT_BC
+
+	; print a space
 	LD	A,' ' 
 	RST	$10
-	POP	HL
-	PUSH	HL
-	LD	A,L
+	
+	; restore copy of read A byte from joystick
+	POP	AF
+	; and print it
 	CALL	PRINTA
+
+	; restore registers
 	POP	HL
 ;	POP	BC
 	EXX	
@@ -412,7 +423,7 @@ PRINT_BC:
 	LD	A,B
 	CALL	PRINTA
 	LD	A,C
-	;PRINTA
+	;CALL	PRINTA
 
 ; =============================
 ; print "A" in hexa 
@@ -554,6 +565,10 @@ MAIN_SCREEN:
         DEFB    AT, 19, 9, "CAPS+SPACE to quit"
 	DEFB	AT, 21, 9, "(c) Rui 2020"
 	DEFB	'$'
+
+;
+; Starting screen position for hex joystick port and reading
+;
 
 JOY_PORT:	
 	DEFB	AT, LINE1+2, COL+8, '$'
