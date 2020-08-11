@@ -228,12 +228,15 @@ TEST_JOY:
 ; Cursor joytick reads two I/O ports
 
 
+        ; D' = value to be ORed later on to joystick
+        ; port reading
 ;	XOR	A
 ;	LD	(CURS_TMP),A
 	EXX
-	LD	D,0
+	LD	D,0	
 	EXX
-	
+
+	; test if dealing with cursor joystick	
 	LD	DE,CURSORP
 
 	; 16 bit CP HL,DE	
@@ -379,20 +382,26 @@ PRINT:
 
 ;
 ; INPUT: none
-; returns: Z=0 if SPACE pressed
+; returns: Z=1 if CAPS+SPACE pressed
 ;
 
 T_SPACE:
         PUSH	BC
+
+	; first test for SPACE key
 	LD	BC,$7FFE	; keyboard row SPACE-B
-	IN	A,(C)
-	CPL
+	IN	A,(C)		; read half key row port
+	CPL			; active low, invert bits
 	AND	1		; test for SPACE
-	JR	Z,T_END
+	JR	Z,T_END		; jump if not space
+
+        ; if SPACE key pressed
+        ; now test for CAPS key
 	LD	BC,$FEFE	; keyboard row CAPS-V
-	IN	A,(C)
-	CPL
-	AND	1
+	IN	A,(C)		; read half key row port
+	CPL                     ; active low, invert bits
+	AND	1               ; test for CAPS
+
 T_END:	POP	BC
 	RET
 
