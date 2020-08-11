@@ -262,6 +262,7 @@ NO_CURSOR:
 
 	LD	L,A     ; save it in L
 
+	; print BC and A from IN A,(C)
 	CALL	PRINT_JPORT_A
 
         ; Kempston joytick is not active low
