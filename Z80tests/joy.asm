@@ -117,16 +117,21 @@ L_TEST:
 ;
 
 LOAD_JOY_PORT:
+	; gets BC to be tested from table
+	; BC==0 end of table
         LD      C,(HL)
         INC     HL
         LD      B,(HL)
         INC     HL
+
 	; if BC=0 we have reached the end of the detection array
         LD      A,B
         OR      C
 	JR	NZ,ALL_OK
+
 	SCF	; returns C=1 (end,error)
         RET     
+
 ALL_OK:        
         IN      A,(C)	;	A=read joystick port
         LD      E,(HL)	;	E=expected left direction value from detection array
