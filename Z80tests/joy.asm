@@ -46,7 +46,7 @@ FIRST_ATTR	EQU	ATTR+(LINE1*32)+COL
 
 ; memory offsets from first location
 ; so ATTR mapping tables can be 1 byte
-; ought not to be 0, it was selected for ignoring a bit
+; ought not to be 0, 0 is for ignoring a bit
 
 A_UP     	EQU     2      ; ATTR+(LINE1*32)+COL+2              
 A_LEFT   	EQU     2*32   ; ATTR+((LINE1+2)*32)+COL              
@@ -88,7 +88,7 @@ L_DETECT:
 
 	 
 L_TEST:	
-	; if space pressed leaves to BASIC
+	; if CAPS+space (BREAK) pressed leaves to BASIC
 	CALL	T_SPACE
 	RET	NZ
 
@@ -98,6 +98,8 @@ L_TEST:
         ; show joytstick actions	
         CALL	TEST_JOY
 
+	; loop into L_TEST
+        ; end is via BREAK key test
 	JR	L_TEST
 
 	; Never reachs here
@@ -129,11 +131,11 @@ LOAD_JOY_PORT:
         OR      C
 	JR	NZ,ALL_OK
 
-	SCF	; returns C=1 (end,error)
+	SCF	; returns C=1 (end,error, search exausted)
         RET     
 
 ALL_OK:        
-        IN      A,(C)	;	A=read joystick port
+        IN      A,(C)	;	A=read joystick BC port
         LD      E,(HL)	;	E=expected left direction value from detection array
         INC     HL
         RET
@@ -154,7 +156,9 @@ DETECT_JOY:
 				; E with value to test
         CP	E 		; exception, kempston must be detected as is
 	JR	Z,DETECTED
-	; less bytes duplicating code...
+
+	; less bytes duplicating code for 
+        ; dealing with 2nd Kempston port exception
         LD      HL,KEMPSTON_P2  ; point to beginning of joystick detection array
         CALL    LOAD_JOY_PORT   ; get joytick port in BC and A with read value,
                                 ; E with value to test
@@ -172,8 +176,9 @@ LOOP_JOY:
 	AND	E		
 	JR	Z,LOOP_JOY	; if value not as expected, try next joystick in table
 DETECTED:
-        SCF
-	CCF			; C=0, success
+        ;SCF                     ; C=1
+	;CCF			; C=0, success
+	XOR	A		; A not used
 	RET
 
 ;
@@ -353,13 +358,19 @@ BIT_1:	DJNZ	BITS	; B not 0, go to next bit
 ; Print a string in HL
 ; terminated by $
 ;
+; INPUT: HL=$ terminated string address
+;
 
-PRINT:	LD	A,(HL)
-	CP	'$'
-	RET	Z
-	RST	$10
-	INC	HL
-	JR	PRINT
+PRINT:	
+	; get char
+	LD	A,(HL)
+
+	CP	'$'	; if $
+	RET	Z	; leave
+
+	RST	$10	; print it
+	INC	HL	; go to next char in string
+	JR	PRINT	; loop to PRINT
 
 ;
 ;DELAY:	
@@ -395,7 +406,7 @@ PRINT_JPORT_A:
 	; save registers use by routine
         ; and by rst $10, that we need ahead
 	EXX
-	PUSH	DE
+	PUSH	DE	; D' used by RST $10
 	EXX
 ;	PUSH	BC
 	PUSH	HL
@@ -580,7 +591,7 @@ SINCLAIR_B2:
 ;
 
 MAIN_SCREEN: 
-        DEFB	AT, 0, 4, "Joystick diagnostics v0.7"
+        DEFB	AT, 0, 4, "Joystick diagnostics v0.8"
         DEFB    AT, 4, 8, "Left on joystick"
         DEFB	AT, LINE1  , COL, ' ' , ' ', UUP, ' ', ' '
 	DEFB    AT, LINE1+2, COL, ULEFT, ' ', UFIRE, ' ', URIGHT
