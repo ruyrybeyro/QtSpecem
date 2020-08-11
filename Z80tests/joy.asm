@@ -382,6 +382,9 @@ T_END:	POP	BC
 ;
 ; Print BC and A (Joystick port and reading)
 ;
+; INPUT: BC = joystick port
+;        A  = result from IN A,(C)
+;
 PRINT_JPORT_A:
 	; save registers use by routine
         ; and by rst $10, that we need ahead
@@ -414,20 +417,32 @@ PRINT_JPORT_A:
 	EXX	
 	POP	DE
 	EXX
+        ; return
 	RET
 
 ;
 ; Print BC
 ;
+; INPUT: BC holding 16 bit value to be printed in hexa (0000-FFFF)
+;
 PRINT_BC:
+
+	; print B
 	LD	A,B
 	CALL	PRINTA
+
+        ; print C
 	LD	A,C
+
+	; intead of calling it and returning
+	; just drop on it
 	;CALL	PRINTA
 
-; =============================
+; 
 ; print "A" in hexa 
-; =============================
+; 
+; INPUT: A holding 8 bit value to be printed in hexa (00-FF)
+;
 PRINTA:
 	PUSH	AF
         ; Highest 4 bits first
@@ -445,9 +460,11 @@ PRINTA:
         CALL    PRINTHEXA
         RET
 
-; =============================
+;
 ; print lower 4 bits of A in hexa
-; =============================
+; 
+; INPUT: A holding in lower 4 bits value to be printed in hexa (0-F)
+;
 PRINTHEXA:
         PUSH    DE
 
