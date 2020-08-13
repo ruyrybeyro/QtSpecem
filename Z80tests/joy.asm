@@ -581,7 +581,7 @@ SINCLAIR_T:
 T2068_T:   DEFB AT, 4, 8, "Timex 2068$"
 
 ;
-; Bits of select ports behaviour, 7 to 0
+; Bits of selected ports behaviour, 7 to 0
 ; CURSOR bits are read from $EFFE except left from $f7fe
 ; 0 no action
 ;
