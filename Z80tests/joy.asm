@@ -248,6 +248,10 @@ TEST_JOY:
 	; read from cursor Joystick, first port
 	; $F7FE row 1-5, for 5 (left)
 	IN	A,(C)
+
+        ; print BC and A from IN A,(C)
+        CALL    PRINT_JPORT_A_CURSOR
+
 	CPL	
 	AND	$10	; and with key 5
 	; shift it to an unused bit on the other port
@@ -411,18 +415,25 @@ T_END:	POP	BC
 ; INPUT: BC = joystick port
 ;        A  = result from IN A,(C)
 ;
+PRINT_JPORT_A_CURSOR:
+        PUSH    HL
+        LD      HL,JOY_PORT_CURSOR
+	JR	JPORT_ALT
+
 PRINT_JPORT_A:
 	; save registers use by routine
         ; and by rst $10, that we need ahead
-	EXX
+	PUSH	HL
+	LD      HL,JOY_PORT
+	
+JPORT_ALT:        
+        EXX
 	PUSH	DE	; D' used by RST $10
 	EXX
 ;	PUSH	BC
-	PUSH	HL
 	PUSH	AF
 
-	; position cursor
-	LD      HL,JOY_PORT
+	; position cursor (uses HL)
         CALL    PRINT
 
 	; print detected joystick port in BC
@@ -434,15 +445,17 @@ PRINT_JPORT_A:
 	
 	; restore copy of read A byte from joystick
 	POP	AF
+	PUSH	AF
 	; and print it
 	CALL	PRINTA
 
 	; restore registers
-	POP	HL
+	POP	AF
 ;	POP	BC
 	EXX	
 	POP	DE
 	EXX
+	POP	HL
         ; return
 	RET
 
@@ -600,7 +613,7 @@ SINCLAIR_B2:
 ;
 
 MAIN_SCREEN: 
-        DEFB	AT, 0, 4, "Joystick diagnostics v0.8"
+        DEFB	AT, 0, 4, "Joystick diagnostics v0.9"
         DEFB    AT, 4, 8, "Left on joystick"
         DEFB	AT, LINE1  , COL, ' ' , ' ', UUP, ' ', ' '
 	DEFB    AT, LINE1+2, COL, ULEFT, ' ', UFIRE, ' ', URIGHT
@@ -612,6 +625,9 @@ MAIN_SCREEN:
 ;
 ; Starting screen position for hex joystick port and reading
 ;
+
+JOY_PORT_CURSOR:
+        DEFB    AT, LINE1+1, COL+8, '$'
 
 JOY_PORT:	
 	DEFB	AT, LINE1+2, COL+8, '$'
