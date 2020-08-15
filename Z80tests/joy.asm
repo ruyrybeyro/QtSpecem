@@ -433,6 +433,13 @@ JPORT_ALT:
 ;	PUSH	BC
 	PUSH	AF
 
+        ; SAVES HL for port printing
+	PUSH	HL
+	; PRINT "PORT IN" MSG
+	LD	HL,JOY_PORT_MSG
+        CALL	PRINT
+	POP	HL
+
 	; position cursor (uses HL)
         CALL    PRINT
 
@@ -626,11 +633,15 @@ MAIN_SCREEN:
 ; Starting screen position for hex joystick port and reading
 ;
 
-JOY_PORT_CURSOR:
-        DEFB    AT, LINE1+1, COL+8, '$'
+JOY_PORT_MSG:	
+	DEFB	AT, LINE1,  COL+8, "PORT IN"
 
-JOY_PORT:	
-	DEFB	AT, LINE1+2, COL+8, '$'
+JOY_PORT:
+        DEFB    AT, LINE1+2, COL+8, '$'
+
+JOY_PORT_CURSOR:
+        DEFB    AT, LINE1+3, COL+8, '$'
+
 
 ;
 ; UDGs
