@@ -189,7 +189,7 @@ WHILE_C:
         ; if (error >= 0)
         ;LD	A,(ERROR)
         LD      A,H
-        AND     $80             ; bit 15=1 is negative
+        AND     $80             ; bit 15 of ERROR = 1 if negative
         JR      NZ,WHILE_C	; if negative, return to cicle
 
         ; --x;
