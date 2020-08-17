@@ -82,9 +82,9 @@ LOOP_Z:
         AND     $7F			; limit A to 127
         LD      (CY),A
 
-        ; random number 0-127 into radius
+        ; random number 0-63 into radius
         CALL    RND
-        AND     $7F			; limit A to 127
+        AND     $3F			; limit A to 63
         LD      (RADIUS),A
 
         CALL    CIRCLE
