@@ -33,6 +33,7 @@ MAIN:
 ;
 FOR_CIRCLE:
 
+	; circle center
         ; (CX),(CY) = (128,96)
 
         LD      A,128
@@ -162,6 +163,7 @@ WHILE_C:
 	; extend positive number E y
 	; int 16-bit DE
         LD      D,0
+
         ADD     HL,DE		; error=error+y
         LD      (ERROR),HL
 
