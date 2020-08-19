@@ -5,8 +5,6 @@
 ; (c) Rui Ribeiro 2020
 ;
 
-;P_FLAG          EQU 23697       ; TEMPORARY PRINT FLAGS
-
 SEED		EQU $5C76	; seed for random numbers
 ; ROM CLS routine
 CL_ALL          EQU $0DAF       ; ROM
@@ -23,7 +21,7 @@ MAIN:
 
         ; RETURN TO BASIC
 	EXX
-	LD      HL,$2758
+	LD      HL,$2758	; quirk of ZX ROM ; needed for a succeful BASIC return
 	EXX
         RET
 
@@ -116,14 +114,15 @@ LOOP_Z:
 ;      (CX), (CY): center of circle
 ;      (RADIUS)  : radius
 ;
-; MODIFIES: HL, AF, DE
+; MODIFIES: AF, HL',DE'
+;
+; HL' = ERROR
+; B'  = Y
+; C'  = X
 ;
 
 CIRCLE:
         ; int error = -radius;
-        ;LD	A,(RADIUS)
-        ;NEG
-        ;LD	(ERROR),A
 
 	; 16 bit NEG
 	; of a known positive number (RADIUS)
@@ -135,28 +134,21 @@ CIRCLE:
         LD      H,$FF		; negation of 0
         LD      L,A		; HL = A 1's CPL
         INC     HL		; 1'CPL+1=2's CPL (NEG)
-        ;LD      (ERROR),HL	; store -radius
 
         ; int x = radius;
         LD      A,(RADIUS)
-        ;LD      (X),A
 	LD	C,A             ; C'=X
 
         ; int y = 0;
         XOR     A
-        ;LD      (Y),A
 	LD	B,A             ; B'=Y
 	EXX
 
         ; while (x > y)
 WHILE_C:
 	EXX
-        ;LD      A,(Y)
-        ;LD      E,A
-        ;LD      A,(X)
-        ;CP      E		; compare (X)-(Y)
-	LD	A,C
-        CP	B
+	LD	A,C		; A=C' - X
+        CP	B               ; compare X-Y
 	EXX
         RET     C		; carry=1, if Y>=X, leave routine
 
@@ -165,47 +157,29 @@ WHILE_C:
 
         ; error += y;
 	EXX
-        ;LD      A,(Y)
-        LD      E,B
-
-        ;LD	A,(ERROR)
-        ;ADD	A,E
-        ;LD	(ERROR),A
-
-        ;LD      HL,(ERROR)
+        LD      E,B             ; E = B' = Y
 
 	; extend positive number E y
 	; int 16-bit DE
         LD      D,0
 
+                                ; HL' is error
         ADD     HL,DE		; error=error+y
-        ;LD      (ERROR),HL
+  
 
         ; ++y;
-        ;LD      A,(Y)
-        ;INC     A
-        ;LD      (Y),A
 	INC	B
 
         LD      E,B
 
         ; error += y;
-        ;LD      A,(ERROR)
-        ;ADD     A,E
-        ;LD      (ERROR),A
-
-        ;LD      HL,(ERROR)
-
         ; extend positive number E y
         ; int 16-bit DE
         LD      D,0
 
         ADD     HL,DE           ; error=error+y
-        ;LD      (ERROR),HL
-
 
         ; if (error >= 0)
-        ;LD	A,(ERROR)
         LD      A,H
 	EXX
 
@@ -214,31 +188,23 @@ WHILE_C:
 
         ; --x;
 	EXX
-        ;LD      A,(X)
-        ;DEC     A
-        ;LD      (X),A
-	DEC	C
+	DEC	C               ; C' is X
 
         ; error -= x;
         ; error -= x;
         LD      E,C
 
-        ;LD	A,(ERROR)
-        ;SUB	E
-        ;SUB	E
-        ;LD	(ERROR),A
 
 	; extend positive E x
 	; into 16-bit DE
         LD      D,0
-
-        ;LD      HL,(ERROR)
+                                  ; HL' is error
         XOR     A                 ; carry = 0
         SBC     HL,DE             ; error=error-x
         XOR     A                 ; carry = 0
         SBC     HL,DE             ; error=error-x
-        ;LD      (ERROR),HL        ; store error
 	EXX
+
         JR      WHILE_C           ; jump to cycle
 
 ;
@@ -264,15 +230,9 @@ PLOT8:
 ;
 SWAP_X_Y:
 	EXX
-        ;LD      A,(X)
-        ;LD      E,A
-        ;LD      A,(Y)
-        ;LD      (X),A
-        ;LD      A,E
-        ;LD      (Y),A
-	LD	A,B
-	LD	B,C
-	LD	C,A
+	LD	A,B                ; A=Y (B')
+	LD	B,C                ; Y=X (B'=C')
+	LD	C,A                ; X=A (C'=A)
 	EXX
         RET
 ;
@@ -289,8 +249,7 @@ PLOT4:
         ; plot(1, cx + x, cy + y);
 
 	EXX
-        ;LD      A,(X)
-	LD	A,C
+	LD	A,C             ; A=C'=X
         EXX
         LD      C,A
         LD      A,L             ; LD A,(CX)
@@ -299,8 +258,7 @@ PLOT4:
         LD      D,C             ; D = CX+X (backup to use again)
 
 	EXX
-        ;LD      A,(Y)
-	LD	A,B
+	LD	A,B             ; A=B'=Y
 	EXX
         LD      B,A
         LD      A,H             ; LD A,(CY)
@@ -311,8 +269,7 @@ PLOT4:
 
         ; plot(1,cx - x, cy + y);
 	EXX
-        ;LD      A,(X)
-	LD	A,C
+	LD	A,C             ; A=C'=X
 	EXX
         LD      C,A
         LD      A,L             ; LD A,(CX)
@@ -326,8 +283,7 @@ PLOT4:
         ; if (x != 0)	- not doing it before, because we reuse
         ;                calculations
 	EXX
-        ;LD      A,(X)
-	LD      A,C
+	LD      A,C             ; A=C'=X
 	EXX
         CP      0
         CALL    NZ,PLOT
@@ -336,8 +292,7 @@ PLOT4:
         LD      C,D		; getting backup of CX+X
 
 	EXX
-        ;LD      A,(Y)
-	LD	A,B
+	LD	A,B             ; A=B'=Y
 	EXX
         LD      B,A
         LD      A,H             ; LD A,(CY)
@@ -347,8 +302,7 @@ PLOT4:
         ; if (y != 0)    - not using it before, because we reuse
         ;                calculations
         EXX
-        ;LD      A,(Y)
-        LD      A,B
+        LD      A,B             ; A=B'=Y
         EXX
         CP      0
         CALL    NZ,PLOT
@@ -397,24 +351,11 @@ PLOT:
         PUSH    DE
         PUSH    BC
 
-
-        ;CALL 	$22DF    ; unofficial PLOT entry $22DC
-
-        ; since we have a wrapper we can fix the "bug"
-        ; about ROM not using the full 192 lines
-        ;LD      A,191
-        ;CALL    $22AC
-
-        ;LD      A,B             ; coords beggining from the top
-				 ; replacing the SUB with a CP
-		                 ; at the beginning
-        ;CALL    $22B1		
-
 	CALL     $22B0   	; HL = screen ADDRESS
 				; 7-A (pixel position)
 
         
-        ;CALL    $22EC	        ; replace by a faster, shorter routine
+        ;CALL    $22EC	        ; replaced by a faster, shorter routine
                                 ; that does not handle colours
 
 	; Getting right value/bit in position
@@ -452,44 +393,12 @@ RND:
        	ADD     A,L		; Add low L to R
         XOR     H		; XOR it H
         RET
-;
-; GENERATES A RANDOM NUMBER (A - 00 to FF)
-; TAKEN FROM THE ROM (slowest)
-;RND:
-;
-;        LD      BC,($5C76)      ; Fetch the current value of SEED.
-;        CALL    $2D2B           ; STACK_B Put it on the calculator stack.
-;        RST     $28             ; Now use the calculator.
-;        DEFB    $A1             ; stk_one
-;        DEFB    $0F             ; addition: The 'last value' is now SEED+1.
-;        DEFB    $34             ; stk_data: Put the number 75 on the calculator stack.
-;        DEFB    $37,$16
-;        DEFB    $04             ; multiply: 'last value' (SEED+1)*75.
-;        DEFB    $34             ; stk_data: Put the number 65537 on the calculator stack.
-;        DEFB    $80,$41,$00,$00,$80
-;        DEFB    $32             ; n_mod_m: Divide (SEED+1)*75 by 65537 to give a 'remainder' and an 'answer'.
-;        DEFB    $02             ; delete: Discard the 'answer'.
-;        DEFB    $A1             ; stk_one
-;        DEFB    $03             ; subtract The 'last value' is now 'remainder' - 1.
-;        DEFB    $31             ; duplicate: Make a copy of the 'last value'.
-;        DEFB    $38             ; end_calc: The calculation is finished.
-;        CALL    $2DA2           ; FP_TO_BC Use the 'last value' to give the new value for SEED.
-;        LD      ($5C76),BC
-;        LD      A,C             ; Fetch the exponent of 'last value'.
-;S_RND_END:
-;        RET
 
 ; center of circle
 CX      DB      0
 CY      DB      0
 ; radius
 RADIUS  DB      0
-
-; calculation helpers
-;ERROR   DB      0	; 8 bits overflows/underflows
-;ERROR   DW      0	; moved to HL'
-;X       DB      0	; C'
-;Y       DB      0	; B'
 
         END     32768
 
