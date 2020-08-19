@@ -261,13 +261,13 @@ PLOT4:
         LD      C,A
 	EXX
         LD      E,A             ; E' = CX-X (backup to use again)
-        EXX
+        ;EXX
                                 ; reusing B CY+Y from previous call
                                 ; as plot saves BC
 
         ; if (x != 0)	- not doing it before, because we reuse
         ;                calculations
-	EXX
+	;EXX
 	LD      A,C             ; A=C'=X
 	EXX
 	OR	A               ; CP 0
