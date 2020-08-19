@@ -21,7 +21,7 @@ MAIN:
 
         ; RETURN TO BASIC
 	EXX
-	LD      HL,$2758	; quirk of ZX ROM ; needed for a succeful BASIC return
+	LD      HL,$2758	; quirk of ZX ROM ; needed for a successful BASIC return
 	EXX
         RET
 
