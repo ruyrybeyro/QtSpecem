@@ -53,7 +53,7 @@ FOR_A:
 	DEC	E
 
         ; radius != 0
-        XOR     A
+        XOR     A		; A=0
         CP      E
         JR      NZ,FOR_A
 
@@ -129,8 +129,8 @@ CIRCLE:
 	LD	C,E             ; C'=X
 
         ; int y = 0;
-        XOR     A
-	LD	B,A             ; B'=Y
+        XOR     A		; A=0
+	LD	B,A             ; B'=Y=0
 
         ; while (x > y)
 WHILE_C:
