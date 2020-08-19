@@ -122,7 +122,7 @@ CIRCLE:
         CPL			; 1's CLP
 				; HL'=ERROR
         LD      H,$FF		; negation of 0
-        LD      L,A		; HL = A 1's CPL
+        LD      L,A		; HL' = A 1's CPL
         INC     HL		; 1'CPL+1=2's CPL (NEG)
 
         ; int x = radius;
@@ -144,10 +144,10 @@ WHILE_C:
 
         ; error += y;
 	EXX
-        LD      E,B             ; E = B' = Y
+        LD      E,B             ; E' = B' = Y
 
 	; extend positive number E y
-	; int 16-bit DE
+	; int 16-bit DE'
         LD      D,0
 
                                 ; HL' is error
@@ -161,15 +161,15 @@ WHILE_C:
 
         ; error += y;
         ; extend positive number E y
-        ; int 16-bit DE
-        LD      D,0
+        ; int 16-bit DE'
+        LD      D,0             ; DE'=E'
 
         ADD     HL,DE           ; error=error+y
 
         ; if (error >= 0)
-        LD      A,H
+        LD      A,H             ; A=H'
 
-        AND     $80             ; bit 15 of ERROR = 1 if negative
+        AND     $80             ; bit 15 of HL' = 1 if negative
         JR      NZ,WHILE_C	; if negative, return to cicle
 
         ; --x;
@@ -180,8 +180,8 @@ WHILE_C:
         LD      E,C
 
 
-	; extend positive E x
-	; into 16-bit DE
+	; extend positive E' x
+	; into 16-bit DE'
         LD      D,0
                                   ; HL' is error
         XOR     A                 ; carry = 0
@@ -260,7 +260,7 @@ PLOT4:
         SUB     C               ; CX - X
         LD      C,A
 	EXX
-        LD      E,A             ; E = CX-X (backup to use again)
+        LD      E,A             ; E' = CX-X (backup to use again)
         EXX
                                 ; reusing B CY+Y from previous call
                                 ; as plot saves BC
@@ -294,7 +294,7 @@ PLOT4:
 
         ; plot(1,cx - x, cy - y);
 	EXX
-	LD	A,E	        ; getting backup of CX-X
+	LD	A,E	        ; getting backup of CX-X (E')
 	EXX
         LD      C,A             ; getting backup of CX-X
 
