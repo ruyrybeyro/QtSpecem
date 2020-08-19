@@ -270,7 +270,7 @@ PLOT4:
 	EXX
 	LD      A,C             ; A=C'=X
 	EXX
-        CP      0
+	OR	A               ; CP 0
         CALL    NZ,PLOT
 
         ; plot(1,cx + x, cy - y);
@@ -289,7 +289,7 @@ PLOT4:
         EXX
         LD      A,B             ; A=B'=Y
         EXX
-        CP      0
+        OR      A		; CP 0
         CALL    NZ,PLOT
 
         ; plot(1,cx - x, cy - y);
