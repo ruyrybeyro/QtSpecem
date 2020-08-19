@@ -94,16 +94,6 @@ LOOP_Z:
 	; restore B for loop counting
         POP     BC
 
-;        LD      A,B
-;        AND     $7F
-;        CP      0
-;        JR      NZ,DO_LOOP
-
-;        LD      A,(P_FLAG)
-;        XOR     4               ; FLIP INVERSE 1/0
-;        LD      (P_FLAG),A
-;DO_LOOP:
-
         DJNZ    LOOP_Z		 ; i = i -1 ; while(i < 0)
         RET
 
