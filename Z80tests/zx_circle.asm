@@ -346,7 +346,7 @@ PLOT:
         ;CALL    $22EC	        ; replaced by a faster, shorter routine
                                 ; that does not handle colours
 
-	; Getting right value/bit in position
+	; Getting right value/bit/pixel in position
         LD      B,A
         INC     B
         LD      A,$01
@@ -354,7 +354,7 @@ PLOT_LOOP:
         RRCA
         DJNZ    PLOT_LOOP
 
-        OR      (HL)		; A = screen value in (HL) with bit added
+        OR      (HL)		; A = screen value in (HL) with bit/pixel added
         LD      (HL),A		; write A in (HL)
 
 	; restore registers
