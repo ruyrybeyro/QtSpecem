@@ -30,32 +30,30 @@ MAIN:
 ;
 ; INPUTS  : NONE
 ;
-; MODIFIES: AF,E
+; MODIFIES: AF,E, HL
 ;
 FOR_CIRCLE:
 
 	; circle center
-        ; (CX),(CY) = (128,96)
+        ; H=CY , L=CX
+        ; 
+        ; CX,CY = (128,96)
 
-        LD      A,128
-        LD      (CX),A
-
-        LD      A,96
-        LD      (CY),A
+        LD      L,128		; center X = 128
+        LD      H,96            ; center Y = 96
 
         ; for radius=94 ; radius != 0 ; radius=radius-2
 
-        LD      A,94		; radius = 94
+        LD      E,94		; radius = 94
 FOR_A:
-        LD      (RADIUS),A	; store radius in memory
         CALL    CIRCLE
 
         ; radius = radius - 2
-        LD      A,(RADIUS)
-        SUB     2
+	DEC	E
+	DEC	E
 
         ; radius != 0
-        LD      E,0
+        XOR     A
         CP      E
         JR      NZ,FOR_A
 
@@ -65,7 +63,7 @@ FOR_A:
 ;
 ; INPUTS  : NONE
 ;
-; MODIFIES: B,AF
+; MODIFIES: B,AF, E, HL
 ;
 RND_CIRCLE:
 
@@ -77,17 +75,17 @@ LOOP_Z:
 
         ; random number 0-255 into X center circle point
         CALL    RND
-        LD      (CX),A
+        LD      L,A                     ; CX=A center X
 
         ; random number 0-127 into Y center circle point
         CALL    RND
         AND     $7F			; limit A to 127
-        LD      (CY),A
+        LD      H,A                     ; CY=A  center Y
 
         ; random number 0-63 into radius
         CALL    RND
         AND     $3F			; limit A to 63
-        LD      (RADIUS),A
+        LD      E,A			; E = RADIUS
 
         CALL    CIRCLE
 
@@ -101,8 +99,8 @@ LOOP_Z:
 ; CIRCLE : Breseham's circle using integers
 ;
 ; INPUT:
-;      (CX), (CY): center of circle
-;      (RADIUS)  : radius
+;      L=(CX), H=(CY): center of circle
+;      E  : radius
 ;
 ; MODIFIES: AF, HL',DE',BC'
 ;
@@ -116,18 +114,19 @@ CIRCLE:
 
 	; 16 bit NEG
 	; of a known positive number (RADIUS)
-        LD      A,(RADIUS)
-        CPL			; 1's CLP
+        LD      A,E		; A = RADIUS
 
 	EXX
+	LD	E,A		; E' temporary copy E (RADIUS)
+
+        CPL			; 1's CLP
 				; HL'=ERROR
         LD      H,$FF		; negation of 0
         LD      L,A		; HL = A 1's CPL
         INC     HL		; 1'CPL+1=2's CPL (NEG)
 
         ; int x = radius;
-        LD      A,(RADIUS)
-	LD	C,A             ; C'=X
+	LD	C,E             ; C'=X
 
         ; int y = 0;
         XOR     A
@@ -226,10 +225,10 @@ SWAP_X_Y:
 ; INPUT: (CX),(CY) as center of cirle
 ;        (X),(Y) as offsets to center
 ;
-; MODIFIES: BC, DE, HL, AF
+; MODIFIES: BC, DE, AF
 ;
 PLOT4:
-        LD      HL,(CX)         ; H=CY , L=CX
+        ; H=CY , L=CX
 
         ; plot(1, cx + x, cy + y);
 
@@ -260,8 +259,9 @@ PLOT4:
         LD      A,L             ; LD A,(CX)
         SUB     C               ; CX - X
         LD      C,A
-        LD      E,C             ; E = CX-X (backup to use again)
-
+	EXX
+        LD      E,A             ; E = CX-X (backup to use again)
+        EXX
                                 ; reusing B CY+Y from previous call
                                 ; as plot saves BC
 
@@ -293,7 +293,10 @@ PLOT4:
         CALL    NZ,PLOT
 
         ; plot(1,cx - x, cy - y);
-        LD      C,E             ; getting backup of CX-X
+	EXX
+	LD	A,E	        ; getting backup of CX-X
+	EXX
+        LD      C,A             ; getting backup of CX-X
 
 				; reusing B CY-Y from previous call
 				; as plot saves BC
@@ -366,9 +369,10 @@ PLOT_LOOP:
 ;
 ; OUTPUT: A=RANDOM 8-BIT VALUE 
 ;
-; MODIFIES: DE,HL
+; MODIFIES: DE
 ;
 RND:
+	PUSH	HL
         LD      HL,(SEED)       ; get current seed
         LD      A,R		; get "random" value from R
         LD      E,A
@@ -377,13 +381,8 @@ RND:
         LD      (SEED),HL	; save new SEED
        	ADD     A,L		; Add low L to R
         XOR     H		; XOR it H
+        POP     HL
         RET
-
-; center of circle
-CX      DB      0
-CY      DB      0
-; radius
-RADIUS  DB      0
 
         END     32768
 
