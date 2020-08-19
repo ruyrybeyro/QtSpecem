@@ -120,17 +120,17 @@ CIRCLE:
 	LD	E,A		; E' temporary copy E (RADIUS)
 
         CPL			; 1's CLP
-				; HL'=ERROR
+				; HL' is ERROR
         LD      H,$FF		; negation of 0
         LD      L,A		; HL' = A 1's CPL
         INC     HL		; 1'CPL+1=2's CPL (NEG)
 
         ; int x = radius;
-	LD	C,E             ; C'=X
+	LD	C,E             ; C' is X = RADIUS
 
         ; int y = 0;
         XOR     A		; A=0
-	LD	B,A             ; B'=Y=0
+	LD	B,A             ; B' is Y=0
 
         ; while (x > y)
 WHILE_C:
