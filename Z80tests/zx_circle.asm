@@ -22,6 +22,9 @@ MAIN:
         CALL    RND_CIRCLE	; call demo routine - random circles
 
         ; RETURN TO BASIC
+	EXX
+	LD      HL,$2758
+	EXX
         RET
 
 ;
@@ -126,82 +129,99 @@ CIRCLE:
 	; of a known positive number (RADIUS)
         LD      A,(RADIUS)
         CPL			; 1's CLP
+
+	EXX
+				; HL'=ERROR
         LD      H,$FF		; negation of 0
         LD      L,A		; HL = A 1's CPL
         INC     HL		; 1'CPL+1=2's CPL (NEG)
-        LD      (ERROR),HL	; store -radius
+        ;LD      (ERROR),HL	; store -radius
 
         ; int x = radius;
         LD      A,(RADIUS)
-        LD      (X),A
+        ;LD      (X),A
+	LD	C,A             ; C'=X
 
         ; int y = 0;
         XOR     A
-        LD      (Y),A
+        ;LD      (Y),A
+	LD	B,A             ; B'=Y
+	EXX
 
         ; while (x > y)
 WHILE_C:
-        LD      A,(Y)
-        LD      E,A
-        LD      A,(X)
-        CP      E		; compare (X)-(Y)
+	EXX
+        ;LD      A,(Y)
+        ;LD      E,A
+        ;LD      A,(X)
+        ;CP      E		; compare (X)-(Y)
+	LD	A,C
+        CP	B
+	EXX
         RET     C		; carry=1, if Y>=X, leave routine
 
         ;plot8points (cx, cy, x, y);
         CALL    PLOT8
 
         ; error += y;
-        LD      A,(Y)
-        LD      E,A
+	EXX
+        ;LD      A,(Y)
+        LD      E,B
 
         ;LD	A,(ERROR)
         ;ADD	A,E
         ;LD	(ERROR),A
 
-        LD      HL,(ERROR)
+        ;LD      HL,(ERROR)
 
 	; extend positive number E y
 	; int 16-bit DE
         LD      D,0
 
         ADD     HL,DE		; error=error+y
-        LD      (ERROR),HL
+        ;LD      (ERROR),HL
 
         ; ++y;
-        LD      A,(Y)
-        INC     A
-        LD      (Y),A
-        LD      E,A
+        ;LD      A,(Y)
+        ;INC     A
+        ;LD      (Y),A
+	INC	B
+
+        LD      E,B
 
         ; error += y;
         ;LD      A,(ERROR)
         ;ADD     A,E
         ;LD      (ERROR),A
 
-        LD      HL,(ERROR)
+        ;LD      HL,(ERROR)
 
         ; extend positive number E y
         ; int 16-bit DE
         LD      D,0
 
         ADD     HL,DE           ; error=error+y
-        LD      (ERROR),HL
+        ;LD      (ERROR),HL
 
 
         ; if (error >= 0)
         ;LD	A,(ERROR)
         LD      A,H
+	EXX
+
         AND     $80             ; bit 15 of ERROR = 1 if negative
         JR      NZ,WHILE_C	; if negative, return to cicle
 
         ; --x;
-        LD      A,(X)
-        DEC     A
-        LD      (X),A
+	EXX
+        ;LD      A,(X)
+        ;DEC     A
+        ;LD      (X),A
+	DEC	C
 
         ; error -= x;
         ; error -= x;
-        LD      E,A
+        LD      E,C
 
         ;LD	A,(ERROR)
         ;SUB	E
@@ -212,13 +232,13 @@ WHILE_C:
 	; into 16-bit DE
         LD      D,0
 
-        LD      HL,(ERROR)
+        ;LD      HL,(ERROR)
         XOR     A                 ; carry = 0
         SBC     HL,DE             ; error=error-x
         XOR     A                 ; carry = 0
         SBC     HL,DE             ; error=error-x
-        LD      (ERROR),HL        ; store error
-
+        ;LD      (ERROR),HL        ; store error
+	EXX
         JR      WHILE_C           ; jump to cycle
 
 ;
@@ -243,12 +263,17 @@ PLOT8:
 ; MODIFIES: (X),(Y), A, E
 ;
 SWAP_X_Y:
-        LD      A,(X)
-        LD      E,A
-        LD      A,(Y)
-        LD      (X),A
-        LD      A,E
-        LD      (Y),A
+	EXX
+        ;LD      A,(X)
+        ;LD      E,A
+        ;LD      A,(Y)
+        ;LD      (X),A
+        ;LD      A,E
+        ;LD      (Y),A
+	LD	A,B
+	LD	B,C
+	LD	C,A
+	EXX
         RET
 ;
 ; PLOT4: PLOT 4 POINTS OF THE CIRCLE
@@ -263,14 +288,20 @@ PLOT4:
 
         ; plot(1, cx + x, cy + y);
 
-        LD      A,(X)
+	EXX
+        ;LD      A,(X)
+	LD	A,C
+        EXX
         LD      C,A
         LD      A,L             ; LD A,(CX)
         ADD     A,C             ; CX + X
         LD      C,A
         LD      D,C             ; D = CX+X (backup to use again)
 
-        LD      A,(Y)
+	EXX
+        ;LD      A,(Y)
+	LD	A,B
+	EXX
         LD      B,A
         LD      A,H             ; LD A,(CY)
         ADD     A,B             ; CY + Y      
@@ -279,7 +310,10 @@ PLOT4:
         CALL    PLOT
 
         ; plot(1,cx - x, cy + y);
-        LD      A,(X)
+	EXX
+        ;LD      A,(X)
+	LD	A,C
+	EXX
         LD      C,A
         LD      A,L             ; LD A,(CX)
         SUB     C               ; CX - X
@@ -291,14 +325,20 @@ PLOT4:
 
         ; if (x != 0)	- not doing it before, because we reuse
         ;                calculations
-        LD      A,(X)
+	EXX
+        ;LD      A,(X)
+	LD      A,C
+	EXX
         CP      0
         CALL    NZ,PLOT
 
         ; plot(1,cx + x, cy - y);
         LD      C,D		; getting backup of CX+X
 
-        LD      A,(Y)
+	EXX
+        ;LD      A,(Y)
+	LD	A,B
+	EXX
         LD      B,A
         LD      A,H             ; LD A,(CY)
         SUB     B               ; CY - Y
@@ -306,7 +346,10 @@ PLOT4:
 
         ; if (y != 0)    - not using it before, because we reuse
         ;                calculations
-        LD      A,(Y)
+        EXX
+        ;LD      A,(Y)
+        LD      A,B
+        EXX
         CP      0
         CALL    NZ,PLOT
 
@@ -444,9 +487,9 @@ RADIUS  DB      0
 
 ; calculation helpers
 ;ERROR   DB      0	; 8 bits overflows/underflows
-ERROR   DW      0
-X       DB      0
-Y       DB      0
+;ERROR   DW      0	; moved to HL'
+;X       DB      0	; C'
+;Y       DB      0	; B'
 
         END     32768
 
