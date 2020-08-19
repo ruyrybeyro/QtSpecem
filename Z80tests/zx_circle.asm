@@ -45,7 +45,7 @@ FOR_CIRCLE:
         ; for radius=94 ; radius != 0 ; radius=radius-2
 
         LD      E,94		; radius = 94
-FOR_A:
+FOR_E:
         CALL    CIRCLE
 
         ; radius = radius - 2
@@ -55,7 +55,7 @@ FOR_A:
         ; radius != 0
         XOR     A		; A=0
         CP      E
-        JR      NZ,FOR_A
+        JR      NZ,FOR_E
 
         RET
 ;
