@@ -179,12 +179,9 @@ WHILE_C:
         ; error -= x;
         LD      E,C
 
-
-
-        XOR     A                 ; A= 0 and carry = 0
-
 	; extend positive E' x
 	; into 16-bit DE'
+        XOR     A                 ; A= 0 and carry = 0
         LD      D,A		  ; D=0
                                   ; HL' is error
         ;XOR     A                ; carry = 0
