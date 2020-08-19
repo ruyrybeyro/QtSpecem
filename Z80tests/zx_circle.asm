@@ -1,6 +1,6 @@
 
 ;
-; zx_cirle: demo of Breseham's circle using integers using Z80 ASM
+; zx_circle: demo of Breseham's circle using integers using Z80 ASM
 ;
 ; (c) Rui Ribeiro 2020
 ;
