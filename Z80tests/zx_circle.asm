@@ -355,7 +355,7 @@ PLOT_LOOP:
         DJNZ    PLOT_LOOP
 
         OR      (HL)		; A = screen value in (HL) with bit/pixel added
-        LD      (HL),A		; write A in (HL)
+        LD      (HL),A		; write A in (HL) screen address
 
 	; restore registers
         POP     BC
