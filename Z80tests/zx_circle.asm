@@ -114,7 +114,7 @@ LOOP_Z:
 ;      (CX), (CY): center of circle
 ;      (RADIUS)  : radius
 ;
-; MODIFIES: AF, HL',DE'
+; MODIFIES: AF, HL',DE',BC'
 ;
 ; HL' = ERROR
 ; B'  = Y
@@ -142,11 +142,9 @@ CIRCLE:
         ; int y = 0;
         XOR     A
 	LD	B,A             ; B'=Y
-	EXX
 
         ; while (x > y)
 WHILE_C:
-	EXX
 	LD	A,C		; A=C' - X
         CP	B               ; compare X-Y
 	EXX
@@ -181,13 +179,11 @@ WHILE_C:
 
         ; if (error >= 0)
         LD      A,H
-	EXX
 
         AND     $80             ; bit 15 of ERROR = 1 if negative
         JR      NZ,WHILE_C	; if negative, return to cicle
 
         ; --x;
-	EXX
 	DEC	C               ; C' is X
 
         ; error -= x;
@@ -203,7 +199,6 @@ WHILE_C:
         SBC     HL,DE             ; error=error-x
         XOR     A                 ; carry = 0
         SBC     HL,DE             ; error=error-x
-	EXX
 
         JR      WHILE_C           ; jump to cycle
 
