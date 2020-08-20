@@ -158,7 +158,7 @@ WHILE_C:
         ; ++y;
 	INC	B
 
-        LD      E,B
+        LD      E,B		; could be INC E
 
         ; error += y;
         ; extend positive number E y
