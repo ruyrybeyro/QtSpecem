@@ -129,8 +129,7 @@ CIRCLE:
 	LD	C,E             ; C' is X = RADIUS
 
         ; int y = 0;
-        XOR     A		; A=0
-	LD	B,A             ; B' is Y=0
+	LD	B,0             ; B' is Y=0
 
         ; while (x > y)
 WHILE_C:
@@ -348,11 +347,11 @@ PLOT:
                                 ; that does not handle colours
 
 	; Getting right value/bit/pixel in position
-        LD      B,A
-        INC     B
-        LD      A,$01
+        LD      B,A		; B=7-A
+        INC     B               ; B=8-A
+        LD      A,$01		; rightmost bit
 PLOT_LOOP:
-        RRCA
+        RRCA			; Rotates A to the right with bit 0 moved to bit 7 
         DJNZ    PLOT_LOOP
 
         OR      (HL)		; A = screen value in (HL) with bit/pixel added
