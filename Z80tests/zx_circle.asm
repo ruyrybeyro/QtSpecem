@@ -314,7 +314,7 @@ PLOT4:
 ;
 ; OUTPUTS:
 ;
-;           C=1 -  Y out of range
+;           Carry/C=1 -  Y out of range
 ;
 
 PLOT:
