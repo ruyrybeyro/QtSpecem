@@ -152,8 +152,7 @@ WHILE_C:
 
                                 ; HL' is error
         ADD     HL,DE		; error=error+y
-  
-
+ 
         ; ++y;
 	INC	B
 
@@ -162,7 +161,7 @@ WHILE_C:
         ; error += y;
         ; extend positive number E y
         ; int 16-bit DE'
-        LD      D,0             ; DE'=E'
+        ;LD      D,0             ; DE'=E' D' still zero
 
         ADD     HL,DE           ; error=error+y
 
