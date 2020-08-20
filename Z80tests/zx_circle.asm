@@ -57,6 +57,7 @@ FOR_E:
         JR      NZ,FOR_E
 
         RET
+
 ;
 ; RND_CIRCLE: generates random centered/sized circles
 ;
@@ -190,6 +191,7 @@ WHILE_C:
 
         JR      WHILE_C           ; jump to cycle
 
+
 ;
 ; PLOT8: PLOT 8 POINTS OF THE CIRCLE
 ;
@@ -218,6 +220,7 @@ SWAP_X_Y:
 	LD	C,A                ; X=A (C'=A)
 	EXX
         RET
+
 ;
 ; PLOT4: PLOT 4 POINTS OF THE CIRCLE
 ;
@@ -360,7 +363,9 @@ PLOT_LOOP:
         POP     BC
         POP     DE
         POP     HL
+        
         RET
+
 ;
 ; GENERATES A 8-BIT RANDOM NUMBER (A - 00 to FF)
 ;
