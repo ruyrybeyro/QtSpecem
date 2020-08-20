@@ -6,8 +6,7 @@
 ;
 
 SEED		EQU $5C76	; seed for random numbers
-; ROM CLS routine
-CL_ALL          EQU $0DAF       ; ROM
+CL_ALL          EQU $0DAF       ; ROM CLS routine
 
 
         ORG     32768
@@ -210,7 +209,7 @@ PLOT8:
 ;
 ; SWAP_X_Y: swaps contents of (X) and (Y)
 ;
-; MODIFIES: (X),(Y), A, E
+; MODIFIES: A, BC'
 ;
 SWAP_X_Y:
 	EXX
