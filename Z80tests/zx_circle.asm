@@ -4,6 +4,9 @@
 ;
 ; (c) Rui Ribeiro 2020
 ;
+; CIRCLE demo     around  60 bytes 
+; CIRCLE routines around 140 bytes
+; RND                     16 bytes
 
 SEED		EQU $5C76	; seed for random numbers
 CL_ALL          EQU $0DAF       ; ROM CLS routine
