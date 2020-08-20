@@ -18,7 +18,7 @@ MAIN:
         CALL    $CL_ALL         ; clear screen
         CALL    RND_CIRCLE	; call demo routine - random circles
 
-        ; RETURN TO BASIC
+        ; return to BASIC
 	EXX
 	LD      HL,$2758	; quirk of ZX ROM ; needed for a successful BASIC return
 	EXX
