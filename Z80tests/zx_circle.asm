@@ -130,7 +130,7 @@ CIRCLE:
         INC     HL		; 1'CPL+1=2's CPL (NEG)
 
         ; int x = radius;
-	LD	C,E             ; C' is X = RADIUS
+	LD	C,E             ; C'=E' is X = RADIUS
 
         ; int y = 0;
 	LD	B,0             ; B' is Y=0
