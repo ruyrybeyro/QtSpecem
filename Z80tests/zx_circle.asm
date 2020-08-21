@@ -297,6 +297,7 @@ PLOT4:
 
 				; reusing B=CY-Y from previous call
 				; as plot saves BC
+
         CALL    PLOT		; PLOT PLOT_X,PLOT_Y
 
         RET
