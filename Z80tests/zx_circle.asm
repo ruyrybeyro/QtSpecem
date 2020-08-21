@@ -4,7 +4,7 @@
 ;
 ; (c) Rui Ribeiro 2020
 ;
-; CIRCLE demo      60 bytes 
+; CIRCLE demo      59 bytes 
 ; CIRCLE routines 140 bytes
 ; RND              16 bytes
 
@@ -41,8 +41,9 @@ FOR_CIRCLE:
         ; 
         ; CX,CY = (128,96)
 
-        LD      L,128		; center X = 128
-        LD      H,96            ; center Y = 96
+        ;LD      L,128		; center X = 128
+        ;LD      H,96           ; center Y = 96
+	LD	HL,$6080	; less one byte
 
         ; for radius=94 ; radius != 0 ; radius=radius-2
 
