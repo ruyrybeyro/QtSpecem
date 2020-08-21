@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE demo      59 bytes 
-; CIRCLE routines 135 bytes
+; CIRCLE routines 134 bytes
 ; RND              16 bytes
 
 SEED		EQU $5C76	; seed for random numbers
@@ -114,23 +114,22 @@ LOOP_Z:
 ;
 
 CIRCLE:
-        ; int error = -radius;
-
-	; 16 bit NEG
-	; of a known positive number (RADIUS)
         LD      A,E		; A = RADIUS
 
 	EXX
-	LD	E,A		; E' temporary copy E (RADIUS)
 
+        ; int x = radius;
+        LD      C,A             ; C'=E' is X = RADIUS
+
+        ; int error = -radius;
+
+        ; 16 bit NEG
+        ; of a known positive number (RADIUS)
         CPL			; 1's CLP
 				; HL' is ERROR
         LD      H,$FF		; H' = negation of 0
         LD      L,A		; HL' = A 1's CPL
         INC     HL		; HL'=1'CPL+1=2's CPL (NEG)
-
-        ; int x = radius;
-	LD	C,E             ; C'=E' is X = RADIUS
 
         ; int y = 0;
 	LD	B,0             ; B' is Y=0
