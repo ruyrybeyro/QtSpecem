@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE demo      59 bytes 
-; CIRCLE routines 140 bytes
+; CIRCLE routines 136 bytes
 ; RND              16 bytes
 
 SEED		EQU $5C76	; seed for random numbers
