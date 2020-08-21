@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE demo      59 bytes 
-; CIRCLE routines 136 bytes
+; CIRCLE routines 135 bytes
 ; RND              16 bytes
 
 SEED		EQU $5C76	; seed for random numbers
@@ -169,9 +169,7 @@ WHILE_C:
         ADD     HL,DE           ; error=error+y
 
         ; if (error >= 0)
-        LD      A,H             ; A=H'
-
-        AND     $80             ; bit 15 of HL' = 1 if negative
+        BIT     7,H             ; bit 15 of HL' = 1 if negative
         JR      NZ,WHILE_C	; if negative, return to cicle
 
         ; --x;
