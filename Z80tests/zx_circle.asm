@@ -51,14 +51,14 @@ FOR_CIRCLE:
 FOR_E:
         CALL    CIRCLE
 
-        ; radius = radius - 2
-	DEC	E
+        ; radius = radius - 2 (E=E-2)
+	DEC	E		
 	DEC	E
 
         ; radius != 0
         XOR     A		; A=0
-        CP      E
-        JR      NZ,FOR_E
+        CP      E               ; CP A-E
+        JR      NZ,FOR_E	; jump relative IF E not 0
 
         RET
 
@@ -157,7 +157,7 @@ WHILE_C:
         ADD     HL,DE		; error=error+y
  
         ; ++y;
-	INC	B
+	INC	B		; B'=B'+1
 
         LD      E,B		; could be INC E
 
@@ -175,7 +175,7 @@ WHILE_C:
         JR      NZ,WHILE_C	; if negative, return to cicle
 
         ; --x;
-	DEC	C               ; C' is X
+	DEC	C               ; C' is X (C'=C'-1)
 
         ; error -= x;
         ; error -= x;
@@ -192,7 +192,7 @@ WHILE_C:
         SBC     HL,DE             ; error=error-x
 				  ; same as HL'=HL'-DE'*2
 
-        JR      WHILE_C           ; jump to cycle
+        JR      WHILE_C           ; jump relative to cycle
 
 
 ;
@@ -218,9 +218,9 @@ PLOT8:
 ;
 SWAP_X_Y:
 	EXX
-	LD	A,B                ; A=Y (B')
+	LD	A,B                ; A=Y (A =B')
 	LD	B,C                ; Y=X (B'=C')
-	LD	C,A                ; X=A (C'=A)
+	LD	C,A                ; X=A (C'=A )
 	EXX
         RET
 
@@ -256,7 +256,7 @@ PLOT4:
 	EXX
 	LD	A,C             ; A=C'=X
 	EXX
-        LD      C,A
+        LD      C,A             ; C=X
         LD      A,L             ; LD A,(CX)
         SUB     C               ; A=CX - X
         LD      C,A             ; PLOT_X C=CX-X
@@ -280,7 +280,7 @@ PLOT4:
 	EXX
 	LD	A,B             ; A=B'=Y
 	EXX
-        LD      B,A
+        LD      B,A             ; B=Y
         LD      A,H             ; LD A,(CY)
         SUB     B               ; A=CY - Y
         LD      B,A             ; PLOT_Y B=CY-Y
