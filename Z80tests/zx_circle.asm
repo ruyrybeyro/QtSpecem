@@ -123,20 +123,21 @@ CIRCLE:
 
         ; int error = -radius;
 
-        ; 16 bit NEG
-        ; of a known positive number (RADIUS)
+        ; 16 bit HL' NEG
+        ; of a known 8-bit positive number in A (RADIUS)
         CPL			; 1's CLP
 				; HL' is ERROR
         LD      H,$FF		; H' = negation of 0
         LD      L,A		; HL' = A 1's CPL
         INC     HL		; HL'=1'CPL+1=2's CPL (NEG)
+                                ; HL' has now -radius value
 
         ; int y = 0;
 	LD	B,0             ; B' is Y=0
 
         ; while (x > y)
 WHILE_C:
-	LD	A,C		; A=C' - X
+	LD	A,C		; A=C'= X
         CP	B               ; compare X-Y
 	EXX
         RET     C		; carry=1, if Y>=X, leave routine
