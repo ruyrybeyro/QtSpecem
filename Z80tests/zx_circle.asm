@@ -295,11 +295,11 @@ PLOT4:
 
         ; plot(1,cx - x, cy - y);
 	EXX
-	LD	A,E	        ; getting backup of CX-X (E')
+	LD	A,E	        ; A=getting backup of CX-X (E')
 	EXX
-        LD      C,A             ; PLOT_X=getting backup of CX-X
+        LD      C,A             ; PLOT_X=CX-X
 
-				; reusing B CY-Y from previous call
+				; reusing B=CY-Y from previous call
 				; as plot saves BC
         CALL    PLOT		; PLOT PLOT_X,PLOT_Y
 
