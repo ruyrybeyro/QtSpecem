@@ -241,14 +241,14 @@ PLOT4:
 	LD	A,C             ; A=C'=X
         EXX
         ADD     A,L             ; A=CX+X
-        LD      C,A		; PLOT_X = CX+X
+        LD      C,A		; PLOT_X C=CX+X
         LD      D,C             ; D = CX+X (backup to use again)
 
 	EXX
 	LD	A,B             ; A=B'=Y
 	EXX
         ADD     A,H             ; A=CY+Y
-        LD      B,A		; PLOT_Y=CY+Y
+        LD      B,A		; PLOT_Y B=CY+Y
 
         CALL    PLOT		; PLOT PLOT_X,PLOT_Y
 
@@ -259,7 +259,7 @@ PLOT4:
         LD      C,A
         LD      A,L             ; LD A,(CX)
         SUB     C               ; A=CX - X
-        LD      C,A             ; PLOT_X=CX-X
+        LD      C,A             ; PLOT_X C=CX-X
 	EXX
         LD      E,A             ; E' = CX-X (backup to use again)
         ;EXX
@@ -275,7 +275,7 @@ PLOT4:
         CALL    NZ,PLOT         ; PLOT PLOT_X,PLOT_Y IF Z=0 (A!=0)
 
         ; plot(1,cx + x, cy - y);
-        LD      C,D		; PLOT_X = getting backup of CX+X
+        LD      C,D		; PLOT_X C=getting backup of CX+X
 
 	EXX
 	LD	A,B             ; A=B'=Y
@@ -283,7 +283,7 @@ PLOT4:
         LD      B,A
         LD      A,H             ; LD A,(CY)
         SUB     B               ; A=CY - Y
-        LD      B,A             ; PLOT_Y=CY-Y
+        LD      B,A             ; PLOT_Y B=CY-Y
 
         ; if (y != 0)    - not using it before, because we reuse
         ;                calculations
@@ -297,7 +297,7 @@ PLOT4:
 	EXX
 	LD	A,E	        ; A=getting backup of CX-X (E')
 	EXX
-        LD      C,A             ; PLOT_X=CX-X
+        LD      C,A             ; PLOT_X C=CX-X
 
 				; reusing B=CY-Y from previous call
 				; as plot saves BC
