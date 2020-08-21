@@ -125,9 +125,9 @@ CIRCLE:
 
         CPL			; 1's CLP
 				; HL' is ERROR
-        LD      H,$FF		; negation of 0
+        LD      H,$FF		; H' = negation of 0
         LD      L,A		; HL' = A 1's CPL
-        INC     HL		; 1'CPL+1=2's CPL (NEG)
+        INC     HL		; HL'=1'CPL+1=2's CPL (NEG)
 
         ; int x = radius;
 	LD	C,E             ; C'=E' is X = RADIUS
@@ -151,7 +151,7 @@ WHILE_C:
 
 	; extend positive number E y
 	; int 16-bit DE'
-        LD      D,0
+        LD      D,0             ; D'=0 -> DE'=E'
 
                                 ; HL' is error
         ADD     HL,DE		; error=error+y
@@ -184,12 +184,13 @@ WHILE_C:
 	; extend positive E' x
 	; into 16-bit DE'
         XOR     A                 ; A= 0 and carry = 0
-        LD      D,A		  ; D=0
+        LD      D,A		  ; D'=0 -> DE'=E'
                                   ; HL' is error
         ;XOR     A                ; carry = 0
         SBC     HL,DE             ; error=error-x
         XOR     A                 ; carry = 0
         SBC     HL,DE             ; error=error-x
+				  ; same as HL'=HL'-DE'*2
 
         JR      WHILE_C           ; jump to cycle
 
@@ -239,18 +240,14 @@ PLOT4:
 	EXX
 	LD	A,C             ; A=C'=X
         EXX
-        LD      C,A
-        LD      A,L             ; LD A,(CX)
-        ADD     A,C             ; CX + X
+        ADD     A,L             ; CX+X
         LD      C,A
         LD      D,C             ; D = CX+X (backup to use again)
 
 	EXX
 	LD	A,B             ; A=B'=Y
 	EXX
-        LD      B,A
-        LD      A,H             ; LD A,(CY)
-        ADD     A,B             ; CY + Y      
+        ADD     A,H             ; CY+Y
         LD      B,A
 
         CALL    PLOT
