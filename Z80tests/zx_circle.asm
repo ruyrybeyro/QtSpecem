@@ -256,10 +256,10 @@ PLOT4:
 	EXX
 	LD	A,C             ; A=C'=X
 	EXX
-        LD      C,A             ; C=X
-        LD      A,L             ; LD A,(CX)
-        SUB     C               ; A=CX - X
-        LD      C,A             ; PLOT_X C=CX-X
+	NEG
+	ADD	A,L		; A=CX - X (-X+CX)
+	LD	C,A		; PLOT_X C=CX-X
+
 	EXX
         LD      E,A             ; E' = CX-X (backup to use again)
         ;EXX
@@ -280,9 +280,8 @@ PLOT4:
 	EXX
 	LD	A,B             ; A=B'=Y
 	EXX
-        LD      B,A             ; B=Y
-        LD      A,H             ; LD A,(CY)
-        SUB     B               ; A=CY - Y
+        NEG
+        ADD	A,H             ; A=CY - Y (-Y+CY)
         LD      B,A             ; PLOT_Y B=CY-Y
 
         ; if (y != 0)    - not using it before, because we reuse
