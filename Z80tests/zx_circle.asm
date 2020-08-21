@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE demo      59 bytes 
-; CIRCLE routines 134 bytes
+; CIRCLE routines 133 bytes
 ; RND              16 bytes
 
 SEED		EQU $5C76	; seed for random numbers
@@ -278,15 +278,14 @@ PLOT4:
 	EXX
 	LD	A,B             ; A=B'=Y
 	EXX
+	LD	D,A		; D not needed now, reused to store B' copy
         NEG
         ADD	A,H             ; A=CY - Y (-Y+CY)
         LD      B,A             ; PLOT_Y B=CY-Y
 
         ; if (y != 0)    - not using it before, because we reuse
         ;                calculations
-        EXX
-        LD      A,B             ; A=B'=Y
-        EXX
+        LD      A,D             ; A=D=B'=Y
         OR      A		; CP 0
         CALL    NZ,PLOT		; PLOT PLOT_X,PLOT_Y IF Z=0 (A!=0)
 
