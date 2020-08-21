@@ -240,17 +240,17 @@ PLOT4:
 	EXX
 	LD	A,C             ; A=C'=X
         EXX
-        ADD     A,L             ; CX+X
-        LD      C,A
+        ADD     A,L             ; A=CX+X
+        LD      C,A		; PLOT_X = CX+X
         LD      D,C             ; D = CX+X (backup to use again)
 
 	EXX
 	LD	A,B             ; A=B'=Y
 	EXX
-        ADD     A,H             ; CY+Y
-        LD      B,A
+        ADD     A,H             ; A=CY+Y
+        LD      B,A		; PLOT_Y=CY+Y
 
-        CALL    PLOT
+        CALL    PLOT		; PLOT PLOT_X,PLOT_Y
 
         ; plot(1,cx - x, cy + y);
 	EXX
@@ -258,8 +258,8 @@ PLOT4:
 	EXX
         LD      C,A
         LD      A,L             ; LD A,(CX)
-        SUB     C               ; CX - X
-        LD      C,A
+        SUB     C               ; A=CX - X
+        LD      C,A             ; PLOT_X=CX-X
 	EXX
         LD      E,A             ; E' = CX-X (backup to use again)
         ;EXX
@@ -272,18 +272,18 @@ PLOT4:
 	LD      A,C             ; A=C'=X
 	EXX
 	OR	A               ; CP 0
-        CALL    NZ,PLOT
+        CALL    NZ,PLOT         ; PLOT PLOT_X,PLOT_Y IF Z=0 (A!=0)
 
         ; plot(1,cx + x, cy - y);
-        LD      C,D		; getting backup of CX+X
+        LD      C,D		; PLOT_X = getting backup of CX+X
 
 	EXX
 	LD	A,B             ; A=B'=Y
 	EXX
         LD      B,A
         LD      A,H             ; LD A,(CY)
-        SUB     B               ; CY - Y
-        LD      B,A
+        SUB     B               ; A=CY - Y
+        LD      B,A             ; PLOT_Y=CY-Y
 
         ; if (y != 0)    - not using it before, because we reuse
         ;                calculations
@@ -291,17 +291,17 @@ PLOT4:
         LD      A,B             ; A=B'=Y
         EXX
         OR      A		; CP 0
-        CALL    NZ,PLOT
+        CALL    NZ,PLOT		; PLOT PLOT_X,PLOT_Y IF Z=0 (A!=0)
 
         ; plot(1,cx - x, cy - y);
 	EXX
 	LD	A,E	        ; getting backup of CX-X (E')
 	EXX
-        LD      C,A             ; getting backup of CX-X
+        LD      C,A             ; PLOT_X=getting backup of CX-X
 
 				; reusing B CY-Y from previous call
 				; as plot saves BC
-        CALL    PLOT
+        CALL    PLOT		; PLOT PLOT_X,PLOT_Y
 
         RET
 
