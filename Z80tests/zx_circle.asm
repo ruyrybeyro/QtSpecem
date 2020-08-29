@@ -24,10 +24,10 @@ CL_ALL          EQU $0DAF       ; ROM CLS routine
 ;
 
 MAIN:
-        CALL    $CL_ALL		; clear screen
+        CALL    CL_ALL		; clear screen
         CALL    FOR_CIRCLE	; call demo routine - circles made w/ a for cycle
 
-        CALL    $CL_ALL         ; clear screen
+        CALL    CL_ALL          ; clear screen
         CALL    RND_CIRCLE	; call demo routine - random circles
 
         ; return to BASIC
