@@ -8,6 +8,8 @@
 ; CIRCLE routines 107 bytes
 ; PLOT   routine   23 bytes
 ; RND              16 bytes
+;
+; based in https://gist.github.com/bert/1085538/f288057c6fb08b61bf97e999d9237f6e04e4f444#file-circle-c
 
 SEED		EQU $5C76	; seed for random numbers
 CL_ALL          EQU $0DAF       ; ROM CLS routine
