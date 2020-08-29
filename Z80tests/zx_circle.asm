@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE demos     59 bytes 
-; CIRCLE routines 107 bytes
+; CIRCLE routines  99 bytes
 ; PLOT   routine   23 bytes
 ; RND              16 bytes
 ;
@@ -16,6 +16,12 @@ CL_ALL          EQU $0DAF       ; ROM CLS routine
 
 
         ORG     32768
+
+;
+; MAIN: calls demo routines
+;
+; size: 18 bytes
+;
 
 MAIN:
         CALL    $CL_ALL		; clear screen
@@ -36,6 +42,8 @@ MAIN:
 ; INPUTS  : NONE
 ;
 ; MODIFIES: AF,E, HL
+;
+; size: 15 bytes
 ;
 FOR_CIRCLE:
 
@@ -71,6 +79,8 @@ FOR_E:
 ; INPUTS  : NONE
 ;
 ; MODIFIES: B,AF, E, HL
+;
+; size: 26 bytes
 ;
 RND_CIRCLE:
 
@@ -114,6 +124,8 @@ LOOP_Z:
 ; HL' = ERROR
 ; B'  = Y
 ; C'  = X
+;
+; size: 37 bytes
 ;
 
 CIRCLE:
@@ -199,6 +211,8 @@ WHILE_C:
 ; INPUT: (CX),(CY) as center of cirle
 ;        (X),(Y) as offsets to center
 ;
+; size: 9 bytes
+;
 PLOT8:
         ; plot4points (cx, cy, x, y);
         CALL    PLOT4
@@ -206,13 +220,16 @@ PLOT8:
         ; plot4points (cx, cy, y, x);
         CALL    SWAP_X_Y	  ; (X)<->(Y)
         CALL    PLOT4
-        CALL    SWAP_X_Y          ; reverts previous invocation
-        RET
+; falls through
+;        CALL    SWAP_X_Y          ; reverts previous invocation 
+;        RET
 
 ;
 ; SWAP_X_Y: swaps contents of (X) and (Y)
 ;
 ; MODIFIES: A, BC'
+;
+; size: 6 bytes
 ;
 SWAP_X_Y:
 	EXX
@@ -229,6 +246,8 @@ SWAP_X_Y:
 ;        (X),(Y) as offsets to center
 ;
 ; MODIFIES: BC, DE, AF
+;
+; size: 47 bytes 
 ;
 PLOT4:
         ; H=CY , L=CX
@@ -298,9 +317,9 @@ PLOT4:
 				; reusing B=CY-Y from previous call
 				; as plot saves BC
 
-        CALL    PLOT		; PLOT PLOT_X,PLOT_Y
-
-        RET
+; falls through
+;        CALL    PLOT		; PLOT PLOT_X,PLOT_Y
+;        RET
 
 ;
 ; PLOT: put one pixel at (C,B)
@@ -314,6 +333,8 @@ PLOT4:
 ; OUTPUTS:
 ;
 ;           Carry/C=1 -  Y out of range
+;
+; size: 23 bytes
 ;
 
 PLOT:
@@ -370,6 +391,8 @@ PLOT_LOOP:
 ; OUTPUT: A=RANDOM 8-BIT VALUE 
 ;
 ; MODIFIES: DE
+;
+; size: 16 bytes
 ;
 RND:
 	PUSH	HL
