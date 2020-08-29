@@ -121,19 +121,16 @@ CIRCLE:
         ; int x = radius;
         LD      C,A             ; C'=E' is X = RADIUS
 
-        ; int error = -radius;
+        ; int error = radius;
 
-        ; 16 bit HL' NEG
-        ; of a known 8-bit positive number in A (RADIUS)
-        CPL			; 1's CLP
-				; HL' is ERROR
-        LD      H,$FF		; H' = negation of 0
-        LD      L,A		; HL' = A 1's CPL
-        INC     HL		; HL'=1'CPL+1=2's CPL (NEG)
-                                ; HL' has now -radius value
+        LD      L,A		; L'=RADIUS
+
+	XOR	A
+	LD	H,A             ; HL' = RADIUS (we need a 16 bit number,
+                                ;              8 bits overflows for larger circles)
 
         ; int y = 0;
-	LD	B,0             ; B' is Y=0
+	LD	B,A             ; B' is Y=0
 
         ; while (x > y)
 WHILE_C:
@@ -159,7 +156,7 @@ WHILE_C:
         ; ++y;
 	INC	B		; B'=B'+1
 
-        LD      E,B		; could be INC E
+        INC     E		; could be LD E,B
 
         ; error += y;
         ; extend positive number E y
