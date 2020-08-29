@@ -128,7 +128,7 @@ CIRCLE:
 
         LD      L,A		; L'=RADIUS
 
-	XOR	A
+	XOR	A		; A=0 (temporary)
 	LD	H,A             ; HL' = RADIUS (we need a 16 bit number,
                                 ;              8 bits overflows for larger circles)
 
