@@ -37,9 +37,11 @@ MAIN:
         CALL    RND_CIRCLE	; call demo routine - random circles
 
         ; return to BASIC
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
+
+
 	LD      HL,$2758	; quirk of ZX ROM ; HL'=$2758 needed for a successful BASIC return
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         RET			; return to BASIC
 
 ;
@@ -139,7 +141,7 @@ LOOP_Z:
 CIRCLE:
         LD      A,E		; A = RADIUS
 
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 
         ; int x = radius;
         LD      C,A             ; C'=E' is X = RADIUS
@@ -167,7 +169,7 @@ CIRCLE:
 WHILE_C:
 	LD	A,C		; A=C'= X
         CP	B               ; compare X-Y
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         RET     C		; carry=1, if Y>=X
                                 ; circle finished, leave routine
 
@@ -175,7 +177,7 @@ WHILE_C:
         CALL    PLOT8
 
         ; error += y;
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         LD      E,B             ; E' = B' = Y
 
 	; extend positive number E y
@@ -256,11 +258,11 @@ PLOT8:
 ; size: 6 bytes
 ;
 SWAP_X_Y:
-	EXX
-	LD	A,B                ; A=Y (A =B')
-	LD	B,C                ; Y=X (B'=C')
-	LD	C,A                ; X=A (C'=A )
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
+	LD	A,B             ; A=Y (A =B')
+	LD	B,C             ; Y=X (B'=C')
+	LD	C,A             ; X=A (C'=A )
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         RET
 
 
@@ -279,30 +281,30 @@ PLOT4:
 
         ; plot(1, cx + x, cy + y);
 
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	LD	A,C             ; A=C'=X
-        EXX
+        EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         ADD     A,L             ; A=CX+X
         LD      C,A		; PLOT_X C=CX+X
         LD      D,C             ; D = CX+X (backup to use again)
 
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	LD	A,B             ; A=B'=Y
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         ADD     A,H             ; A=CY+Y
         LD      B,A		; PLOT_Y B=CY+Y
 
         CALL    PLOT		; PLOT PLOT_X,PLOT_Y
 
         ; plot(1,cx - x, cy + y);
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	LD	A,C             ; A=C'=X
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	NEG			; A=-C'=-X
 	ADD	A,L		; A=CX - X (-X+CX)
 	LD	C,A		; PLOT_X C=CX-X
 
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         LD      E,A             ; E' = CX-X (backup to use again)
         ;EXX
                                 ; reusing B CY+Y from previous call
@@ -312,16 +314,16 @@ PLOT4:
         ;                calculations
 	;EXX
 	LD      A,C             ; A=C'=X
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	OR	A               ; CP 0 ; A compared to zero
         CALL    NZ,PLOT         ; PLOT PLOT_X,PLOT_Y IF Z=0 (X!=0)
 
         ; plot(1,cx + x, cy - y);
         LD      C,D		; PLOT_X C=getting backup of CX+X
 
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	LD	A,B             ; A=B'=Y
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	LD	D,A		; D not needed now, reused to store B' copy
         NEG                     ; A=-B'=-Y
         ADD	A,H             ; A=CY - Y (-Y+CY)
@@ -334,9 +336,9 @@ PLOT4:
         CALL    NZ,PLOT		; PLOT PLOT_X,PLOT_Y IF Z=0 (Y!=0)
 
         ; plot(1,cx - x, cy - y);
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
 	LD	A,E	        ; A=getting backup of CX-X (E')
-	EXX
+	EXX                     ; exchanges BC, DE, and HL with shadow registers BC', DE', and HL'
         LD      C,A             ; PLOT_X C=CX-X
 
 				; reusing B=CY-Y from previous call
