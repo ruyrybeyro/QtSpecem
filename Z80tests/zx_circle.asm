@@ -135,10 +135,10 @@ CIRCLE:
 
 	EXX
 
-        ; int x = -radius;
+        ; int x = radius;
         LD      C,A             ; C'=E' is X = RADIUS
 
-        ; int error = radius;
+        ; int error = -radius;
         ; HL' = -RADIUS (we need a 16 bit number,
         ;              8 bits overflows for larger circles)
 
