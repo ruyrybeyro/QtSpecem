@@ -364,7 +364,7 @@ PLOT4:
 
 PLOT:
         ; test limits ; allows partial circles
-	; as are jumping forwarding the rom limit test
+	; as we are jumping bypassing the rom limit test
 	; this test is essential for things working smoothly
 	; Y is between 0 and 191
 
