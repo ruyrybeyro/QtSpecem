@@ -135,7 +135,7 @@ CIRCLE:
 
 	EXX
 
-        ; int x = radius;
+        ; int x = -radius;
         LD      C,A             ; C'=E' is X = RADIUS
 
         ; int error = radius;
