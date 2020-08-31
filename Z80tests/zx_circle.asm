@@ -310,8 +310,8 @@ PLOT4:
 	;EXX
 	LD      A,C             ; A=C'=X
 	EXX
-	OR	A               ; CP 0
-        CALL    NZ,PLOT         ; PLOT PLOT_X,PLOT_Y IF Z=0 (A!=0)
+	OR	A               ; CP 0 ; A compared to zero
+        CALL    NZ,PLOT         ; PLOT PLOT_X,PLOT_Y IF Z=0 (X!=0)
 
         ; plot(1,cx + x, cy - y);
         LD      C,D		; PLOT_X C=getting backup of CX+X
@@ -327,8 +327,8 @@ PLOT4:
         ; if (y != 0)    - not using it before, because we reuse
         ;                calculations
         LD      A,D             ; A=D=B'=Y
-        OR      A		; CP 0
-        CALL    NZ,PLOT		; PLOT PLOT_X,PLOT_Y IF Z=0 (A!=0)
+        OR      A		; CP 0  ; A compared to zero
+        CALL    NZ,PLOT		; PLOT PLOT_X,PLOT_Y IF Z=0 (Y!=0)
 
         ; plot(1,cx - x, cy - y);
 	EXX
