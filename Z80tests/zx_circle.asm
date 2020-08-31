@@ -398,7 +398,7 @@ PLOT:
         LD      A,$01		; rightmost bit
 PLOT_LOOP:
         RRCA			; Rotates A to the right with bit 0 moved to bit 7 
-        DJNZ    PLOT_LOOP
+        DJNZ    PLOT_LOOP	; Loop until B=0 - 1 is in the right bit for plotting X
 
         OR      (HL)		; A = screen value in (HL) with bit/pixel added
         LD      (HL),A		; write A in (HL) screen address
