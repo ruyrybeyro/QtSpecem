@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE calling demos 59 bytes 
-; CIRCLE routines      99 bytes
+; CIRCLE routines      99 bytes in total
 ;        CIRCLE        37 bytes
 ;        PLOT8          9 bytes
 ;        SWAP_X_Y       6 bytes
