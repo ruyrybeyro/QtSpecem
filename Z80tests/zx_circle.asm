@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE calling demos 59 bytes 
-; CIRCLE routines      99 bytes
+; CIRCLE routines      102 bytes
 ; PLOT   routine       23 bytes
 ; RND                  16 bytes
 ;
@@ -127,7 +127,7 @@ LOOP_Z:
 ; B'  = Y
 ; C'  = X
 ;
-; size: 37 bytes
+; size: 40 bytes
 ;
 
 CIRCLE:
@@ -139,14 +139,19 @@ CIRCLE:
         LD      C,A             ; C'=E' is X = RADIUS
 
         ; int error = radius;
-        LD      L,A		; L'=RADIUS
+        ; HL' = -RADIUS (we need a 16 bit number,
+        ;              8 bits overflows for larger circles)
 
-	XOR	A		; A=0 (temporary)
-	LD	H,A             ; HL' = RADIUS (we need a 16 bit number,
-                                ;              8 bits overflows for larger circles)
+	CPL
+        LD      L,A		; L'=8 bit 1 CPL RADIUS
+
+	LD	H,$FF           ; extend 8 bit CPL into 16 bit
+	INC	HL		; HL = 16 bit NEG HL = - RADIUS
+				; Z80 negative numbers are
+				; 2 complement (NEG)
 
         ; int y = 0;
-	LD	B,A             ; B' is Y=0
+	LD	B,0             ; B' is Y=0
 
         ; while (x > y)
 WHILE_C:
