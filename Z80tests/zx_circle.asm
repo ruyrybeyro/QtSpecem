@@ -68,8 +68,8 @@ FOR_E:
 
         ; radius != 0
         XOR     A		; A=0
-        CP      E               ; CP A-E
-        JR      NZ,FOR_E	; jump relative IF E not 0
+        CP      E               ; CP A-E - compare radius with 0
+        JR      NZ,FOR_E	; jump relative IF E/radius not 0
 
         RET
 
@@ -109,8 +109,10 @@ LOOP_Z:
 	; restore B for loop counting
         POP     BC
 
-        DJNZ    LOOP_Z		 ; i = i -1 ; while(i < 0)
+        DJNZ    LOOP_Z		 ; i = i -1 ; while(i < 0) 
+                                 ; B=B-1; jump to LOOP_Z if B not zero 0
         RET
+
 
 ;
 ; CIRCLE : Breseham's circle using integers
@@ -137,7 +139,6 @@ CIRCLE:
         LD      C,A             ; C'=E' is X = RADIUS
 
         ; int error = radius;
-
         LD      L,A		; L'=RADIUS
 
 	XOR	A		; A=0 (temporary)
@@ -171,7 +172,7 @@ WHILE_C:
         ; ++y;
 	INC	B		; B'=B'+1
 
-        INC     E		; could be LD E,B
+        LD      E,B		; could be INC E
 
         ; error += y;
         ; extend positive number E y
@@ -358,12 +359,14 @@ PLOT:
         PUSH    DE
         PUSH    BC
 
-	CALL     $22B0   	; HL = screen ADDRESS
+	CALL     $22B0   	; INPUT: B=Y,C=X
+                                ; returns:
+                                ; HL = screen ADDRESS
 				; 7-A (pixel position)
 
         
-        ;CALL    $22EC	        ; replaced by a faster, shorter routine
-                                ; that does not handle colours
+        ;CALL    $22EC	        ; replaced by faster, shorter routine
+                                ; that does not handle colours (+6 bytes)
 
 	; Getting right value/bit/pixel in position
         LD      B,A		; B=7-A
@@ -398,12 +401,12 @@ RND:
 	PUSH	HL
         LD      HL,(SEED)       ; get current seed
         LD      A,R		; get "random" value from R
-        LD      E,A
-        LD      D,(HL)		; get "random" value from ROM contents
-        ADD     HL,DE		; add D=ROM+E=R contents to SEED
+        LD      D,A		; D = R
+        LD      E,(HL)		; get "random" value from ROM contents
+        ADD     HL,DE		; add E=ROM,D=R contents to SEED
         LD      (SEED),HL	; save new SEED
-       	ADD     A,L		; Add low L to R
-        XOR     H		; XOR it H
+       	ADD     A,L		; A= R + L
+        XOR     H		; A= R + L ^ H
         POP     HL
         RET
 
