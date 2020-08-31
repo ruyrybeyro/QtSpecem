@@ -6,6 +6,10 @@
 ;
 ; CIRCLE calling demos 59 bytes 
 ; CIRCLE routines      99 bytes
+;        CIRCLE        37 bytes
+;        PLOT8          9 bytes
+;        SWAP_X_Y       6 bytes
+;        PLOT4         47 bytes
 ; PLOT   routine       23 bytes
 ; RND                  16 bytes
 ;
