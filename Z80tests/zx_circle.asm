@@ -158,7 +158,7 @@ CIRCLE:
 	XOR	A
 	LD	B,A             ; B' is Y=0
 
-        ; used ahead for extending E to 16 bits positive number
+        ; used ahead for extending E to 16 bits positive number DE
 	LD	D,A             ; D' will be always 0
 
         ; while (x > y)
