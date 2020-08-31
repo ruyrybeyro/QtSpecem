@@ -153,6 +153,8 @@ CIRCLE:
         ; int y = 0;
 	XOR	A
 	LD	B,A             ; B' is Y=0
+
+        ; used ahead for extending E to 16 bits positive number
 	LD	D,A             ; D' will be always 0
 
         ; while (x > y)
@@ -173,6 +175,7 @@ WHILE_C:
 	; extend positive number E y
 	; int 16-bit DE'
         ;LD      D,0             ; D'=0 -> DE'=E'
+	; D' always 0, not needed
 
                                 ; HL' is error
         ADD     HL,DE		; error=error+y
@@ -379,7 +382,7 @@ PLOT:
 				; 7-A (pixel position)
 
         
-        ;CALL    $22EC	        ; replaced by faster, shorter routine
+        ;CALL    $22EC	        ; replaced by faster, shorter routine commentend
                                 ; that does not handle colours (+6 bytes)
 
 	; Getting right value/bit/pixel in position
