@@ -161,7 +161,7 @@ CIRCLE:
 	LD	B,A             ; B' is Y=0
 
         ; used ahead for extending E to 16 bits positive number DE
-	LD	D,A             ; D' will be always 0
+	LD	D,A             ; D'=0 ; D' will be always 0
 
         ; while (x > y)
 WHILE_C:
