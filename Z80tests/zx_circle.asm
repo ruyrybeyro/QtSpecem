@@ -298,7 +298,7 @@ PLOT4:
 	EXX
 	LD	A,C             ; A=C'=X
 	EXX
-	NEG
+	NEG			; A=-C'=-X
 	ADD	A,L		; A=CX - X (-X+CX)
 	LD	C,A		; PLOT_X C=CX-X
 
@@ -323,7 +323,7 @@ PLOT4:
 	LD	A,B             ; A=B'=Y
 	EXX
 	LD	D,A		; D not needed now, reused to store B' copy
-        NEG
+        NEG                     ; A=-B'=-Y
         ADD	A,H             ; A=CY - Y (-Y+CY)
         LD      B,A             ; PLOT_Y B=CY-Y
 
