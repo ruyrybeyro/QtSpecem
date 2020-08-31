@@ -157,7 +157,7 @@ CIRCLE:
 				; 2 complement (NEG)
 
         ; int y = 0;
-	XOR	A
+	XOR	A               ; A=0 (temporary)
 	LD	B,A             ; B' is Y=0
 
         ; used ahead for extending E to 16 bits positive number DE
