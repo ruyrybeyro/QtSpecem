@@ -177,12 +177,11 @@ WHILE_C:
         ; ++y;
 	INC	B		; B'=B'+1
 
-        LD      E,B		; could be INC E
+        INC	DE 		; DE was still B' 
 
         ; error += y;
         ; extend positive number E y
         ; int 16-bit DE'
-        ;LD      D,0             ; DE'=E' D' still zero
 
         ADD     HL,DE           ; error=error+y
 
