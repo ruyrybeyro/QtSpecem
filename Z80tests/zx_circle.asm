@@ -143,7 +143,7 @@ CIRCLE:
         ;              8 bits overflows for larger circles)
 
 	CPL
-        LD      L,A		; L'=8 bit 1 CPL RADIUS
+        LD      L,A		; L'=8 bit, 1 CPL RADIUS
 
 	LD	H,$FF           ; extend 8 bit CPL into 16 bit
 	INC	HL		; HL = 16 bit NEG HL = - RADIUS
