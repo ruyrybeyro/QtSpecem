@@ -109,7 +109,7 @@ LOOP_Z:
 	; restore B for loop counting
         POP     BC
 
-        DJNZ    LOOP_Z		 ; i = i -1 ; while(i < 0) 
+        DJNZ    LOOP_Z		 ; i = i -1 ; while(i > 0) 
                                  ; B=B-1; jump to LOOP_Z if B not zero 0
         RET
 
