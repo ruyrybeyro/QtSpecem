@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE calling demos 59 bytes 
-; CIRCLE routines      101 bytes
+; CIRCLE routines      99 bytes
 ; PLOT   routine       23 bytes
 ; RND                  16 bytes
 ;
@@ -127,7 +127,7 @@ LOOP_Z:
 ; B'  = Y
 ; C'  = X
 ;
-; size: 39 bytes
+; size: 37 bytes
 ;
 
 CIRCLE:
@@ -151,7 +151,9 @@ CIRCLE:
 				; 2 complement (NEG)
 
         ; int y = 0;
-	LD	B,0             ; B' is Y=0
+	XOR	A
+	LD	B,A             ; B' is Y=0
+	LD	D,A             ; D' will be always 0
 
         ; while (x > y)
 WHILE_C:
@@ -170,7 +172,7 @@ WHILE_C:
 
 	; extend positive number E y
 	; int 16-bit DE'
-        LD      D,0             ; D'=0 -> DE'=E'
+        ;LD      D,0             ; D'=0 -> DE'=E'
 
                                 ; HL' is error
         ADD     HL,DE		; error=error+y
@@ -178,7 +180,8 @@ WHILE_C:
         ; ++y;
 	INC	B		; B'=B'+1
 
-        INC	DE 		; DE was still B' 
+        INC	E 		; E was still B' 
+                                ; (not DE on purpose. D' will always be 0)
 
         ; error += y;
         ; extend positive number E y
@@ -198,8 +201,10 @@ WHILE_C:
 
 	; extend positive E' x
 	; into 16-bit DE'
-        XOR     A                 ; A= 0 and carry = 0
-        LD      D,A		  ; D'=0 -> DE'=E'
+        XOR     A                 ; carry = 0
+        ;LD      D,A		  ; D'=0 -> DE'=E' 
+                                  ; D' always 0
+
                                   ; HL' is error
 
         SBC     HL,DE             ; error=error-x
