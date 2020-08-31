@@ -5,7 +5,7 @@
 ; (c) Rui Ribeiro 2020
 ;
 ; CIRCLE calling demos 59 bytes 
-; CIRCLE routines      102 bytes
+; CIRCLE routines      101 bytes
 ; PLOT   routine       23 bytes
 ; RND                  16 bytes
 ;
@@ -127,7 +127,7 @@ LOOP_Z:
 ; B'  = Y
 ; C'  = X
 ;
-; size: 40 bytes
+; size: 39 bytes
 ;
 
 CIRCLE:
@@ -201,9 +201,12 @@ WHILE_C:
         XOR     A                 ; A= 0 and carry = 0
         LD      D,A		  ; D'=0 -> DE'=E'
                                   ; HL' is error
-        ;XOR     A                ; carry = 0
+
         SBC     HL,DE             ; error=error-x
-        XOR     A                 ; carry = 0
+        ;XOR     A                ; carry = 0 
+                                  ; carry=1 not happening.
+                                  ; we are extending an 8 bit number already.
+
         SBC     HL,DE             ; error=error-x
 				  ; same as HL'=HL'-DE'*2
 
