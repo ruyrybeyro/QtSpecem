@@ -158,7 +158,8 @@ WHILE_C:
 	LD	A,C		; A=C'= X
         CP	B               ; compare X-Y
 	EXX
-        RET     C		; carry=1, if Y>=X, leave routine
+        RET     C		; carry=1, if Y>=X
+                                ; circle finished, leave routine
 
         ;plot8points (cx, cy, x, y);
         CALL    PLOT8
@@ -193,7 +194,6 @@ WHILE_C:
 	DEC	C               ; C' is X (C'=C'-1)
 
         ; error -= x;
-        ; error -= x;
         LD      E,C
 
 	; extend positive E' x
@@ -203,6 +203,8 @@ WHILE_C:
                                   ; HL' is error
 
         SBC     HL,DE             ; error=error-x
+
+        ; error -= x;
         ;XOR     A                ; carry = 0 
                                   ; carry=1 not happening.
                                   ; we are extending an 8 bit number already.
