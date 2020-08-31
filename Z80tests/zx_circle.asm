@@ -40,7 +40,7 @@ MAIN:
 	EXX
 	LD      HL,$2758	; quirk of ZX ROM ; HL'=$2758 needed for a successful BASIC return
 	EXX
-        RET
+        RET			; return to BASIC
 
 ;
 ;  FOR_CIRCLE: prints circles with a for routine for radius
