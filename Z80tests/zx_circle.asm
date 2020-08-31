@@ -422,7 +422,7 @@ PLOT_LOOP:
 ; size: 16 bytes
 ;
 RND:
-	PUSH	HL
+	PUSH	HL		; save HL
         LD      HL,(SEED)       ; get current seed
         LD      A,R		; get "random" value from R
         LD      D,A		; D = R
@@ -431,7 +431,7 @@ RND:
         LD      (SEED),HL	; save new SEED
        	ADD     A,L		; A= R + L
         XOR     H		; A= R + L ^ H
-        POP     HL
+        POP     HL              ; restore HL
         RET
 
         END     32768
