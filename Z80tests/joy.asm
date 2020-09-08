@@ -650,7 +650,7 @@ JOY_PORT_CURSOR:
 ;
 
 UDGs:	
-	; up
+	; up arrow
 	DEFB    %00010000
 	DEFB    %00111000
 	DEFB    %01010100
@@ -660,7 +660,7 @@ UDGs:
 	DEFB	%00010000
 	DEFB	%00010000
 
-	; left
+	; left arrow
 	DEFB	%00000000
 	DEFB	%00010000
 	DEFB	%00100000
@@ -670,7 +670,7 @@ UDGs:
 	DEFB	%00100000
 	DEFB	%00010000
 
-        ; fire
+        ; fire (round)
 	DEFB	%00011000
 	DEFB	%00111100
 	DEFB	%01000010
@@ -680,7 +680,7 @@ UDGs:
 	DEFB	%00111100
 	DEFB	%00011000
 
-        ; right
+        ; right arrow
 	DEFB	%00000000
 	DEFB	%00001000
 	DEFB	%00000100
@@ -690,7 +690,7 @@ UDGs:
 	DEFB	%00000100
 	DEFB	%00001000
 
-        ; down
+        ; down arrow
 	DEFB	%00010000
 	DEFB	%00010000
 	DEFB	%00010000

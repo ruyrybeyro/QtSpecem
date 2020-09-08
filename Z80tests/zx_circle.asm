@@ -471,5 +471,6 @@ RND:
         POP     HL              ; restore HL
         RET
 
+; Pasmo uses this directive to USR to this value in the BASIC loader
         END     32768
 
