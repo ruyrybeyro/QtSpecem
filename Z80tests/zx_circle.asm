@@ -80,7 +80,7 @@ MAIN:
         RET			; return to BASIC
 
 ;
-;  FOR_CIRCLE: prints circles with a for routine for radius
+;  FOR_CIRCLE: prints circles with a for routine for radius (demo)
 ;
 ; INPUTS  : NONE
 ;
@@ -117,7 +117,7 @@ FOR_E:
         RET
 
 ;
-; RND_CIRCLE: generates random centered/sized circles
+; RND_CIRCLE: generates random centered/sized circles (demo)
 ;
 ; INPUTS  : NONE
 ;
@@ -158,7 +158,7 @@ LOOP_Z:
 
 
 ;
-; CIRCLE : Breseham's circle using integers
+; CIRCLE : core Breseham's circle routine using integers
 ;
 ; INPUT:
 ;      L=(CX), H=(CY): center of circle
