@@ -11,14 +11,15 @@
 ; H  = Y
 ; L  = X
 ; 
-; E  = radius.
+; E  = radius in pixels
+;
+;
+; PLOT routine, used by CIRCLE. Can be directly invoked with:
+;
+; B=Y, C=X
 ;
 ; The coordinate system was changed to use full screen
 ; (0,0) is really at the bottom.
-;
-; PLOT routine can be invoked with:
-;
-; B=Y, C=X
 ;
 ;
 ; RND routine returns a 8-bit pseudo-random number in A
@@ -39,6 +40,7 @@
 ;        PLOT4         47 bytes
 ;
 ; PLOT   routine       23 bytes (faster) / 17 bytes (slower)
+;
 ; RND                  16 bytes
 ;
 ; based in https://gist.github.com/bert/1085538/f288057c6fb08b61bf97e999d9237f6e04e4f444#file-circle-c
