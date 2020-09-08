@@ -2,6 +2,8 @@
 ; kempston/cursor/fuller/sinclair/timex 2068 joystick detection and testing
 ; Rui Ribeiro/2020
 ;
+; table driven routines to deal with the several types of ZX Spectrum joysticks
+;
 ; MIT License
 ;
 ; pasmo --tapbas joy.asm joy.tap
