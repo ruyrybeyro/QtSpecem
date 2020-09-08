@@ -4,6 +4,10 @@
 ;
 ; (c) Rui Ribeiro 2020
 ;
+; MIT License
+;
+; pasmo --tapbas zx_circle.asm zx_circle.tap
+;
 ; CIRCLE routine is invoked with:
 ;
 ; Center of circle:
