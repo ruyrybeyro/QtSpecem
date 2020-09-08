@@ -45,7 +45,10 @@
 ;
 ; based in https://gist.github.com/bert/1085538/f288057c6fb08b61bf97e999d9237f6e04e4f444#file-circle-c
 
+; ZX Spectrum system variable SEED
 SEED		EQU $5C76	; seed for random numbers
+
+; ROM routine for clearing the screen
 CL_ALL          EQU $0DAF       ; ROM CLS routine
 
 
