@@ -4,9 +4,35 @@
 ;
 ; (c) Rui Ribeiro 2020
 ;
+; CIRCLE routine is invoked with:
+;
+; Center of circle:
+;
+; H  = Y
+; L  = X
+; 
+; E  = radius.
+;
+; The coordinate system was changed to use full screen
+; (0,0) is really at the bottom.
+;
+; PLOT routine can be invoked with:
+;
+; B=Y, C=X
+;
+;
+; RND routine returns a 8-bit pseudo-random number in A
+;
+; Sizes in RAM:
+;
 ; CIRCLE calling demos 59 bytes 
 ;
+;        MAIN          18 bytes
+;        FOR_CIRCLE    15 bytes
+;        RND_CIRCLE    26 bytes
+;
 ; CIRCLE routines      99 bytes in total
+;
 ;        CIRCLE        37 bytes
 ;        PLOT8          9 bytes
 ;        SWAP_X_Y       6 bytes
