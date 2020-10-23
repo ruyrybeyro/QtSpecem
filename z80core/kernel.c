@@ -54,6 +54,27 @@ void do_reset()
  *=========================================================================*/
 void execute()
 {
+
+  /* do_int_tasks(); */
+  /* if interrupts activated */
+  if( clock_ticks >= INT_TIME )
+  {
+  if(IFF1)
+     {
+     do_interrupt();
+     }
+  else
+     ResetTickCounter();
+
+  // ULA inverts FLASH every 16 frames
+  if(++ChangeFlashTime == 16)
+  {
+     ChangeFlashTime = 0; // reset counter
+     FlashState ^= 1;     // signal colours inverted
+     do_flash();
+  }
+  }
+
   /* Z80 main cycle */
   /* --> 0xDD e 0xFD are only 'switches' wich map IX or IY in HL
       till instruction end [but not in instructions prefixed by ED]
@@ -93,26 +114,6 @@ void execute()
         }
 	}
         while( (clock_ticks < INT_TIME) && !TraceOn );
-   
-  /* do_int_tasks(); */
-  /* if interrupts activated */
-  if( clock_ticks >= INT_TIME )
-  {
-  if(IFF1)
-     {
-     do_interrupt();
-     }
-  else
-     ResetTickCounter();
-
-  // ULA inverts FLASH every 16 frames
-  if(++ChangeFlashTime == 16)
-  {
-     ChangeFlashTime = 0; // reset counter
-     FlashState ^= 1;     // signal colours inverted
-     do_flash();
-  }
-  }
 }
 
 /*=========================================================================*

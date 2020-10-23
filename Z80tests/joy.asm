@@ -76,7 +76,8 @@ L_DETECT:
         CALL    T_SPACE
 	RET	NZ
 
-	; wait for an interrupt
+	; wait for an interrupt 
+        ; each occurs at 1/50 of a second
 	HALT               ; CALL    DELAY
 
 	; detect joystick type
@@ -297,7 +298,7 @@ NO_CURSOR:
         JR      Z,IS_KEMPSTON
 
 	; other joysticks besides kempston are active low
-	; invert bits
+	; thus, invert bits
 	LD	A,L
 	CPL		; invert bits reading
 
