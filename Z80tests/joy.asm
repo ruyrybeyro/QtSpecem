@@ -33,7 +33,7 @@ AT      	EQU     $16
 
 ; line and column for the joystick status
 LINE1   	EQU     10
-COL     	EQU     13
+COL     	EQU     5
 
 ; ATTR EQUs
 
@@ -459,6 +459,16 @@ JPORT_ALT:
 	; and print it
 	CALL	PRINTA
 
+	; print a space
+	LD	A,' '
+	RST	$10
+
+	POP	AF
+	PUSH	AF
+
+	; print A in binary
+	CALL	PRINTBIN
+
 	; restore registers
 	POP	AF
 ;	POP	BC
@@ -505,8 +515,12 @@ PRINTA:
 
         ; lower 4 bits of A
 	POP	AF
+
+	PUSH	AF
         AND     $0F
         CALL    PRINTHEXA
+	POP	AF
+
         RET
 
 ;
@@ -527,6 +541,26 @@ ISDIGIT:
 
         POP     DE
         RET
+
+;
+; Print A in binary form.
+;
+PRINTBIN:
+	LD	H,A
+	LD	B,8
+LBITS:	LD	A,'0'
+        BIT	7,H
+	JR	Z,BINZERO
+	INC	A
+BINZERO:
+	PUSH	HL
+	PUSH	BC
+	RST 	$10
+	POP	BC
+	POP	HL
+	RL	H
+	DJNZ	LBITS
+	RET
 
 ;
 ; DATA
@@ -623,7 +657,7 @@ SINCLAIR_B2:
 ;
 
 MAIN_SCREEN: 
-        DEFB	AT, 0, 4, "Joystick diagnostics v0.9"
+        DEFB	AT, 0, 4, "Joystick diagnostics v0.10"
         DEFB    AT, 4, 8, "Left on joystick"
         DEFB	AT, LINE1  , COL, ' ' , ' ', UUP, ' ', ' '
 	DEFB    AT, LINE1+2, COL, ULEFT, ' ', UFIRE, ' ', URIGHT
@@ -637,7 +671,7 @@ MAIN_SCREEN:
 ;
 
 JOY_PORT_MSG:	
-	DEFB	AT, LINE1,  COL+8, "PORT IN"
+	DEFB	AT, LINE1,  COL+8, "PORT IN BIN"
 
 JOY_PORT:
         DEFB    AT, LINE1+2, COL+8, '$'
