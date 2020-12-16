@@ -1,4 +1,5 @@
 
+; pasmo --tapbas sbc_a.asm sbc_a.tap
 
         ORG     50000
 

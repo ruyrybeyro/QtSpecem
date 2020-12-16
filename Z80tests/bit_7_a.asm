@@ -1,4 +1,5 @@
 
+; pasmo --tapbas bit_7_a.asm bit_7_a.tap
 
         ORG     50000
 

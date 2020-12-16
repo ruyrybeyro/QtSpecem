@@ -1,5 +1,8 @@
+
 ; https://gist.github.com/ruyrybeyro/e4af49aa29086b3a5b61a0d52c5d0d8f
 ; Adapted for Z80 Spectrum syntax, assembled with pasmo
+
+; pasmo --tapbas disz80.asm disz80.tap
 
 	ORG 	50000
         LD      A,2             ; upper screen

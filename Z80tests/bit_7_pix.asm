@@ -1,4 +1,5 @@
 
+; pasmo --tapbas bit_7_pix.asm
 
         ORG     50000
 

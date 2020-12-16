@@ -1,4 +1,5 @@
 
+; pasmo bit_0_a.asm bit_0_a.tap
 
         ORG     50000
 

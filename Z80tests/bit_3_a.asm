@@ -1,4 +1,5 @@
 
+; pasmo --tapbas bit_3_a.asm bit_3_a.tap
 
         ORG     50000
 

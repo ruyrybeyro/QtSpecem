@@ -1,3 +1,6 @@
+
+; pasmo --tapbas daa.asm daa.tap
+
 ; N C H   Loop to be made
 ;
 ; 0 0 0   00

@@ -1,5 +1,7 @@
 ; http://www.breakintoprogram.co.uk/computers/zx-spectrum/keyboard
 
+; pasmo --tapbas keyboard.asm keyboard.tap
+
 					ORG	50000
 					CALL	PRINT_KEYB
 STALL:				        CALL	Read_Keyboard

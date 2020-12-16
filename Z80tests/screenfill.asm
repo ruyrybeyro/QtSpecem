@@ -14,6 +14,8 @@
 ;	Y5-Y3 - line pixels
 ;	X4-X0 - X
 
+; pasmo --tapbas screenfill.asm screenfill.tap
+
 	ORG	50000
 
         LD      A,2             ; upper screen

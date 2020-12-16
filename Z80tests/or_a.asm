@@ -1,4 +1,5 @@
 
+; pasmo --tapbas or_a.asm or_a.tap
 
         ORG     50000
 

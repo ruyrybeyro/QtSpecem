@@ -1,4 +1,5 @@
 
+; pasm --tapbas ccf.asm ccf.tap
 
         ORG     50000
 

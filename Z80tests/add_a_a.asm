@@ -1,4 +1,5 @@
 
+; pasmo --tapbas adc_a_a.asm adc_a_a.tap
 
         ORG     50000
 

@@ -1,6 +1,8 @@
 
 ; call it with PRINT USR 50000
 
+; pasmo --tapbas wz.asm wz.tap
+
 	ORG	50000
 	LD      BC,  $27FF   ; After this WZ will be $2800, bit 13 = 1; bit 11 = 1
         LD      A, (BC)     ; WZ = $27FF + 1

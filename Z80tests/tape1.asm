@@ -1,5 +1,7 @@
 ; EXAMPLE SAVE AND LOAD ; BLOCKS WITHOUT HEADERS
 
+; pasmo --tapbas tape1.asm tape1.tap
+
 	ORG	50000
 
         LD      A,2             ; upper screen

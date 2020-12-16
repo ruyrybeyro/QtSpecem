@@ -1,4 +1,5 @@
 
+; pasmo --tapbas cp_a.asm cp_a.tap
 
         ORG     50000
 

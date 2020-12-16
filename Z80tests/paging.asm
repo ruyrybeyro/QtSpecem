@@ -5,6 +5,8 @@
 ;
 ; (C) Rui Ribeiro Fev 2020
 ;
+; pasmo --tapbas paging.asm paging.tap
+;
 ; Invoked from 128K mode BASIC
 ;
 ; By default memory banks will be ROM 0->Bank 5 (screen)->Bank 2->Bank 0

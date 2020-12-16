@@ -1,3 +1,5 @@
+
+
 ;	FILL ZX SPECTRUM SCREEN NORMAL
 ;
 ;	SCREEN ADDRESS  
@@ -11,6 +13,8 @@
 ;
 ;	Y5-Y3 - line pixels
 ;	X4-X0 - X
+
+; pasmo --tapbas screen_addr.asm screen_addr.tap
 
 	ORG	50000
 

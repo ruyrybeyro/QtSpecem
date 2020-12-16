@@ -5,6 +5,9 @@
 ;       H =  0  1  0 Y7 Y6 Y2 Y1 Y0
 ;	L = Y5 Y4 Y3 X4 X3 X2 X1 X0
 
+; pasmo --tapbas screenfill1.asm screenfill1.tap
+
+
 	ORG	50000
 
 	LD	HL,$4000	; SCREEN START

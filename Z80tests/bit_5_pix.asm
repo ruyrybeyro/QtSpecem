@@ -1,4 +1,5 @@
 
+; pasmo --tapbas bit_5_pix.asm bit_5_pix.tap
 
         ORG     50000
 

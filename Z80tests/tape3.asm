@@ -1,5 +1,7 @@
 ; EXAMPLE TAPE : PRINT HEADERS
 
+; pasmo tape3.asm tape3.tap
+
 	ORG	50000
 
         LD      A,2             ; upper screen

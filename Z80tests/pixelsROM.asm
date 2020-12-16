@@ -1,4 +1,6 @@
 
+; pasmo --tapbas pixelsROM.asm pixelsROM.tap
+
 PLOT	EQU	$22DF
 DRAW	EQU     $24BA
 

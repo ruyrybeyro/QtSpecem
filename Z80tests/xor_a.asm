@@ -1,4 +1,5 @@
 
+; pasmo --tapbas xor_a.asm xor_a.tap
 
         ORG     50000
 

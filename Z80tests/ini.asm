@@ -1,4 +1,5 @@
 
+; pasmo --tapbas ini.asm ini.tap
 
         ORG     50000
 

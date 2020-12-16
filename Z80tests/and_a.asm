@@ -1,4 +1,5 @@
 
+; pasmo --tapbas and_a.asm and_a.tap
 
         ORG     50000
 
