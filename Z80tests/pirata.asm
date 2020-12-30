@@ -7,7 +7,16 @@
 ; border yellow   - introduce blank tape and press 1 (any key??)
 ;
 ; border green    - 1 another copy
-                    2 start over
+;                   2 start over
+;
+; FORMAT of tape block in memory
+;
+;  BYTE 1 - LSB size of block
+;  BYTE 2 - MSB size of block	
+;  BYTE 3 - flag identifying block
+;  -------- block 
+
+; if BYTE1 and BYTE2 = 0, no more blocks
 
 		ORG 	$FF54
 	
