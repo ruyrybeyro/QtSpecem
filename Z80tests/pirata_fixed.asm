@@ -18,12 +18,15 @@
 
 ; if BYTE1 and BYTE2 = 0, no more blocks
 
-		ORG 	$FF67
-	
+MAX_SIZE	EQU	BEGIN-$4000-5
+
+		ORG 	$FF65
+START:	
 		DI			; only needed once
 		LD	SP,0		; stack to end of RAM
 
 BEGIN:		LD	IX,$4000	; beggining of RAM/screen
+
 L_NEXTBLK:		
 		XOR	A		; header block
 		LD      (IX+02),A
@@ -31,7 +34,7 @@ L_NEXTBLK:
 		INC	IX		; size of block LSB
 		INC	IX              ; size of block MSB
 		INC	IX              ; flag
-		LD	DE,BEGIN-$4000-5 ; max number of bytes
+		LD	DE,MAX_SIZE 	; max number of bytes
 		SCF
 		INC	D
 		EX	AF,AF'
@@ -41,12 +44,12 @@ L_NEXTBLK:
 		OUT	($FE),A		
 
 		CALL	$0562    	; load block
-		JR	Z,END_LOAD	; load w/ sucess
+		JR	Z,END_BLOCK	; load w/ sucess
 
 		LD	A,$7F
 		IN 	A,($FE)
 		RR	A
-		JR	NC,SAVE_SECTION	; if SPACE 
+		JR	NC,END_LOAD	; if SPACE 
 
 		LD	(IX-01),L	; save flag block identifier byte in RAM
 
@@ -55,7 +58,7 @@ L_NEXTBLK:
 
 		    ; subtract from max number of bytes
                     ; to get bytes loaded
-END_LOAD:	LD	HL,$BF54	
+END_BLOCK:	LD	HL,MAX_SIZE
 		OR	A		; carry =0
 		SBC	HL,DE		; HL=bytes loaded
 
@@ -71,7 +74,7 @@ END_LOAD:	LD	HL,$BF54
 		DEC	IX		; loading leaves IX at IX+1
 		JR	L_NEXTBLK	; next block
 
-SAVE_SECTION:	POP	HL		; POP IX before loading
+END_LOAD:	POP	HL		; POP IX before loading
 
 		XOR	A
 		LD	(HL),A		; (IX) = 0 word, no more blocks
@@ -124,6 +127,6 @@ DLOOP:		DEC	BC
 		OR	C
 		JR	NZ,DLOOP
 		RET
-STACK		DEFS	(6)	
+STACK		DEFS	(8)	
 
-		END	$FF67
+		END	START
