@@ -28,7 +28,7 @@ L_NEXTBLK:	LD	(IX+02),00
 		INC	IX		; size of block LSB
 		INC	IX              ; size of block MSB
 		INC	IX              ; flag
-		LD	A,00		; header block
+		LD	A,00		; header block	- Could be XOR A, one less byte
 		LD	DE,$BF54	; max number of bytes
 		SCF
 		INC	D
@@ -72,7 +72,8 @@ SAVE_SECTION:	POP	HL		; POP IX before loading
 
 		LD	(HL),00		; (IX) = 0 word, no more blocks
 		INC	HL
-		LD	(HL),00
+		LD	(HL),00		; could be XOR A,LD (HL),A,INC HL,LD (HL),A
+					; less one byte
 
 		LD	A,06            ; border yellow
 		OUT	($FE),A
@@ -92,6 +93,14 @@ NEXT_SBLOCK:	CALL	DELAY
 		JR	Z,EXIT_SAVE	; size = 0, jump to FFD2
 		LD	E,(IX+00)
 		LD	A,(IX+02)
+					; could be
+					; LD E,(IX+0)
+					; LD D,(IX+1)
+                                        ; LD A,E
+					; OR D
+					; JR ....
+                                        ; LD A,(IX+2)
+                                        ; less 3 bytes
 		INC	IX
 		INC	IX
 		INC	IX
