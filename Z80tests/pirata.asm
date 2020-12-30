@@ -21,7 +21,10 @@
 		ORG 	$FF54
 	
 BEGIN:		LD	SP,$FFFF	; stack to end of RAM
-		DI
+		DI			; DI can be moved to before the SP
+					; it is only needed the first time
+                                        ; more one byte to load
+
 		LD	IX,$4000	; beggining of RAM/screen
 L_NEXTBLK:	LD	(IX+02),00	
 		PUSH	IX
@@ -111,8 +114,13 @@ NEXT_SBLOCK:	CALL	DELAY
 		INC	IX
 		INC	IX
 		INC	IX
+
 		CALL	$04C2 		; CALL	SA_BYTES
-		DI
+		DI			; change it to CALL $04C6
+					; and delete DI - one less byte
+				        ; also if an interrupt comes before DI
+					; it potentialy corrupts data
+
 		DEC	IX
 		JR	NEXT_SBLOCK	; save next block
 
