@@ -36,7 +36,7 @@ L_NEXTBLK:	LD	(IX+02),00
 		DEC	D
 
 		LD	A,$0F		; border white
-		OUT	($FE),A
+		OUT	($FE),A		
 
 		CALL	$0562    	; load block
 		JR	Z,END_LOAD	; load w/ sucess
@@ -47,8 +47,14 @@ L_NEXTBLK:	LD	(IX+02),00
 		JR	NC,SAVE_SECTION	; if SPACE 
 
 		LD	(IX-01),L	; save flag block identifier byte in RAM
-		XOR	A
+
+
+		XOR	A               ; Z=1
 		CALL	$05B6		; load entry after flag check.
+					;
+					; delete XOR A and change CALL to
+					; CALL $05B7
+                                        ; less one byte
 
 		    ; subtract from max number of bytes
                     ; to get bytes loaded
@@ -77,6 +83,7 @@ SAVE_SECTION:	POP	HL		; POP IX before loading
 
 		LD	A,06            ; border yellow
 		OUT	($FE),A
+
 		CALL	DELAY	
 
 		    ; wait for any key
