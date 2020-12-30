@@ -1,4 +1,4 @@
-; Commented disassembly of PIRATA
+; PIRATA 2-3 bug fixed, code optimized and smaller
 ; Rui Ribeiro - Dez/2020
 ;
 ; border cyan/red - introduce tape to copy
