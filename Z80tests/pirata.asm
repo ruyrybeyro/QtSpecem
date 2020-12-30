@@ -111,7 +111,7 @@ WAIT_1_2:	IN	A,(C)
 		JR	Z,BEGIN_SBLOCK	; save again another copy
 		JR	WAIT_1_2	; wait cycle
 
-		; aprox 0.9 segundos
+		; aprox 0.9 seconds
 DELAY:		LD	BC,$FFFF	    
 DLOOP:		DEC	BC
 		LD	A,B
