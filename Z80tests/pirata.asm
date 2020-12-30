@@ -44,7 +44,7 @@ L_NEXTBLK:	LD	(IX+02),00
 		LD	A,$7F
 		IN 	A,($FE)
 		RR	A
-		JR	NC,SAVE_SECTION	; if SPACE JR FF9A
+		JR	NC,SAVE_SECTION	; if SPACE 
 
 		LD	(IX-01),L	; save flag block identifier byte in RAM
 		XOR	A
