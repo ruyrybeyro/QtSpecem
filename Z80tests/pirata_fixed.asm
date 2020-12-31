@@ -18,14 +18,15 @@
 
 ; if BYTE1 and BYTE2 = 0, no more blocks
 
-MAX_SIZE	EQU	BEGIN-$4000-5
+RAM_BEGIN	EQU	$4000		; first byte of RAM (screen)
+MAX_SIZE	EQU	BEGIN - RAM_BEGIN - 5
 
 		ORG 	$FF6C
 START:	
 		DI			; only needed once
 		LD	SP,0		; stack to end of RAM
 
-BEGIN:		LD	HL,$4000	; beggining of RAM/screen
+BEGIN:		LD	HL,RAM_BEGIN	; beggining of RAM
 
 L_NEXTBLK:		
 		PUSH    HL	
@@ -46,7 +47,7 @@ L_NEXTBLK:
 		OUT	($FE),A		
 
 		CALL	$0562    	; load block
-		JR	Z,END_BLOCK	; load w/ sucess
+		JR	Z,END_BLOCK	; load w/ sucess RRR
 
 		LD	A,$7F
 		IN 	A,($FE)
@@ -96,7 +97,7 @@ ANYKEY:		XOR	A
 		RR	A
 		JR 	C,ANYKEY		
 
-BEGIN_SBLOCK:	LD	HL,$4000
+BEGIN_SBLOCK:	LD	HL,RAM_BEGIN
 NEXT_SBLOCK:	CALL	DELAY	
 		LD	E,(HL)	
 		INC	HL
@@ -136,6 +137,5 @@ DLOOP:		DEC	BC
 		OR	C
 		JR	NZ,DLOOP
 		RET
-STACK		DEFS	(8)	
-
+STACK:		DEFS	(8)	
 		END	START
