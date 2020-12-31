@@ -20,7 +20,7 @@
 
 MAX_SIZE	EQU	BEGIN-$4000-5
 
-		ORG 	$FF6A
+		ORG 	$FF6C
 START:	
 		DI			; only needed once
 		LD	SP,0		; stack to end of RAM
@@ -104,8 +104,8 @@ NEXT_SBLOCK:	CALL	DELAY
 		LD	A,E
 		OR	D
 		JR	Z,EXIT_SAVE	; size = 0, jump to FFD2
-		LD	A,(IX+02)
 		INC	HL
+		LD	A,(HL)		; load flag
 		INC	HL
 
 		PUSH	HL
