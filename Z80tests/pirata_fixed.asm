@@ -20,21 +20,23 @@
 
 MAX_SIZE	EQU	BEGIN-$4000-5
 
-		ORG 	$FF65
+		ORG 	$FF6A
 START:	
 		DI			; only needed once
 		LD	SP,0		; stack to end of RAM
 
-BEGIN:		LD	IX,$4000	; beggining of RAM/screen
+BEGIN:		LD	HL,$4000	; beggining of RAM/screen
 
 L_NEXTBLK:		
+		PUSH    HL	
+		INC	HL		; size of block LSB
+		INC	HL              ; size of block MSB
 		XOR	A		; header block
-		LD      (IX+02),A
-		PUSH	IX
-		INC	IX		; size of block LSB
-		INC	IX              ; size of block MSB
-		INC	IX              ; flag
+		LD      (HL),A		; flag
+		INC	HL              
 		LD	DE,MAX_SIZE 	; max number of bytes
+		PUSH	HL
+		POP	IX
 		SCF
 		INC	D
 		EX	AF,AF'
@@ -71,7 +73,9 @@ END_BLOCK:	LD	HL,MAX_SIZE
 		LD	(HL),E          ; (HL) = size (word) at beggining of block
 		INC	HL
 		LD	(HL),D
-		DEC	IX		; loading leaves IX at IX+1
+		PUSH	IX
+		POP	HL
+		DEC	HL		; loading leaves IX at IX+1
 		JR	L_NEXTBLK	; next block
 
 END_LOAD:	POP	HL		; POP IX before loading
@@ -92,21 +96,26 @@ ANYKEY:		XOR	A
 		RR	A
 		JR 	C,ANYKEY		
 
-BEGIN_SBLOCK:	LD	IX,$4000
+BEGIN_SBLOCK:	LD	HL,$4000
 NEXT_SBLOCK:	CALL	DELAY	
-		LD	E,(IX+00)	
-		LD	D,(IX+01)
+		LD	E,(HL)	
+		INC	HL
+		LD	D,(HL)
 		LD	A,E
 		OR	D
 		JR	Z,EXIT_SAVE	; size = 0, jump to FFD2
 		LD	A,(IX+02)
-		INC	IX
-		INC	IX
-		INC	IX
+		INC	HL
+		INC	HL
+
+		PUSH	HL
+		POP	IX
 
 		CALL	$04C6 		; CALL	SA_BYTES
 
-		DEC	IX
+		PUSH	IX
+		POP	HL
+		DEC	HL
 		JR	NEXT_SBLOCK	; save next block
 
 EXIT_SAVE:	LD	A,04         	; border green
