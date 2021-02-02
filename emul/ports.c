@@ -13,8 +13,10 @@ void border_updated(uint8_t color, unsigned long ticks);
 
 /* keeps last out to ula --- current border colour */
 static UCHAR out_ula = 190;
+static UCHAR Port255 = 0;
 /* keeps the current border color */
 UCHAR borderColor;
+USHORT colours_8x1 = 0;
 
 /* returns colour of border */
 UCHAR get_sbrdr(void)
@@ -39,6 +41,25 @@ void writeport(USHORT port, UCHAR value)
 		}
 	 else
 	  */
+if ( (port & 0xFF ) == (USHORT)0x00FF)
+       {
+          int i;
+
+          Port255 = value;
+          if ( ( value & 7 ) == 2 )
+             colours_8x1 = 1;
+          else
+             colours_8x1 = 0;
+           for (i = 0x4000 ; i< 0x5800 ; i++ )
+           {
+              int tmp;
+
+              tmp = *(mem+i);
+              writebyte(i, tmp^255);
+              writebyte(i, tmp);
+           }
+       }
+    else
     if (!(port & 1)) {       // ULA
 
         // ULA Bits:  0-2:  border
@@ -110,7 +131,10 @@ UCHAR readport(USHORT port)
 	/*         1   1    EAR  KEY_CODE  */
 
 
-
+                    if ((port&0xFF) == 0xFF )
+                    {
+                       return(Port255);
+                    }
 	// Just here to run USSPIRITS.Z80
 	//if(port == (USHORT)0xFFFD)
 	//	return 0;

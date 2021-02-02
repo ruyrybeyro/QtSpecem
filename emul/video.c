@@ -2,7 +2,7 @@
 /* Video.c: Translates hardware screen addresses to coord
  * 	system, fill screen buffer and implements Flash.
  * 
- * Copyright 1991-2019 Rui Fernando Ferreira Ribeiro.
+ * Copyright 1991-2021 Rui Fernando Ferreira Ribeiro.
  *
  */
 
@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include "../h/env.h"
 
+extern USHORT colours_8x1;
 
 /* buffer caching the Spectrum attributes state */
 static char attrib_z80[24][32];
@@ -17,14 +18,14 @@ static char attrib_z80[24][32];
 // #include <stdio.h>
 
 //  Write a byte on Spectrum memory, at the attribute cache,
-// and at the WinG buffer if needed
+// and at the video buffer if needed
 void writebyte(unsigned short adress, unsigned char byte)
 {
    unsigned char i;
-   UCHAR x, y;      /* coordenadas */
-   static unsigned char colour = 0;  /* ultimo atributo   */
-   static unsigned char ink = 0;     /* ink   (com flash) */
-   static unsigned char paper = 0;   /* paper (com flash) */
+   UCHAR x, y;      /* coords */
+   static unsigned char colour = 0;  /* last attribute     */
+   static unsigned char ink = 0;     /* ink   (with flash) */
+   static unsigned char paper = 0;   /* paper (with flash) */
 
    /* each memory acess = 3T */
 
@@ -43,12 +44,12 @@ void writebyte(unsigned short adress, unsigned char byte)
    }
    */
 
-   *(mem + adress) = byte;
 
    // if ( adress == 0xFDBB )
    //   TraceOn = 3;
 
-   if(adress < 0x5800) /* If adress lower than attributes adress */
+   *(mem + adress) = byte;
+   if(adress < 0x5800) /* If address lower than attributes adress */
    {
       static USHORT ladress = 0x4000;
       static UCHAR lbyte = 0;
@@ -63,11 +64,25 @@ void writebyte(unsigned short adress, unsigned char byte)
                ((ladress >> 5) & 0xc0);
       /* if attrib different recalculates ink&paper */
 
-      if(colour != attrib_z80[y>>3][x = (ladress & 0x1F)])
+      if (!colours_8x1)
       {
-         colour = attrib_z80[y>>3][x];
-	 paper = (colour >> 3) & 0xF;
-	 ink = (colour & 7) | ((colour >> 3) & 8);
+         if(colour != attrib_z80[y>>3][x = (ladress & 0x1F)])
+         {
+            colour = attrib_z80[y>>3][x];
+	    paper = (colour >> 3) & 0xF;
+	    ink = (colour & 7) | ((colour >> 3) & 8);
+         }
+      }
+      else
+      { 
+         // improve later
+         x = (ladress & 0x1F);
+         //if(colour != *(mem + (ladress | 0x2000)))
+         //{  
+            colour = *(mem + (ladress | 0x2000));
+            paper = (colour >> 3) & 0xF;
+            ink = (colour & 7) | ((colour >> 3) & 8);
+         //}
       }
 
       x <<= 3;
@@ -83,7 +98,7 @@ void writebyte(unsigned short adress, unsigned char byte)
       lbyte = byte;
    }
    else
-      if(adress < 0x5B00) /* If adress in attrib zone */
+      if( (!colours_8x1) && (adress < 0x5B00) ) /* If adress in attrib zone */
       {
          unsigned char k;
 
@@ -103,12 +118,12 @@ void writebyte(unsigned short adress, unsigned char byte)
 	     */
 	    adress = ((y & 7)<<5) | ((y & 0x18)<<8) | x | 0x4000;
 
-	    /* put ïtextï coords in graphic coords
+	    /* put text coords in graphic coords
 	     */
 	    y <<= 3;
 	    x <<= 3;
 
-	    /* Print corresponding attribut square (8 * 8 pixels)
+	    /* Print corresponding attribute square (8 * 8 pixels)
 	     */
 	    for(k = 0 ; k < 8 ; k++)
 	    {
@@ -126,10 +141,17 @@ void writebyte(unsigned short adress, unsigned char byte)
 	    }
 	 }
       }
+   else
+   if( (colours_8x1) && (adress >= 0x6000) && (adress < 0x7800 ) )
+   {
+       WindowDirty = 1;
+       // quick hack, improve later on
+       writebyte(adress ^ 0x2000, *(mem+(adress ^ 0x2000)));
+   }
 }
 
 
-// Do the real work for flash happening on the WinG buffer
+// Do the real work for flash happening on the video buffer
 void do_flash()
 {
    UCHAR colour, x1, y1, x, y, k, paper, ink, byte, i;
@@ -166,7 +188,7 @@ void do_flash()
 	    y <<= 3;
 	    x <<= 3;
 
-	    /* Print corresponding attribut square (8 * 8 pixels)
+	    /* Print corresponding attribute square (8 * 8 pixels)
 	     */
 	    for(k = 0 ; k < 8 ; k++)
 	    {
