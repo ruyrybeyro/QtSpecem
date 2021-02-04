@@ -11,6 +11,7 @@
 #include "../h/env.h"
 
 extern USHORT colours_8x1;
+extern USHORT hires;
 
 /* buffer caching the Spectrum attributes state */
 static char attrib_z80[24][32];
@@ -49,13 +50,13 @@ void writebyte(unsigned short adress, unsigned char byte)
    //   TraceOn = 3;
 
    *(mem + adress) = byte;
-   if(adress < 0x5800) /* If address lower than attributes adress */
+   if(adress < 0x5800 && !hires) /* If address lower than attributes adress */
    {
-      static USHORT ladress = 0x4000;
+      static USHORT ladress = 0;
       static UCHAR lbyte = 0;
 
       WindowDirty = 1;
-      if((ladress != adress) || (adress == 0x4000))
+      if( ladress != adress )
       { 
          /* put adress in univ x,y coords and read attribs corresponding with
 	   that coords i.e. x=0,y=0 ecran top
@@ -74,7 +75,7 @@ void writebyte(unsigned short adress, unsigned char byte)
          }
       }
       else
-      { 
+      {
          // improve later
          x = (ladress & 0x1F);
          //if(colour != *(mem + (ladress | 0x2000)))
@@ -98,7 +99,7 @@ void writebyte(unsigned short adress, unsigned char byte)
       lbyte = byte;
    }
    else
-      if( (!colours_8x1) && (adress < 0x5B00) ) /* If adress in attrib zone */
+      if( (!colours_8x1) && (!hires) && (adress < 0x5B00) ) /* If adress in attrib zone */
       {
          unsigned char k;
 
@@ -142,11 +143,46 @@ void writebyte(unsigned short adress, unsigned char byte)
 	 }
       }
    else
-   if( (colours_8x1) && (adress >= 0x6000) && (adress < 0x7800 ) )
+   if( colours_8x1 && (adress >= 0x6000) && (adress < 0x7800 ) )
    {
        WindowDirty = 1;
        // quick hack, improve later on
        writebyte(adress ^ 0x2000, *(mem+(adress ^ 0x2000)));
+   }
+   // else
+   if ( hires && ((adress < 0x5800) || ((adress >= 0x6000) && (adress < 0x7800 ))  ) )
+   {
+       int oddcol;
+       USHORT addrcp;
+
+       ink = 0;
+       paper = 7;
+       WindowDirty = 1;
+       if ( adress & 0x2000 )
+       {
+          oddcol = 8;
+          addrcp = adress ^ 0x2000;
+       }
+       else
+       {
+          oddcol = 0;
+          addrcp = adress;
+       }
+
+       y = ((addrcp >> 8) & 7) | ((addrcp >> 2) & 0x38) |
+               ((addrcp >> 5) & 0xc0);
+       x = ( (addrcp & 0x1F) << 3 );
+       
+       if ( x > 7)
+          x = x * 2;
+
+       x = x + oddcol;
+
+       for(i = 0 ; i < 8 ; i++)
+       {
+           pixel_host(x++, y, (byte & 0x80)?ink:paper);
+           byte <<= 1;
+        } 
    }
 }
 

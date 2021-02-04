@@ -16,7 +16,10 @@ static UCHAR out_ula = 190;
 static UCHAR Port255 = 0;
 /* keeps the current border color */
 UCHAR borderColor;
+/* Timex screen mode */
 USHORT colours_8x1 = 0;
+/* Timex screen mode */
+USHORT hires = 0;
 
 /* returns colour of border */
 UCHAR get_sbrdr(void)
@@ -46,10 +49,9 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
           int i;
 
           Port255 = value;
-          if ( ( value & 7 ) == 2 )
-             colours_8x1 = 1;
-          else
-             colours_8x1 = 0;
+          colours_8x1 = ( ( value & 7 ) == 2 );
+	  hires       = ( ( value & 7 ) == 6 );
+
            for (i = 0x4000 ; i< 0x5800 ; i++ )
            {
               int tmp;
