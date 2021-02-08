@@ -22,6 +22,8 @@ USHORT colours_8x1 = 0;
 USHORT hires = 0;
 UCHAR hires_ink;
 UCHAR hires_paper;
+/* Timex alternate video */
+UCHAR alt_video;
 
 /* returns colour of border */
 UCHAR get_sbrdr(void)
@@ -51,7 +53,17 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
           int i;
 
           Port255 = value;
-          colours_8x1 = ( ( value & 7 ) == 2 );
+          if (alt_video      = value & 1)
+             for (i = 0x6000 ; i< 0x7800 ; i++ )
+             {  
+                int tmp;
+                
+                tmp = *(mem+i);
+                writebyte(i, tmp^255);
+                writebyte(i, tmp);
+             }
+
+          colours_8x1    = ( ( value & 7 ) == 2 );
 
 	  if(hires       = ( ( value & 7 ) == 6 ))
           {
@@ -70,6 +82,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
 	  else
              resize_host(256, 192);
 
+           if (!alt_video)
            for (i = 0x4000 ; i< 0x5800 ; i++ )
            {
               int tmp;

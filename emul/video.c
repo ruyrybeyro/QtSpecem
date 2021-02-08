@@ -14,6 +14,8 @@ extern USHORT colours_8x1;
 extern USHORT hires;
 extern UCHAR hires_ink;
 extern UCHAR hires_paper;
+/* Timex alternate video */
+extern UCHAR alt_video;
 
 /* buffer caching the Spectrum attributes state */
 static char attrib_z80[24][32];
@@ -52,7 +54,10 @@ void writebyte(unsigned short adress, unsigned char byte)
    //   TraceOn = 3;
 
    *(mem + adress) = byte;
-   if(adress < 0x5800 && !hires) /* If address lower than attributes adress */
+   if( ( (adress >= 0x4000 && (adress < 0x5800) ) && !hires && !alt_video)
+||
+ ( alt_video && (adress >= 0x6000 ) && (adress < 0x7800) ) 
+) /* If address lower than attributes adress */
    {
       static USHORT ladress = 0;
       static UCHAR lbyte = 0;
@@ -101,7 +106,10 @@ void writebyte(unsigned short adress, unsigned char byte)
       lbyte = byte;
    }
    else
-      if( (!colours_8x1) && (!hires) && (adress < 0x5B00) ) /* If adress in attrib zone */
+      if ( ( (!colours_8x1) && (!hires) && (adress < 0x5B00) ) ||
+           ( alt_video && (adress >= 0x7800 ) && (adress < 0x7B00) ) 
+         )
+         /* If adress in attrib zone */
       {
          unsigned char k;
 
