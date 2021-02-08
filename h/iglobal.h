@@ -1412,6 +1412,7 @@ void patch_rom(int do_it);
 
 /* WSPECEM.c */
 void pixel_host(USHORT, USHORT, UCHAR);
+void resize_host(unsigned x, unsigned y);
 //int  save_pcx(HFILE );
 
 /* VIDEO.C */

@@ -23,7 +23,7 @@ static char attrib_z80[24][32];
 void writebyte(unsigned short adress, unsigned char byte)
 {
    unsigned char i;
-   UCHAR x, y;      /* coords */
+   USHORT x, y;      /* coords */
    static unsigned char colour = 0;  /* last attribute     */
    static unsigned char ink = 0;     /* ink   (with flash) */
    static unsigned char paper = 0;   /* paper (with flash) */

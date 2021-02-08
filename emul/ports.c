@@ -50,7 +50,21 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
 
           Port255 = value;
           colours_8x1 = ( ( value & 7 ) == 2 );
-	  hires       = ( ( value & 7 ) == 6 );
+
+	  if(hires       = ( ( value & 7 ) == 6 ))
+          {
+             resize_host(512, 192);
+             for (i = 0x6000 ; i< 0x7800 ; i++ )
+             {
+                int tmp;
+              
+                tmp = *(mem+i);
+                writebyte(i, tmp^255);
+                writebyte(i, tmp);
+             } 
+          }
+	  else
+             resize_host(256, 192);
 
            for (i = 0x4000 ; i< 0x5800 ; i++ )
            {

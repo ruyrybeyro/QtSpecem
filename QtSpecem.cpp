@@ -23,6 +23,8 @@ extern "C" unsigned char joystick;
 extern "C" int open_sna(const char * file_name);
 extern "C" void save_sna(const char * file_name);
 
+extern "C" unsigned short hires;
+
 #define BORDER_HORIZONTAL 32
 #define BORDER_VERTICAL 16
 
@@ -30,7 +32,8 @@ extern "C" void save_sna(const char * file_name);
 #define BORDER_THRESHOLD_HIGH 4096+(65535)     /* Border scan end in T-states */
 
 
-static QImage background(256+(2*BORDER_HORIZONTAL), 192+(2*BORDER_VERTICAL), QImage::Format_Indexed8);
+//static QImage background(256+(2*BORDER_HORIZONTAL), 192+(2*BORDER_VERTICAL), QImage::Format_Indexed8);
+static QImage *background;
 
 /* This stores one color for a specific border line */
 static uint8_t border_colors[192+(2*BORDER_VERTICAL)];
@@ -58,12 +61,12 @@ extern "C" void init_pallete(void) {
     
     for (i = 0 ; i < 16 ; i++) {
         value = qRgb(rgbvals[i][0], rgbvals[i][1], rgbvals[i][2]);
-        background.setColor(i, value);
+        background->setColor(i, value);
     }
 }
 
 extern "C" void pixel_host(unsigned short x, unsigned short  y, unsigned char colour) {
-    background.setPixel(x + BORDER_HORIZONTAL, y+BORDER_VERTICAL, colour);
+    background->setPixel(x + BORDER_HORIZONTAL, y+BORDER_VERTICAL, colour);
 }
 
 void complete_border()
@@ -235,6 +238,7 @@ void DrawnWindow::createMenus()
 
 DrawnWindow::DrawnWindow(QWidget *parent) : QMainWindow(parent) {
 
+    background = new QImage(256+(2*BORDER_HORIZONTAL), 192+(2*BORDER_VERTICAL), QImage::Format_Indexed8);
     createActions();
     createMenus();
 
@@ -249,6 +253,14 @@ DrawnWindow::DrawnWindow(QWidget *parent) : QMainWindow(parent) {
     border_ptr = 0;
 }
 
+extern "C" void resize_host(unsigned x, unsigned y)
+{
+    delete(background);
+    background = new QImage(x+(2*BORDER_HORIZONTAL), y+(2*BORDER_VERTICAL), QImage::Format_Indexed8);
+    
+    init_pallete();
+}
+
 void DrawnWindow::drawBorder()
 {
     // Top border
@@ -257,40 +269,67 @@ void DrawnWindow::drawBorder()
 
     for (i=0; i<BORDER_VERTICAL; i++) {
         uint8_t color = border_colors[i];
-        ptr = background.scanLine(i);
+        ptr = background->scanLine(i);
         int x;
+        if (hires)
+        {
+        for (x=0;x<512+(BORDER_HORIZONTAL*2);x++) {
+           *ptr++ = color;
+        }
+        }
+        else
+        {
         for (x=0;x<256+(BORDER_HORIZONTAL*2);x++) {
            *ptr++ = color;
         }
+        }
     }
     for(i=0; i<192; i++) {
-        ptr = background.scanLine(i+BORDER_VERTICAL);
+        ptr = background->scanLine(i+BORDER_VERTICAL);
         uint8_t color = border_colors[i+BORDER_VERTICAL];
         int x;
         for (x=0; x<BORDER_HORIZONTAL;x++) {
            *ptr++ = color;
         }
-        ptr += 256;
+        if (hires)
+           ptr += 512;
+        else
+           ptr += 256;
         for (x=0; x<BORDER_HORIZONTAL;x++) {
            *ptr++ = color;
         }
     }
 
     for (i=0; i<BORDER_VERTICAL; i++) {
-        ptr = background.scanLine(i + BORDER_VERTICAL + 192);
+        ptr = background->scanLine(i + BORDER_VERTICAL + 192);
         uint8_t color = border_colors[i+BORDER_VERTICAL+192];
 
         int x;
+        if (hires)
+        {
+        for (x=0;x<512+(BORDER_HORIZONTAL*2);x++) {
+           *ptr++ = color;
+        }
+        }
+        else
+        {
         for (x=0;x<256+(BORDER_HORIZONTAL*2);x++) {
            *ptr++ = color;
+        }
         }
     }
 }
 
 void DrawnWindow::paintEvent(QPaintEvent *) {
     QPainter paint(this);
+    //if (hires)
+    //   setGeometry(0,0, ((512+(BORDER_HORIZONTAL*2))*2),
+    //            (192+(BORDER_VERTICAL*2))*2);
+    //else
+    //   setGeometry(0,0, ((256+(BORDER_HORIZONTAL*2))*2),
+    //            (192+(BORDER_VERTICAL*2))*2);
     drawBorder();
-    paint.drawImage(0, 0, background.scaled(size()));
+    paint.drawImage(0, 0, background->scaled(size()));
     execute();
     complete_border();
 
