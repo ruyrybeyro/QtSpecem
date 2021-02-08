@@ -12,6 +12,8 @@
 
 extern USHORT colours_8x1;
 extern USHORT hires;
+extern UCHAR hires_ink;
+extern UCHAR hires_paper;
 
 /* buffer caching the Spectrum attributes state */
 static char attrib_z80[24][32];
@@ -180,7 +182,7 @@ void writebyte(unsigned short adress, unsigned char byte)
 
        for(i = 0 ; i < 8 ; i++)
        {
-           pixel_host(x++, y, (byte & 0x80)?ink:paper);
+           pixel_host(x++, y, (byte & 0x80)?hires_ink:hires_paper);
            byte <<= 1;
         } 
    }

@@ -20,6 +20,8 @@ UCHAR borderColor;
 USHORT colours_8x1 = 0;
 /* Timex screen mode */
 USHORT hires = 0;
+UCHAR hires_ink;
+UCHAR hires_paper;
 
 /* returns colour of border */
 UCHAR get_sbrdr(void)
@@ -53,6 +55,8 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
 
 	  if(hires       = ( ( value & 7 ) == 6 ))
           {
+             hires_ink   = ( value >> 3 ) & 7;
+             hires_paper = hires_ink ^ 7;
              resize_host(512, 192);
              for (i = 0x6000 ; i< 0x7800 ; i++ )
              {

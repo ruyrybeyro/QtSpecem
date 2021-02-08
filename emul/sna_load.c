@@ -49,6 +49,7 @@ static int zx_load(FILE * hfp);
 static int prg_load(FILE * hfp);
 static int ach_load(FILE * hfp);
 static int rom_load(FILE * hfp);
+static int dck_load(FILE * hfp);
 static int dat_load(FILE * hfp);
 static int tap_load(FILE * hfp);
 static int scr_load(FILE * hfp);
@@ -145,6 +146,7 @@ static int snap_type(char * file_name)
 	{ ".tap", TAP_FMT },
 	{ ".blk", TAP_FMT },
 	{ ".rom", ROM_FMT },
+	{ ".dck", DCK_FMT },
 	{ ".dat", DAT_FMT },
 	{ ".scr", SCR_FMT },
     	{ ".sem", SEM_FMT },
@@ -282,6 +284,14 @@ int open_sna(const char * file_name)
 	    //if(reset)
 	    //do_reset();
 	    break;
+
+         case DCK_FMT:
+            strcpy(szROMPath, snapcopy);
+            status = dck_load(stream);
+            // LIXO
+            //if(reset)
+            //do_reset();
+            break;
 
 	 case SCR_FMT:
 	    status = scr_load(stream);
@@ -1079,6 +1089,22 @@ static int rom_load(FILE * hfp)
    }
    //patch_rom(1);
    return ((i == 0x4000)?0:3);
+}
+
+// load Timex dock cartridge
+static int dck_load(FILE * hfp)
+{
+   USHORT i = 0;
+
+   fseek(hfp, 9, SEEK_SET);
+   for(i = 0 ; i  < 0xFFFF ; i++)
+   {
+      if(feof_file(hfp))
+         break;
+      *(mem+i) = getbyte(hfp);
+   }
+   do_reset();
+   return 0;
 }
 
 static int scr_load(FILE * hfp)
