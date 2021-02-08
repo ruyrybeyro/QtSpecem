@@ -105,6 +105,10 @@ void do_fullreset()
 {
         BreakPoint = -1;
         TraceOn    = 0;
+
+	// reset Timex 2048 extra video modes
+        writeport(255,0);
+ 
         do_reset();
 }
 
