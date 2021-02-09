@@ -111,7 +111,7 @@ void writebyte(unsigned short adress, unsigned char byte)
          )
          /* If adress in attrib zone */
       {
-         unsigned char k;
+         unsigned char k;      
 
 	 WindowDirty = 1;
 	 /* if attrib changed */
@@ -202,6 +202,9 @@ void do_flash()
 {
    UCHAR colour, x1, y1, x, y, k, paper, ink, byte, i;
    USHORT adress;
+
+   if (colours_8x1 || hires )
+      return;
 
    // hack for flushing byte buffer
    writebyte(0x4000, readbyte(0x4000) );
