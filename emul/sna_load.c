@@ -1094,14 +1094,27 @@ static int rom_load(FILE * hfp)
 // load Timex dock cartridge
 static int dck_load(FILE * hfp)
 {
-   USHORT i = 0;
+   USHORT i,j;
+   UCHAR  type;
+   UCHAR  map[8];
+   USHORT mempos;
 
-   fseek(hfp, 9, SEEK_SET);
-   for(i = 0 ; i  < 0xFFFF ; i++)
+   type = getbyte(hfp);
+   fread(map, 1, 8, hfp);
+   if ( type == 0xFF )
    {
-      if(feof_file(hfp))
-         break;
-      *(mem+i) = getbyte(hfp);
+      mempos = 0;
+      for (j = 0 ; j < 8 ; j++)
+      {
+         if (map[j])
+            for(i = 0 ; i  < 8192 ; i++)
+            {
+               if(feof_file(hfp))
+                  break;
+               *(mem+mempos+i) = getbyte(hfp);
+            }
+         mempos += 8192;
+      }
    }
    do_reset();
    return 0;
