@@ -1016,7 +1016,7 @@ void patch_rom(int do_it)
 {
    USHORT crc = 0, i;
    // vars to save ROM bytes patched
-   static int v056c, v056d, v056e, v059e, v05c8, v05c9;
+   static int v056c, v056d, v056e, v059e, v05c8, v05c9,v050b,v050c;
 
    if(do_it)
    {
@@ -1046,6 +1046,8 @@ void patch_rom(int do_it)
       v059e = readbyte(0x059E);
       v05c8 = readbyte(0x05C8);
       v05c9 = readbyte(0x05C9);
+      v050b = readbyte(0x050B);
+      v050c = readbyte(0x050C);
 
       if(crc == 38151)
       {
@@ -1060,6 +1062,10 @@ void patch_rom(int do_it)
 
 	 *(mem+0x05c8) = 0xED;  /* install handler */
 	 *(mem+0x05c9) = 0xFB;
+
+	 /* handler save */
+         *(mem+0x050b) = 0xED;
+         *(mem+0x050c) = 0xFB;
       }
    }
    else
@@ -1073,6 +1079,8 @@ void patch_rom(int do_it)
 
       *(mem+0x05C8) = v05c8;
       *(mem+0x05C9) = v05c9;
+      *(mem+0x050B) = v050b;
+      *(mem+0x050C) = v050c;
    }
 }
 
@@ -1095,14 +1103,51 @@ static int rom_load(FILE * hfp)
 static int dck_load(FILE * hfp)
 {
    USHORT i,j;
-   UCHAR  type;
+   UCHAR  cm,type, subtype = 0;
    UCHAR  map[8];
    USHORT mempos;
-
+  
+   // {
+   //   static int n = 0;
+   //   char s[200];
+   //
+   //   sprintf(s, "/tmp/w%06d.z80", n++);
+   //   save_sna(s);
+   //}    
    type = getbyte(hfp);
    fread(map, 1, 8, hfp);
-   if ( type == 0xFF )
+   if ( ( type == 0xFF ) || (type == 0x00))
    {
+      PC = 0;
+      if ((map[0] == 0) && (type == 0x00 )) 
+      {
+         cm=getbyte(hfp);
+         subtype = getbyte(hfp);
+         if (subtype == 1) // LROS
+         {
+            PC =  getbyte(hfp) | (getbyte(hfp) * 256);
+            (void)getbyte(hfp);
+         }
+         else
+            if (subtype == 2) // AROS
+            {
+               if ( cm != 2 ) // machine code
+                  return 1;
+               PC =  getbyte(hfp) | (getbyte(hfp) * 256);
+               (void)getbyte(hfp);
+               (void)getbyte(hfp);  // should be 1
+               (void)getbyte(hfp);
+               (void)getbyte(hfp);
+	       mempos = 0x8008;
+               while(!feof_file(hfp))
+               {
+                  *(mem+mempos++) = getbyte(hfp);
+               }
+               return 0;
+            }
+            else
+               return 1;
+      }
       mempos = 0;
       for (j = 0 ; j < 8 ; j++)
       {
@@ -1115,8 +1160,9 @@ static int dck_load(FILE * hfp)
             }
          mempos += 8192;
       }
+      if ( PC == 0 )
+         do_reset();
    }
-   do_reset();
    return 0;
 }
 
@@ -1319,6 +1365,35 @@ static int load_options(FILE * hfp)
    return 0;
 }
 
+void save_tapp()
+{
+   FILE * f;
+   UCHAR  checksum;
+   int i;
+
+   f=fopen("/tmp/tap.tap", "wb");
+   fseek(f, 0, SEEK_END);
+   fputc(DE+1 % 256, f);
+   fputc(DE+1 / 256, f);
+   fputc(L, f);
+   checksum = L;
+   for ( i = IX+1 ; i < DE ; i++)
+   {
+      fputc(*(mem+i),f);
+      checksum ^= *(mem+i);
+   }
+   fputc(checksum, f); 
+   fclose(f);
+   Z80_Z = 1;
+   Z80_C = 1;
+   IX=IX+DE;
+   DE=0xFFFF;
+   A=0;
+   BC=0x000E;
+   HL=0x0000;
+   ret();
+}
+
 // --------------------------------------------------------
 void level_loader_trap(void)
 {
@@ -1329,6 +1404,10 @@ void level_loader_trap(void)
    if(PC == (0x05C8+2))
    {
       (void)open_sna(TapName);
+   }
+   else if (PC == (0x050B+2))
+   {
+      save_tapp();
    }
    else
    {
