@@ -1107,33 +1107,29 @@ static int dck_load(FILE * hfp)
    UCHAR  map[8];
    USHORT mempos;
   
-   // {
-   //   static int n = 0;
-   //   char s[200];
-   //
-   //   sprintf(s, "/tmp/w%06d.z80", n++);
-   //   save_sna(s);
-   //}    
    type = getbyte(hfp);
    fread(map, 1, 8, hfp);
    if ( ( type == 0xFF ) || (type == 0x00))
    {
       PC = 0;
-      if ((map[0] == 0) && (type == 0x00 )) 
+      cm=getbyte(hfp);
+      subtype = getbyte(hfp);
+      if ( ((cm == 0) && (subtype == 1)) || ((cm == 2) && (subtype == 2))  ) 
       {
-         cm=getbyte(hfp);
-         subtype = getbyte(hfp);
          if (subtype == 1) // LROS
          {
-            PC =  getbyte(hfp) | (getbyte(hfp) * 256);
-            (void)getbyte(hfp);
+            di();
+            SP=0x61FE;
+            IX=DE=PC =  getbyte(hfp) + (getbyte(hfp) * 256);
+            C=getbyte(hfp);
+            Z80_Z = Z80_P = 1;
          }
          else
             if (subtype == 2) // AROS
             {
                if ( cm != 2 ) // machine code
                   return 1;
-               PC =  getbyte(hfp) | (getbyte(hfp) * 256);
+               PC =  getbyte(hfp) + (getbyte(hfp) * 256);
                (void)getbyte(hfp);
                (void)getbyte(hfp);  // should be 1
                (void)getbyte(hfp);
@@ -1148,6 +1144,8 @@ static int dck_load(FILE * hfp)
             else
                return 1;
       }
+      else
+         fseek(hfp, -2, SEEK_CUR);
       mempos = 0;
       for (j = 0 ; j < 8 ; j++)
       {
@@ -1161,7 +1159,10 @@ static int dck_load(FILE * hfp)
          mempos += 8192;
       }
       if ( PC == 0 )
+      {
          do_reset();
+         AF = AF2 = SP = 0xFFFF;
+      }
    }
    return 0;
 }
@@ -1369,18 +1370,18 @@ void save_tapp()
 {
    FILE * f;
    UCHAR  checksum;
-   int i;
 
-   f=fopen("/tmp/tap.tap", "wb");
-   fseek(f, 0, SEEK_END);
-   fputc(DE+1 % 256, f);
-   fputc(DE+1 / 256, f);
+   f=fopen("/tmp/tap.tap", "a");
+   //fseek(f, 0, SEEK_END);
+   fputc((DE+1) % 256, f);
+   fputc((DE+1) / 256, f);
    fputc(L, f);
    checksum = L;
-   for ( i = IX+1 ; i < DE ; i++)
+   while(--DE)
    {
-      fputc(*(mem+i),f);
-      checksum ^= *(mem+i);
+      IX++;
+      fputc(*(mem+IX),f);
+      checksum ^= *(mem+IX);
    }
    fputc(checksum, f); 
    fclose(f);
