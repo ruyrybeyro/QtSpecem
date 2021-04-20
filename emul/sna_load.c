@@ -1321,9 +1321,13 @@ static int tap_load(FILE * hfp)
      fseek(hfp, 0L, SEEK_SET);
 	 break;
       } 
-   /*   if(!get2(hfp))
+
+   if(feof_file(hfp))
+   {
       TapFilePos = 0;
-      */
+      fseek(hfp, 0L, SEEK_SET);
+   }
+      
    /* force a redraw --- tell it's interrupt time */
    Force_interrupt();
    return 0;
