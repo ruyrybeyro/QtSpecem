@@ -1016,7 +1016,7 @@ void patch_rom(int do_it)
 {
    USHORT crc = 0, i;
    // vars to save ROM bytes patched
-   static int v056c, v056d, v056e, v059e, v05c8, v05c9,v050b,v050c;
+   static int v0556, v0557, v056c, v056d, v056e, v059e, v05c8, v05c9,v050b,v050c;
 
    if(do_it)
    {
@@ -1040,6 +1040,8 @@ void patch_rom(int do_it)
       for(i = 0x075A ; i < 0x078A ; i++)
 	 crc += readbyte(i);
 
+      v0556 = readbyte(0x0556);
+      v0557 = readbyte(0x0557);
       v056c = readbyte(0x056C);
       v056d = readbyte(0x056D);
       v056e = readbyte(0x056E);
@@ -1049,11 +1051,13 @@ void patch_rom(int do_it)
       v050b = readbyte(0x050B);
       v050c = readbyte(0x050C);
 
-      if(crc == 38151)
+      if( /* crc == 38151 */ 1)
       {
 	 /* jumps to relevant routine */
 
          /* patches for LD-BYTES */
+         *(mem+0x0556) = 0xED;  /* install handler */
+         *(mem+0x0557) = 0xFB;
 	 *(mem+0x056C) = 0xC3;   /* jp */
          *(mem+0x056D) = 0x9f;
 	 *(mem+0x056E) = 0x05;
@@ -1252,7 +1256,16 @@ static int tap_load(FILE * hfp)
 
    fseek(hfp, TapFilePos, SEEK_SET);
    len = get2(hfp);
-   if(/*F'Z = 0*/ !(AF2 & BIT_6) )
+
+   if ( PC == (0x0556+2))
+   {
+      Z80_Z = ( D == 0xFF);
+      ex_af_af2();
+      di();
+      push(0x053F);
+   }
+
+   if(/*F'Z = 0*/ !(AF2 & BIT_6))
    {
       len--;  /* we are already subtracting the space used by the flag
 	       */
@@ -1406,7 +1419,7 @@ void level_loader_trap(void)
    short pos;
 
    inside_level_trap = 1;
-   if(PC == (0x05C8+2))
+   if( (PC == (0x0556+2)) || (PC == (0x05C8+2)) )
    {
       (void)open_sna(TapName);
    }
