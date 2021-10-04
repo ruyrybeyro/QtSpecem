@@ -39,6 +39,7 @@ private slots:
 	void fullreset();
         void nmi();
 	void warmreset();
+        void fullscreen();
 	void about();
 
 private:
@@ -49,14 +50,16 @@ private:
 
         QMenu   * fileMenu;
         QMenu   * miscMenu;
+        QMenu   * windowMenu;
         QMenu   * helpMenu;
-   	QAction *newAct;
-    	QAction *openAct;
-    	QAction *saveAct;
+   	QAction * newAct;
+    	QAction * openAct;
+    	QAction * saveAct;
         QAction * resetAct;
         QAction * fullresetAct;
         QAction * nmiAct;
         QAction * warmresetAct;
+        QAction * fullscreenAct;
         QAction * aboutAct;
         QLabel  * infoLabel;
 };

@@ -12,6 +12,7 @@
 
 extern USHORT colours_8x1;
 extern USHORT hires;
+USHORT FullScreen=0;
 extern UCHAR hires_ink;
 extern UCHAR hires_paper;
 /* Timex alternate video */

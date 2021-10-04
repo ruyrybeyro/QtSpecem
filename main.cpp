@@ -46,6 +46,7 @@ int main(int argc, char **argv) {
       open_sna(argv[1]);
    }
 
+   // keyPress->setWindowState(keyPress->windowState() | Qt::WindowFullScreen);
    keyPress->show();
 
    return app.exec();

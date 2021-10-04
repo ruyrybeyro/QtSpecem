@@ -24,6 +24,7 @@ extern "C" int open_sna(const char * file_name);
 extern "C" void save_sna(const char * file_name);
 
 extern "C" unsigned short hires;
+extern "C" unsigned short FullScreen;
 
 #define BORDER_HORIZONTAL 32
 #define BORDER_VERTICAL 16
@@ -164,6 +165,11 @@ void DrawnWindow::warmreset()
     do_warmreset();
 }
 
+void DrawnWindow::fullscreen()
+{
+    FullScreen = 1;
+}
+
 void DrawnWindow::about()
 {
     //infoLabel->setText(tr("<b>Help|About</b>"));
@@ -210,6 +216,9 @@ void DrawnWindow::createActions()
     warmresetAct->setStatusTip(tr("Warm Reset Spectrum"));
     connect(warmresetAct, &QAction::triggered, this, &DrawnWindow::warmreset);
 
+    fullscreenAct = new QAction(tr("Full screen"), this);
+    fullscreenAct->setStatusTip(tr("Full screen Host"));
+    connect(fullscreenAct, &QAction::triggered, this, &DrawnWindow::fullscreen);
 
     // About is bellow the app name
     aboutAct = new QAction(tr("&About"), this);
@@ -232,11 +241,18 @@ void DrawnWindow::createMenus()
     miscMenu->addAction(nmiAct);
     miscMenu->addAction(warmresetAct);
     //miscMenu->addSeparator();
+
+    windowMenu = menuBar()->addMenu(tr("Window"));
+    windowMenu->addAction(fullscreenAct);
+
     helpMenu = menuBar()->addMenu(tr("&Help"));
     helpMenu->addAction(aboutAct);
 }
 
 DrawnWindow::DrawnWindow(QWidget *parent) : QMainWindow(parent) {
+
+    //if (FullScreen)
+    //   setWindowState(windowState() | Qt::WindowFullScreen);
 
     background = new QImage(256+(2*BORDER_HORIZONTAL), 192+(2*BORDER_VERTICAL), QImage::Format_Indexed8);
     createActions();
@@ -244,7 +260,10 @@ DrawnWindow::DrawnWindow(QWidget *parent) : QMainWindow(parent) {
 
     setGeometry(0,0, ((256+(BORDER_HORIZONTAL*2))*2),
                 (192+(BORDER_VERTICAL*2))*2);
-
+    if (FullScreen)
+       showFullScreen();
+    //else
+    //   showMaximized();
     memset(border_colors,0x7, sizeof(border_colors));
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(repaint()));
@@ -328,6 +347,7 @@ void DrawnWindow::paintEvent(QPaintEvent *) {
     //else
     //   setGeometry(0,0, ((256+(BORDER_HORIZONTAL*2))*2),
     //            (192+(BORDER_VERTICAL*2))*2);
+    //setWindowState(windowState() | Qt::WindowFullScreen);
     drawBorder();
     paint.drawImage(0, 0, background->scaled(size()));
     execute();
@@ -394,8 +414,8 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_J:  keybd_buff[6] |= ~0xF7; break;
               case Qt::Key_H:  keybd_buff[6] |= ~0xEF; break;
       
-              case Qt::Key_Escape:
-                     keybd_buff[0] |= ~0xFE; /* CAPS SHIFT */
+              /* case Qt::Key_Escape:
+                     keybd_buff[0] |= ~0xFE; */ /* CAPS SHIFT */
       
               case Qt::Key_Space:      keybd_buff[7] |= ~0xFE; break;
               case Qt::Key_M:  keybd_buff[7] |= ~0xFB; break;
@@ -505,7 +525,14 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                case Qt::Key_H: keybd_buff[6] &= 0xEF; break;
        
                case Qt::Key_Escape:
-                     keybd_buff[0] &= 0xFE; /* CAPS SHIFT */
+		     if ( FullScreen == 0 ) {
+                        FullScreen = 1;
+                        showFullScreen();
+                     }
+                     else {
+                        FullScreen = 0;
+                        showNormal();
+                     }
        
                case Qt::Key_Space:      
                      keybd_buff[7] &= 0xFE; break;
