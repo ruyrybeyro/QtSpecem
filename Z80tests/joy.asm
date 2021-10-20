@@ -8,6 +8,7 @@
 ;
 ; pasmo --tapbas joy.asm joy.tap
 ;
+; 20.Oct.2021 - fix 2068 joystick bug - fire is bit 7
 
 CL_ALL		EQU     $0DAF ; clearing the whole display area
 
@@ -646,7 +647,7 @@ T2068_T:   DEFB AT, 4, 8, "Timex 2068$"
 KEMPSTON_B: DEFB A_FIRE, 0, 0, A_FIRE, A_UP,    A_DOWN,  A_LEFT,  A_RIGHT
 FULLER_B:   DEFB A_FIRE, 0, 0, 0,      A_RIGHT, A_LEFT,  A_DOWN,  A_UP
 CURSOR_B:   DEFB 0,      0, 0, A_DOWN, A_UP,    A_RIGHT, A_LEFT,  A_FIRE
-T2068_B:    DEFB 0,      0, 0, A_FIRE, A_RIGHT, A_LEFT,  A_DOWN,  A_UP
+T2068_B:    DEFB A_FIRE, 0, 0, 0,      A_RIGHT, A_LEFT,  A_DOWN,  A_UP
 SINCLAIR_B: DEFB 0,      0, 0, A_FIRE, A_UP,    A_DOWN,  A_RIGHT, A_LEFT
 SINCLAIR_B2:
             DEFB 0,      0, 0, A_LEFT, A_RIGHT, A_DOWN,  A_UP,    A_FIRE
