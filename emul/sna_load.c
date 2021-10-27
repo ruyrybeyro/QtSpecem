@@ -133,35 +133,37 @@ static int snap_type(char * file_name)
       short snap_val;
    } map_ext[] =
    {
-	{ ".sna", SNA_FMT },
-	{ ".snx", SNX_FMT },
-	{ ".snp", SNP_FMT },
-	{ ".z80", Z80_FMT },
-	{ ".sit", SIT_FMT },
-	{ ".sp",  SP_FMT  },
-	{ ".raw", RAW_FMT },
-	{ ".zx",  ZX_FMT  },
-	{ ".prg", PRG_FMT },
-	{ ".ach", ACH_FMT },
-	{ ".tap", TAP_FMT },
-	{ ".blk", TAP_FMT },
-	{ ".rom", ROM_FMT },
-	{ ".dck", DCK_FMT },
-	{ ".dat", DAT_FMT },
-	{ ".scr", SCR_FMT },
-    	{ ".sem", SEM_FMT },
-	{ ".slt", SLT_FMT },
-	{ ".ini", INI_FMT },
-        { ".pok", POK_FMT }
+	{ "sna", SNA_FMT },
+	{ "snx", SNX_FMT },
+	{ "snp", SNP_FMT },
+	{ "z80", Z80_FMT },
+	{ "sit", SIT_FMT },
+	{ "sp",  SP_FMT  },
+	{ "raw", RAW_FMT },
+	{ "zx",  ZX_FMT  },
+	{ "prg", PRG_FMT },
+	{ "ach", ACH_FMT },
+	{ "tap", TAP_FMT },
+	{ "blk", TAP_FMT },
+	{ "rom", ROM_FMT },
+	{ "dck", DCK_FMT },
+	{ "dat", DAT_FMT },
+	{ "scr", SCR_FMT },
+    	{ "sem", SEM_FMT },
+	{ "slt", SLT_FMT },
+	{ "ini", INI_FMT },
+        { "pok", POK_FMT }
    };
 
       short i;
+      char ext_cp[4];
 
       ext = strrchr(file_name, '.');
-      if (ext != NULL ) 
+      if (ext != NULL && (strlen(ext+1)<4) ) 
       {
+      strcpy(ext_cp, ext+1);
       for(i = 0 ; i < (short)(sizeof(map_ext)/sizeof(struct map)) ; i++)
-	if(!strcmp(strlwr(ext),map_ext[i].snap_extension))
+	if(!strcmp(strlwr(ext_cp),map_ext[i].snap_extension))
 	{
 	   val = map_ext[i].snap_val;
 	   break;
@@ -311,11 +313,11 @@ int open_sna(const char * file_name)
 
 	 case TAP_FMT:
         
-        if(not_patched)
-        {
-        not_patched=0;
-        patch_rom(1);
-        }
+            if(not_patched)
+            {
+               not_patched=0;
+               patch_rom(1);
+            }
               
 	    if (!inside_level_trap)
 	    {
@@ -327,6 +329,7 @@ int open_sna(const char * file_name)
 	       status = tap_load(stream);
 	    }
 	    break;
+
 	 case INI_FMT:
 	    status = load_options(stream);
 	    break;
