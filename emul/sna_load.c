@@ -162,8 +162,9 @@ static int snap_type(char * file_name)
       if (ext != NULL && (strlen(ext+1)<4) ) 
       {
       strcpy(ext_cp, ext+1);
+      strlwr(ext_cp);
       for(i = 0 ; i < (short)(sizeof(map_ext)/sizeof(struct map)) ; i++)
-	if(!strcmp(strlwr(ext_cp),map_ext[i].snap_extension))
+	if(!strcmp(ext_cp,map_ext[i].snap_extension))
 	{
 	   val = map_ext[i].snap_val;
 	   break;
