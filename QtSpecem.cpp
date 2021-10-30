@@ -11,6 +11,7 @@
 #include <QMenu>
 #include <QMenuBar>  
 #include <QtWidgets> 
+#include <QCoreApplication>
 
 extern "C" void execute();
 extern "C" void do_reset();
@@ -167,7 +168,11 @@ void DrawnWindow::warmreset()
 
 void DrawnWindow::fullscreen()
 {
-    FullScreen = 1;
+  QKeyEvent * eve1 = new QKeyEvent (QEvent::KeyPress,Qt::Key_Escape,Qt::NoModifier,NULL);
+  QKeyEvent * eve2 = new QKeyEvent (QEvent::KeyRelease,Qt::Key_Escape,Qt::NoModifier,NULL); 
+
+  QApplication::postEvent((QObject*)this,(QEvent *)eve1);
+  QApplication::postEvent((QObject*)this,(QEvent *)eve2);
 }
 
 void DrawnWindow::about()
@@ -216,8 +221,8 @@ void DrawnWindow::createActions()
     warmresetAct->setStatusTip(tr("Warm Reset Spectrum"));
     connect(warmresetAct, &QAction::triggered, this, &DrawnWindow::warmreset);
 
-    fullscreenAct = new QAction(tr("Full screen"), this);
-    fullscreenAct->setStatusTip(tr("Full screen Host"));
+    fullscreenAct = new QAction(tr("Full screen on/off"), this);
+    fullscreenAct->setStatusTip(tr("Toggle Full screen Host"));
     connect(fullscreenAct, &QAction::triggered, this, &DrawnWindow::fullscreen);
 
     // About is bellow the app name
