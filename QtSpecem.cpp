@@ -361,6 +361,8 @@ int lParam;
 
 void DrawnWindow::keyPressEvent(QKeyEvent *event)
 {
+    int ok = 1;
+
     // qDebug() << QKeySequence(event->key()).toString();
     switch (event->key() )
     {
@@ -467,12 +469,18 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               //case VK_NUMPAD2: keybd_buff[0] |= ~0xFE;
               //         keybd_buff[4] |= ~0xEF; /* 6 - down  */
               //         break;
+
+              default:		ok = 0;
     }
-    event->accept();
+
+    if (ok)
+       event->accept();
 }
  
 void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
 {
+    int ok = 1;
+
     switch (event->key() )
     {
                case Qt::Key_1: keybd_buff[3] &= 0xFE; break;
@@ -629,8 +637,11 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                //      PostMessage(hwnd, WM_COMMAND, IDM_RESET, 0L);
                //      break;
 
+               default:          ok = 0;
     }
-    event->accept();
+
+    if (ok)
+       event->accept();
 }
 
 void DrawnWindow::dragEnterEvent(QDragEnterEvent *e)
