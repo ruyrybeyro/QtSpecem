@@ -1,11 +1,11 @@
 
-QtSpecem v0.85
-(C) 2019 Rui Fernando Ferreira Ribeiro
+QtSpecem 
+(C) 2021 Rui Fernando Ferreira Ribeiro
 
 Z80A core emulation
-(C) 1991-2019 Rui Fernando Ferreira Ribeiro
+(C) 1991-2021 Rui Fernando Ferreira Ribeiro
 
-New Qt5 ZX Spectrum emulator
+New Qt6/Qt5 ZX Spectrum emulator
 
 It also has a companion debugger, https://github.com/ruyrybeyro/debugZ80
 
@@ -52,5 +52,5 @@ For Mac deployment in a self-contained executable:
 
 macdeployqt QtSpecem.app
 
-. Tested in MacOS Catalina, Mojave, High Sierra and Debian 10.
+. Tested in MacOS Monterey, Big Sur, Catalina, Mojave, High Sierra; Linux Debian 10 and Debian 11.
 

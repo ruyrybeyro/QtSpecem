@@ -468,6 +468,7 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               //         keybd_buff[4] |= ~0xEF; /* 6 - down  */
               //         break;
     }
+    event->accept();
 }
  
 void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
@@ -629,6 +630,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                //      break;
 
     }
+    event->accept();
 }
 
 void DrawnWindow::dragEnterEvent(QDragEnterEvent *e)
