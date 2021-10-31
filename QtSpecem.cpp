@@ -169,7 +169,7 @@ void DrawnWindow::warmreset()
 void DrawnWindow::fullscreen()
 {
   QKeyEvent * eve1 = new QKeyEvent (QEvent::KeyPress,Qt::Key_Escape,Qt::NoModifier,NULL);
-  QKeyEvent * eve2 = new QKeyEvent (QEvent::KeyRelease,Qt::Key_Escape,Qt::NoModifier,NULL); 
+  QKeyEvent * eve2 = new QKeyEvent (QEvent::KeyRelease,Qt::Key_Escape,Qt::NoModifier,NULL);
 
   QApplication::postEvent((QObject*)this,(QEvent *)eve1);
   QApplication::postEvent((QObject*)this,(QEvent *)eve2);
@@ -627,6 +627,20 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                    save_sna(s);
                    }
                    break;
+
+               case Qt::Key_F12:
+                   {
+                   static int n = 0;
+                   char s[200];
+                   QString fileName;
+
+                   sprintf(s, "/tmp/snap%04d.png", n++);
+                   fileName = QString::fromStdString(s);
+
+                   background->save(fileName, NULL, 0);
+                   }
+                   break;
+
        
                //case VK_F3:
                //        PostMessage(hwnd, WM_COMMAND, IDM_OPEN, 0L);
