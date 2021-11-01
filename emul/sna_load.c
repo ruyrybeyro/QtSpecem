@@ -221,11 +221,7 @@ int open_sna(const char * file_name)
    build_F();
    R = (R & 0x7F) | BIT_7;
 
-   #ifndef _WIN32
    if((stream = fopen(file_name, "r")))
-   #else
-   if(stream = _lopen(snapcopy, OF_READ))
-   #endif
    {
       switch(snap_type(snapcopy))
       {
