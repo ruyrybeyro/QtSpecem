@@ -1,5 +1,8 @@
+#ifndef _WIN32
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -9,6 +12,7 @@
 #define SHMVARS sizeof(struct Z80vars)+(sizeof(union Z80Regs)*2)+sizeof(struct CPU_flags) \
 		+sizeof(union Z80IX)+sizeof(union Z80IY)+1
 
+#ifndef _WIN32
 unsigned char * alloc_speccy_shared_ram(void)
 {
     int shmid;
@@ -80,3 +84,18 @@ void dealloc_shared(unsigned char * mem, unsigned char * vars)
       shmdt(mem);
    }
 }
+#else
+unsigned char * alloc_speccy_shared_ram(void)
+{
+   return calloc(SHMSZ,1);
+}
+
+unsigned char * alloc_speccy_shared_vars(void)
+{
+   return calloc(SHMVARS,1);
+}
+
+void dealloc_shared(unsigned char * mem, unsigned char * vars)
+{
+}
+#endif
