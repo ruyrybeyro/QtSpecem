@@ -22,6 +22,9 @@ int main(int argc, char **argv) {
         QByteArray data;
         int i;
 
+
+    QCoreApplication::setApplicationName("QtSpecem");
+    QCoreApplication::setApplicationVersion("0.0.1");
         
     QFile file(":/rom/spectrum.rom");        
 
