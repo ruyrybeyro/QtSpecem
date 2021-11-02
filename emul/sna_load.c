@@ -221,10 +221,10 @@ int open_sna(const char * file_name)
    build_F();
    R = (R & 0x7F) | BIT_7;
 
-#ifndef _WIN32
-   if((stream = fopen(file_name, "r")))
-#else
+#if defined(_WIN32) || defined(WIN32)
    if((stream = fopen(file_name, "rb")))
+#else
+   if((stream = fopen(file_name, "r")))
 #endif
    {
       switch(snap_type(snapcopy))
@@ -1392,10 +1392,10 @@ void save_tapp()
    FILE * f;
    UCHAR  checksum;
 
-#ifndef _WIN32
-   f=fopen("/tmp/tap.tap", "a");
-#else
+#if defined(_WIN32) || defined(WIN32)
    f=fopen("/tmp/tap.tap", "ab");
+#else
+   f=fopen("/tmp/tap.tap", "a");
 #endif
    //fseek(f, 0, SEEK_END);
    fputc((DE+1) % 256, f);

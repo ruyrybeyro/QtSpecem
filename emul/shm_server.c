@@ -1,4 +1,4 @@
-#ifndef _WIN32
+#if !defined(_WIN32) || !defined(WIN32)
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #endif
@@ -12,7 +12,7 @@
 #define SHMVARS sizeof(struct Z80vars)+(sizeof(union Z80Regs)*2)+sizeof(struct CPU_flags) \
 		+sizeof(union Z80IX)+sizeof(union Z80IY)+1
 
-#ifndef _WIN32
+#if !defined(_WIN32) || !defined(WIN32)
 unsigned char * alloc_speccy_shared_ram(void)
 {
     int shmid;

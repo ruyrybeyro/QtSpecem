@@ -161,10 +161,10 @@ void save_sna(const char * file_name)
 
    if(stream == NULL)
    {
-#ifndef _WIN32
-      stream = fopen(file_name, "w");
-#else
+#if defined(_WIN32) || defined(WIN32)
       stream = fopen(file_name, "wb");
+#else
+      stream = fopen(file_name, "w");
 #endif
    }
 
