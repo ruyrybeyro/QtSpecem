@@ -160,7 +160,14 @@ void save_sna(const char * file_name)
    //}
 
    if(stream == NULL)
+   {
+#ifndef _WIN32
       stream = fopen(file_name, "w");
+#else
+      stream = fopen(file_name, "wb");
+#endif
+   }
+
    R = (R & ~BIT_7) | R_BIT7;
    build_F();
    if(stream)
