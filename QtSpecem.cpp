@@ -130,6 +130,9 @@ void DrawnWindow::contextMenuEvent(QContextMenuEvent *event)
 
 void DrawnWindow::newFile()
 {
+   QMessageBox msgBox;
+   msgBox.setText("Not implemented yet.");
+   msgBox.exec();
 }
 
 void DrawnWindow::open()
@@ -143,6 +146,9 @@ void DrawnWindow::open()
 
 void DrawnWindow::save()
 {
+   QMessageBox msgBox;
+   msgBox.setText("Not implemented yet.");
+   msgBox.exec();
 }
 
 
@@ -186,6 +192,16 @@ void DrawnWindow::about()
 
 void DrawnWindow::createActions()
 {
+#if defined(_WIN32) || defined(WIN32)
+    newAct = new QAction(tr("New"), this);
+    connect(newAct, &QAction::triggered, this, &DrawnWindow::newFile);
+
+    openAct = new QAction(tr("Open..."), this);
+    connect(openAct, &QAction::triggered, this, &DrawnWindow::open);
+
+    saveAct = new QAction(tr("Save"), this);
+    connect(saveAct, &QAction::triggered, this, &DrawnWindow::save);
+#else
     newAct = new QAction(tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
@@ -200,6 +216,7 @@ void DrawnWindow::createActions()
     saveAct->setShortcuts(QKeySequence::Save);
     saveAct->setStatusTip(tr("Save the document to disk"));
     connect(saveAct, &QAction::triggered, this, &DrawnWindow::save);
+#endif
 
     resetAct = new QAction(tr("&Reset"), this);
     //resetAct->setShortcuts(QKeySequence::New);
