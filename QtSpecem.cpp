@@ -201,6 +201,24 @@ void DrawnWindow::createActions()
 
     saveAct = new QAction(tr("Save"), this);
     connect(saveAct, &QAction::triggered, this, &DrawnWindow::save);
+
+    resetAct = new QAction(tr("&Reset"), this);
+    connect(resetAct, &QAction::triggered, this, &DrawnWindow::reset);
+
+    fullresetAct = new QAction(tr("&Full Reset"), this);
+    connect(fullresetAct, &QAction::triggered, this, &DrawnWindow::fullreset);
+
+    nmiAct = new QAction(tr("&NMI"), this);
+    connect(nmiAct, &QAction::triggered, this, &DrawnWindow::nmi);
+
+    warmresetAct = new QAction(tr("&Warm Reset"), this);
+    connect(warmresetAct, &QAction::triggered, this, &DrawnWindow::warmreset);
+
+    fullscreenAct = new QAction(tr("Full screen on/off"), this);
+    connect(fullscreenAct, &QAction::triggered, this, &DrawnWindow::fullscreen);
+
+    aboutAct = new QAction(tr("&About"), this);
+    connect(aboutAct, &QAction::triggered, this, &DrawnWindow::about);
 #else
     newAct = new QAction(tr("&New"), this);
     newAct->setShortcuts(QKeySequence::New);
@@ -216,7 +234,6 @@ void DrawnWindow::createActions()
     saveAct->setShortcuts(QKeySequence::Save);
     saveAct->setStatusTip(tr("Save the document to disk"));
     connect(saveAct, &QAction::triggered, this, &DrawnWindow::save);
-#endif
 
     resetAct = new QAction(tr("&Reset"), this);
     //resetAct->setShortcuts(QKeySequence::New);
@@ -246,6 +263,8 @@ void DrawnWindow::createActions()
     aboutAct = new QAction(tr("&About"), this);
     aboutAct->setStatusTip(tr("Show About box"));
     connect(aboutAct, &QAction::triggered, this, &DrawnWindow::about);
+#endif
+
 }
 
 void DrawnWindow::createMenus()
