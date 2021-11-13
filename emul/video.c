@@ -17,6 +17,7 @@ extern UCHAR hires_ink;
 extern UCHAR hires_paper;
 /* Timex alternate video */
 extern UCHAR alt_video;
+extern UCHAR ULAplus;
 
 /* buffer caching the Spectrum attributes state */
 static char attrib_z80[24][32];

@@ -5,6 +5,7 @@
  */
 
 #include "QtSpecem.h"
+#include "h/quirks.h"
 
 
 #include <QMessageBox>
@@ -42,8 +43,10 @@ static uint8_t border_colors[192+(2*BORDER_VERTICAL)];
 static uint8_t border_color; // Last border color seen
 static uint16_t border_ptr; // Current border line being updated */
 
-/* RGB 'Spectrum' colors */
-static unsigned char rgbvals[16][3]={
+/* RGB 'Spectrum' colours */
+// 16 colours enough for normal pallete
+// 64 colours for ULAplus
+static unsigned char rgbvals[64][3]={
             /* Normal colours */
           { 0x00, 0x00, 0x00}, { 0x00, 0x00, 0xcf},
           { 0xcf, 0x00, 0x00}, { 0xcf, 0x00, 0xcf},
@@ -59,12 +62,19 @@ static unsigned char rgbvals[16][3]={
 
 extern "C" void init_pallete(void) {
     int i;
-    QRgb value;
-    
-    for (i = 0 ; i < 16 ; i++) {
-        value = qRgb(rgbvals[i][0], rgbvals[i][1], rgbvals[i][2]);
-        background->setColor(i, value);
+  
+    // better doing 64 than testing for ULAplus?  
+    for (i = 0 ; i < 64 ; i++) {
+        background->setColor(i, qRgb(rgbvals[i][0], rgbvals[i][1], rgbvals[i][2]));
     }
+}
+
+extern "C" void set_palette(UCHAR palettePos, UCHAR colour) {
+          rgbvals[palettePos][0] = ( colour & 0x1C ) >> 2;
+          rgbvals[palettePos][1] = ( colour & 0xE0 ) >> 5;
+          if ((rgbvals[palettePos][2] = (( colour & 0x3 ) << 1)))
+             rgbvals[palettePos][2]++;
+          background->setColor(palettePos, qRgb(rgbvals[palettePos][0], rgbvals[palettePos][1], rgbvals[palettePos][2]));
 }
 
 extern "C" void pixel_host(unsigned short x, unsigned short  y, unsigned char colour) {

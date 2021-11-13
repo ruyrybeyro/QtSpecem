@@ -1411,9 +1411,9 @@ void patch_rom(int do_it);
 //void put2(USHORT, HFILE);
 
 /* WSPECEM.c */
+void set_palette(UCHAR palettePos, UCHAR colour);
 void pixel_host(USHORT, USHORT, UCHAR);
 void resize_host(unsigned x, unsigned y);
-//int  save_pcx(HFILE );
 
 /* VIDEO.C */
 void do_flash(void);

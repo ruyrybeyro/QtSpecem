@@ -25,6 +25,8 @@ UCHAR hires_paper;
 /* Timex alternate video */
 UCHAR alt_video;
 
+UCHAR ULAplus = 0;
+
 /* returns colour of border */
 UCHAR get_sbrdr(void)
 {
@@ -39,6 +41,8 @@ short  reset = 1;
  *=========================================================================*/
 void writeport(USHORT port, UCHAR value)
 {
+       static UCHAR is_colour = 0;
+
 	/* ULA -- b4 - ALTF  b3 - MIC b2b1b0 - BORDER
 	 */
 	  /*if((port & 0xFF ) == 0xF4)
@@ -53,7 +57,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
           int i;
 
           Port255 = value;
-          if (alt_video      = value & 1)
+          if ((alt_video      = value & 1))
              for (i = 0x6000 ; i< 0x7800 ; i++ )
              {  
                 int tmp;
@@ -65,7 +69,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
 
           colours_8x1    = ( ( value & 7 ) == 2 );
 
-	  if(hires       = ( ( value & 7 ) == 6 ))
+	  if((hires       = ( ( value & 7 ) == 6 )))
           {
              hires_ink   = ( value >> 3 ) & 7;
              hires_paper = hires_ink ^ 7;
@@ -92,6 +96,28 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
               writebyte(i, tmp);
            }
        }
+    else
+    if ( (port == (USHORT)0xBF3F) && ULAplus )
+    {
+       static UCHAR palettePos;
+
+       if (!is_colour && ((value & 0xC0) == 0 ) )
+       {
+          palettePos = value & 0x3F;
+          is_colour = 1;
+       }
+       else
+       {
+          set_palette(palettePos, value);
+          is_colour = 0;
+       }
+    }
+    else
+    if ( port == (USHORT)0xFF3B )
+    {
+       ULAplus = value & 1;  
+       is_colour = 0;
+    }
     else
     if (!(port & 1)) {       // ULA
 
