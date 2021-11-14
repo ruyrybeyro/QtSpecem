@@ -44,6 +44,7 @@ short  reset = 1;
 void writeport(USHORT port, UCHAR value)
 {
        static UCHAR is_colour = 0;
+       static UCHAR palettePos;
 
 	/* ULA -- b4 - ALTF  b3 - MIC b2b1b0 - BORDER
 	 */
@@ -101,33 +102,32 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
     else
     if ( (port == (USHORT)0xBF3F) && ULAplus )
     {
-       static UCHAR palettePos;
 
-       if (!is_colour )
+       if ((value & 0xC0) == 0 )
        {
-          if ((value & 0xC0) == 0 )
-          {
-             palettePos = value & 0x3F;
-             is_colour = 1;
-          }
-          if ((value & 0xC0) == 0x40 )
-          {
-             // Timex screen modes
-             writeport(255,value & 0x3F);
-          }
+          palettePos = value & 0x3F;
+          is_colour = 1;
        }
-       else
+       if ((value & 0xC0) == 0x40 )
        {
-          set_palette(palettePos, value);
+          // Timex screen modes
+          writeport(255,value & 0x3F);
           is_colour = 0;
        }
     }
     else
     if ( port == (USHORT)0xFF3B )
     {
-       ULAplus = value & 1;  
-       is_colour = 0;
        out_ULAplus = value;
+       if (!is_colour)
+       {
+       ULAplus = value & 1;  
+       }
+       else
+       {
+         set_palette(palettePos, value);
+         is_colour=0;
+       }
     }
     else
     if (!(port & 1)) {       // ULA

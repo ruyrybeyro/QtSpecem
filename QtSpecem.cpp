@@ -28,6 +28,8 @@ extern "C" void save_sna(const char * file_name);
 extern "C" unsigned short hires;
 extern "C" unsigned short FullScreen;
 
+extern UCHAR ULAplus;
+
 #define BORDER_HORIZONTAL 32
 #define BORDER_VERTICAL 16
 
@@ -60,21 +62,43 @@ static unsigned char rgbvals[256][3]={
           { 0xff, 0xff, 0x00}, { 0xff, 0xff, 0xff}
 };
 
+static unsigned char rgbvalsULAplus[256][3]={
+            /* Normal colours */
+          { 0x00, 0x00, 0x00}, { 0x00, 0x00, 0xcf},
+          { 0xcf, 0x00, 0x00}, { 0xcf, 0x00, 0xcf},
+          { 0x00, 0xcf, 0x00}, { 0x00, 0xcf, 0xcf},
+          { 0xcf, 0xcf, 0x00}, { 0xcf, 0xcf, 0xcf},
+
+          /* Brigth colours */
+          { 0x00, 0x00, 0x00}, { 0x00, 0x00, 0xff},
+          { 0xff, 0x00, 0x00}, { 0xff, 0x00, 0xff},
+          { 0x00, 0xff, 0x00}, { 0x00, 0xff, 0xff},
+          { 0xff, 0xff, 0x00}, { 0xff, 0xff, 0xff}
+};
+
 extern "C" void init_pallete(void) {
     int i;
-  
-    // better doing 64 than testing for ULAplus?  
-    for (i = 0 ; i < 64 ; i++) {
-        background->setColor(i, qRgb(rgbvals[i][0], rgbvals[i][1], rgbvals[i][2]));
+ 
+    if(!ULAplus)
+    { 
+       for (i = 0 ; i < 16 ; i++) {
+          background->setColor(i, qRgb(rgbvals[i][0], rgbvals[i][1], rgbvals[i][2]));
+       }
+    }
+    else
+    {
+       for (i = 0 ; i < 256 ; i++) {
+          background->setColor(i, qRgb(rgbvalsULAplus[i][0], rgbvalsULAplus[i][1], rgbvalsULAplus[i][2]));
+       }
     }
 }
 
 extern "C" void set_palette(UCHAR palettePos, UCHAR colour) {
-          rgbvals[palettePos][0] = ( colour & 0x1C ) >> 2;
-          rgbvals[palettePos][1] = ( colour & 0xE0 ) >> 5;
-          if ((rgbvals[palettePos][2] = (( colour & 0x3 ) << 1)))
-             rgbvals[palettePos][2]++;
-          background->setColor(palettePos, qRgb(rgbvals[palettePos][0], rgbvals[palettePos][1], rgbvals[palettePos][2]));
+          rgbvalsULAplus[palettePos][0] = ( colour & 0x1C ) >> 2;
+          rgbvalsULAplus[palettePos][1] = ( colour & 0xE0 ) >> 5;
+          if ((rgbvalsULAplus[palettePos][2] = (( colour & 0x3 ) << 1)))
+             rgbvalsULAplus[palettePos][2]++;
+          background->setColor(palettePos, qRgb(rgbvalsULAplus[palettePos][0], rgbvalsULAplus[palettePos][1], rgbvalsULAplus[palettePos][2]));
 }
 
 extern "C" void pixel_host(unsigned short x, unsigned short  y, unsigned char colour) {
