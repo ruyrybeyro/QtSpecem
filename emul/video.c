@@ -88,7 +88,7 @@ void writebyte(unsigned short adress, unsigned char byte)
             {
                // ULAplus
                // paper_colour = (FLASH * 2 + BRIGHT) * 16 + PAPER + 8
-               // ink_colour = (FLASH * 2 + BRIGHT) * 16 + INK
+               // ink_colour   = (FLASH * 2 + BRIGHT) * 16 + INK
                paper = ((colour & 0xC0) >> 2) + ((colour >> 3)&7) + 8;
                ink   = ((colour & 0xC0) >> 2) + (colour&7);
             }
@@ -110,7 +110,7 @@ void writebyte(unsigned short adress, unsigned char byte)
             {
                // ULAplus
                // paper_colour = (FLASH * 2 + BRIGHT) * 16 + PAPER + 8
-               // ink_colour = (FLASH * 2 + BRIGHT) * 16 + INK
+               // ink_colour   = (FLASH * 2 + BRIGHT) * 16 + INK
                paper = ((colour & 0xC0) >> 2) + ((colour >> 3)&7) + 8;
                ink   = ((colour & 0xC0) >> 2) + (colour&7);
             }
@@ -155,7 +155,7 @@ void writebyte(unsigned short adress, unsigned char byte)
             {  
                // ULAplus
                // paper_colour = (FLASH * 2 + BRIGHT) * 16 + PAPER + 8
-               // ink_colour = (FLASH * 2 + BRIGHT) * 16 + INK
+               // ink_colour   = (FLASH * 2 + BRIGHT) * 16 + INK
                paper = ((colour & 0xC0) >> 2) + ((colour >> 3)&7) + 8;
                ink   = ((colour & 0xC0) >> 2) + (colour&7);
             }

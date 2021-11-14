@@ -46,7 +46,7 @@ static uint16_t border_ptr; // Current border line being updated */
 /* RGB 'Spectrum' colours */
 // 16 colours enough for normal pallete
 // 64 colours for ULAplus
-static unsigned char rgbvals[64][3]={
+static unsigned char rgbvals[256][3]={
             /* Normal colours */
           { 0x00, 0x00, 0x00}, { 0x00, 0x00, 0xcf},
           { 0xcf, 0x00, 0x00}, { 0xcf, 0x00, 0xcf},
