@@ -28,7 +28,7 @@ extern "C" void save_sna(const char * file_name);
 extern "C" unsigned short hires;
 extern "C" unsigned short FullScreen;
 
-extern UCHAR ULAplus;
+extern "C" UCHAR ULAplus;
 
 #define BORDER_HORIZONTAL 32
 #define BORDER_VERTICAL 16
