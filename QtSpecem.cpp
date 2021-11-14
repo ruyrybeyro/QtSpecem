@@ -95,9 +95,10 @@ extern "C" void init_pallete(void) {
 
 extern "C" void set_palette(UCHAR palettePos, UCHAR colour) {
           rgbvalsULAplus[palettePos][0] = ( colour & 0x1C ) >> 2;
-          rgbvalsULAplus[palettePos][1] = ( colour & 0xE0 ) >> 5;
+          rgbvalsULAplus[palettePos][1] = colour >> 5;
           if ((rgbvalsULAplus[palettePos][2] = (( colour & 0x3 ) << 1)))
              rgbvalsULAplus[palettePos][2]++;
+
           background->setColor(palettePos, qRgb(rgbvalsULAplus[palettePos][0], rgbvalsULAplus[palettePos][1], rgbvalsULAplus[palettePos][2]));
 }
 
