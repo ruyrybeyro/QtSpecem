@@ -100,7 +100,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
            }
        }
     else
-    if ( (port == (USHORT)0xBF3F) && ULAplus )
+    if ( port == (USHORT)0xBF3F )
     {
 
        if (!(value & (UCHAR)0xC0))
