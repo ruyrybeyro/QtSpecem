@@ -106,7 +106,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
 
        if (!(value & (UCHAR)0xC0))
        {
-          palettePos = value & 0x3F;
+          palettePos = value;
           is_colour = 1;
        }
        if ((value & (UCHAR)0xC0) == 0x40 )
