@@ -103,10 +103,18 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
     {
        static UCHAR palettePos;
 
-       if (!is_colour && ((value & 0xC0) == 0 ) )
+       if (!is_colour )
        {
-          palettePos = value & 0x3F;
-          is_colour = 1;
+          if ((value & 0xC0) == 0 )
+          {
+             palettePos = value & 0x3F;
+             is_colour = 1;
+          }
+          if ((value & 0xC0) == 0x40 )
+          {
+             // Timex screen modes
+             writeport(255,value & 0x3F);
+          }
        }
        else
        {
@@ -119,9 +127,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
     {
        ULAplus = value & 1;  
        is_colour = 0;
-       // hack timex video modes
        out_ULAplus = value;
-       writeport(255, value);
     }
     else
     if (!(port & 1)) {       // ULA
