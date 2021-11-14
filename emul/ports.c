@@ -10,6 +10,7 @@
 #include "../h/env.h"
 
 void border_updated(uint8_t color, unsigned long ticks);
+void init_pallete(void);
 
 /* keeps last out to ula --- current border colour */
 static UCHAR out_ula = 190;
@@ -122,6 +123,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
        if (!is_colour)
        {
        ULAplus = value & 1;  
+       init_pallete();
        }
        else
        {
