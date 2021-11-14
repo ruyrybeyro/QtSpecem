@@ -119,15 +119,15 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
     else
     if ( port == (USHORT)0xFF3B )
     {
-       out_ULAplus = value;
        if (!is_colour)
        {
-       ULAplus = value & 1;  
+       out_ULAplus = ULAplus = value & 1;
        init_pallete();
        }
        else
        {
          set_palette(palettePos, value);
+         init_pallete();
          is_colour=0;
        }
     }
