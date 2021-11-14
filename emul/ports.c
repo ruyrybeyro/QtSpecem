@@ -103,12 +103,12 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
     if ( (port == (USHORT)0xBF3F) && ULAplus )
     {
 
-       if ((value & 0xC0) == 0 )
+       if (!(value & (UCHAR)0xC0))
        {
           palettePos = value & 0x3F;
           is_colour = 1;
        }
-       if ((value & 0xC0) == 0x40 )
+       if ((value & (UCHAR)0xC0) == 0x40 )
        {
           // Timex screen modes
           writeport(255,value & 0x3F);
