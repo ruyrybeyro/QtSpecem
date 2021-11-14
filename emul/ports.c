@@ -14,6 +14,8 @@ void border_updated(uint8_t color, unsigned long ticks);
 /* keeps last out to ula --- current border colour */
 static UCHAR out_ula = 190;
 static UCHAR Port255 = 0;
+static UCHAR out_ULAplus = 0;
+
 /* keeps the current border color */
 UCHAR borderColor;
 /* Timex screen mode */
@@ -117,6 +119,9 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
     {
        ULAplus = value & 1;  
        is_colour = 0;
+       // hack timex video modes
+       out_ULAplus = value;
+       writeport(255, value);
     }
     else
     if (!(port & 1)) {       // ULA
@@ -295,6 +300,8 @@ UCHAR readport(USHORT port)
          else
 		    value = 0xFF;
                  }
+        if (port == (USHORT)0xFF3B)
+           value=out_ULAplus;
 	return(value);	// default: 0xff
 }
 

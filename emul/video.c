@@ -79,8 +79,19 @@ void writebyte(unsigned short adress, unsigned char byte)
          if(colour != attrib_z80[y>>3][x = (ladress & 0x1F)])
          {
             colour = attrib_z80[y>>3][x];
-	    paper = (colour >> 3) & 0xF;
-	    ink = (colour & 7) | ((colour >> 3) & 8);
+            if (!ULAplus)
+            {
+	       paper = (colour >> 3) & 0xF;
+	       ink = (colour & 7) | ((colour >> 3) & 8);
+            }
+            else
+            {
+               // ULAplus
+               // paper_colour = (FLASH * 2 + BRIGHT) * 16 + PAPER + 8
+               // ink_colour = (FLASH * 2 + BRIGHT) * 16 + INK
+               paper = ((colour & 0xC0) >> 2) + ((colour >> 3)&7) + 8;
+               ink   = ((colour & 0xC0) >> 2) + (colour&7);
+            }
          }
       }
       else
@@ -90,8 +101,19 @@ void writebyte(unsigned short adress, unsigned char byte)
          //if(colour != *(mem + (ladress | 0x2000)))
          //{  
             colour = *(mem + (ladress | 0x2000));
-            paper = (colour >> 3) & 0xF;
-            ink = (colour & 7) | ((colour >> 3) & 8);
+            if (!ULAplus)
+            {
+               paper = (colour >> 3) & 0xF;
+               ink = (colour & 7) | ((colour >> 3) & 8);
+            }
+            else
+            {
+               // ULAplus
+               // paper_colour = (FLASH * 2 + BRIGHT) * 16 + PAPER + 8
+               // ink_colour = (FLASH * 2 + BRIGHT) * 16 + INK
+               paper = ((colour & 0xC0) >> 2) + ((colour >> 3)&7) + 8;
+               ink   = ((colour & 0xC0) >> 2) + (colour&7);
+            }
          //}
       }
 
@@ -124,8 +146,19 @@ void writebyte(unsigned short adress, unsigned char byte)
 	    colour = attrib_z80[y][x] = byte;
 	    /* recalculate ink&paper
 	     */
-	    paper = (colour >> 3) & 0xF;
-	    ink = (colour & 7) | ((colour >> 3) & 8);
+            if (!ULAplus)
+            {  
+               paper = (colour >> 3) & 0xF;
+               ink = (colour & 7) | ((colour >> 3) & 8);
+            }
+            else
+            {  
+               // ULAplus
+               // paper_colour = (FLASH * 2 + BRIGHT) * 16 + PAPER + 8
+               // ink_colour = (FLASH * 2 + BRIGHT) * 16 + INK
+               paper = ((colour & 0xC0) >> 2) + ((colour >> 3)&7) + 8;
+               ink   = ((colour & 0xC0) >> 2) + (colour&7);
+            }
 
 	    /* Transform text coords in screen adress
 	     */
@@ -205,7 +238,7 @@ void do_flash()
    UCHAR colour, x1, y1, x, y, k, paper, ink, byte, i;
    USHORT adress;
 
-   if (colours_8x1 || hires )
+   if (colours_8x1 || hires || ULAplus)
       return;
 
    // hack for flushing byte buffer
