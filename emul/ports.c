@@ -109,6 +109,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
           palettePos = value;
           is_colour = 1;
        }
+       else
        if ((value & (UCHAR)0xC0) == 0x40 )
        {
           // Timex screen modes
@@ -122,7 +123,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
        if (!is_colour)
        {
           out_ULAplus = ULAplus = value & 1;
-          init_pallete();
+          // init_pallete();
        }
        else
        {
