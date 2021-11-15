@@ -121,13 +121,12 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
     {
        if (!is_colour)
        {
-       out_ULAplus = ULAplus = value & 1;
-       init_pallete();
+          out_ULAplus = ULAplus = value & 1;
+          init_pallete();
        }
        else
        {
-         set_palette(palettePos, value);
-         init_pallete();
+          set_palette(palettePos, value);
        }
     }
     else
