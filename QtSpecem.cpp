@@ -104,8 +104,10 @@ extern "C" void set_palette(UCHAR palettePos, UCHAR colour) {
           if ((rgbvalsULAplus[palettePos][2] = (( colour & 0x3 ) << 1)))
              rgbvalsULAplus[palettePos][2]++;
           rgbvalsULAplus[palettePos][2] = colour3to8bit(rgbvalsULAplus[palettePos][2]);
-
-          background->setColor(palettePos, qRgb(rgbvalsULAplus[palettePos][0], rgbvalsULAplus[palettePos][1], rgbvalsULAplus[palettePos][2]));
+          if(ULAplus)
+          {
+             background->setColor(palettePos, qRgb(rgbvalsULAplus[palettePos][0], rgbvalsULAplus[palettePos][1], rgbvalsULAplus[palettePos][2]));
+          }
 }
 
 extern "C" void pixel_host(unsigned short x, unsigned short  y, unsigned char colour) {
