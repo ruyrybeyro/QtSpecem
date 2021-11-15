@@ -101,7 +101,7 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
            }
        }
     else
-    if ( port == (USHORT)0xBF3F )
+    if ( port == (USHORT)0xBF3B )
     {
 
        if (!(value & (UCHAR)0xC0))
@@ -128,7 +128,6 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
        {
          set_palette(palettePos, value);
          init_pallete();
-         is_colour=0;
        }
     }
     else
