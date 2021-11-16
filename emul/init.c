@@ -65,7 +65,8 @@ UCHAR WriteRom = 1;
  */
 static UCHAR inited = 0;
 
-//static HGLOBAL hglb = 0L;
+extern UCHAR ULAplus;
+
 
 /*=========================================================================*
  *                            Init_Z80Emu                                  *
