@@ -189,9 +189,14 @@ void DrawnWindow::open()
 
 void DrawnWindow::save()
 {
-   QMessageBox msgBox;
-   msgBox.setText("Not implemented yet.");
-   msgBox.exec();
+   //QMessageBox msgBox;
+   //msgBox.setText("Not implemented yet.");
+   //msgBox.exec();
+    QString fileName = QFileDialog::getSaveFileName(this,
+    tr("Save Image"), "/home/jana");
+   QByteArray ba = fileName.toLocal8Bit();
+   if (ba.data() != NULL)
+      save_sna(ba.data());
 }
 
 
