@@ -760,16 +760,16 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                default:         ok = 0;
                                 switch((char)event->nativeVirtualKey())
                                 {
-                                   case '0': keybd_buff[4] &= ~0xFE; break;
-                                   case '1': keybd_buff[3] &= ~0xFE; break;
-                                   case '2': keybd_buff[3] &= ~0xFD; break;
-                                   case '3': keybd_buff[3] &= ~0xFB; break;
-                                   case '4': keybd_buff[3] &= ~0xF7; break;
-                                   case '5': keybd_buff[3] &= ~0xEF; break;
-                                   case '6': keybd_buff[4] &= ~0xEF; break;
-                                   case '7': keybd_buff[4] &= ~0xF7; break;
-                                   case '8': keybd_buff[4] &= ~0xFB; break;
-                                   case '9': keybd_buff[4] &= ~0xFD; break;
+                                   case '0': keybd_buff[4] &= 0xFE; break;
+                                   case '1': keybd_buff[3] &= 0xFE; break;
+                                   case '2': keybd_buff[3] &= 0xFD; break;
+                                   case '3': keybd_buff[3] &= 0xFB; break;
+                                   case '4': keybd_buff[3] &= 0xF7; break;
+                                   case '5': keybd_buff[3] &= 0xEF; break;
+                                   case '6': keybd_buff[4] &= 0xEF; break;
+                                   case '7': keybd_buff[4] &= 0xF7; break;
+                                   case '8': keybd_buff[4] &= 0xFB; break;
+                                   case '9': keybd_buff[4] &= 0xFD; break;
                                 }
     }
 
