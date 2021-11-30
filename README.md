@@ -27,6 +27,10 @@ For now pressing F2 saves Z80 snapshots at /tmp.
 
 Kempston Joystick ALT + cursor keys
 
+Timex video modes+ULAplus
+
+Very hackish early support for Timex cartridges
+
 KNOWN BUGs
 
 - SHIFT 0-9 does not work in MacOS due to a Qt feature, use Command 0-9 instead.
@@ -34,11 +38,6 @@ KNOWN BUGs
 "Features"
 
 Loading a TAP file introduces patches to the ROM. A ROM checksum will fail after loading/drag and dropping a TAP file.
-
-TODO:
-
-- Debugger
-- Save/Load Menu
 
 COMPILING:
 
@@ -52,7 +51,33 @@ For Mac deployment in a self-contained executable:
 
 macdeployqt QtSpecem.app
 
-. Tested in MacOS Monterey, Big Sur, Catalina, Mojave, High Sierra; Linux Debian 10 and Debian 11.
+For cross-compiling for Windows in Ubuntu:
+
+Installing compiler toolchain:
+
+add to sources.list
+
+deb [arch=amd64] https://pkg.mxe.cc/repos/apt focal main
+
+apt update
+
+sudo apt install mxe-x86-64-w64-mingw64.static-qt5
+
+Compiling:
+
+PATH=/usr/lib/mxe/usr/bin:$PATH
+
+git clone https://github.com/ruyrybeyro/QtSpecem
+
+cd QtSpecem
+
+/usr/lib/mxe/usr/x86_64-w64-mingw32.static/qt5/bin/qmake
+
+make
+
+If all goes well, a self contained binary is created at release/QtSpecem.exe 
+
+. Tested in MacOS Monterey, Big Sur, Catalina, Mojave, High Sierra; Linux Debian 10 and Debian 11. Windows 10.
 
 F2  - Z80 file dump /tmp/w0000.z80 where 0000 is incremented
 
