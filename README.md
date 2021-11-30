@@ -29,7 +29,7 @@ Kempston Joystick ALT + cursor keys
 
 KNOWN BUGs
 
-- SHIFT 0-9 does not work due to a Qt feature, use Command 0-9 instead.
+- SHIFT 0-9 does not work in MacOS due to a Qt feature, use Command 0-9 instead.
 
 "Features"
 
