@@ -171,12 +171,12 @@ void DrawnWindow::contextMenuEvent(QContextMenuEvent *event)
     menu.exec(event->globalPos());
 }
 
-//void DrawnWindow::newFile()
-//{
-//   QMessageBox msgBox;
-//   msgBox.setText("Not implemented yet.");
-//   msgBox.exec();
-//}
+void DrawnWindow::newFile()
+{
+   QMessageBox msgBox;
+   msgBox.setText("Not implemented yet.");
+   msgBox.exec();
+}
 
 void DrawnWindow::open()
 {
@@ -241,8 +241,8 @@ void DrawnWindow::about()
 void DrawnWindow::createActions()
 {
 #if defined(_WIN32) || defined(WIN32)
-    //newAct = new QAction(tr("New"), this);
-    //connect(newAct, &QAction::triggered, this, &DrawnWindow::newFile);
+    newAct = new QAction(tr("New"), this);
+    connect(newAct, &QAction::triggered, this, &DrawnWindow::newFile);
 
     openAct = new QAction(tr("Open..."), this);
     connect(openAct, &QAction::triggered, this, &DrawnWindow::open);
@@ -268,10 +268,10 @@ void DrawnWindow::createActions()
     aboutAct = new QAction(tr("&About"), this);
     connect(aboutAct, &QAction::triggered, this, &DrawnWindow::about);
 #else
-    //newAct = new QAction(tr("&New"), this);
-    //newAct->setShortcuts(QKeySequence::New);
-    //newAct->setStatusTip(tr("Create a new file"));
-    //connect(newAct, &QAction::triggered, this, &DrawnWindow::newFile);
+    newAct = new QAction(tr("&New"), this);
+    newAct->setShortcuts(QKeySequence::New);
+    newAct->setStatusTip(tr("Create a new file"));
+    connect(newAct, &QAction::triggered, this, &DrawnWindow::newFile);
 
     openAct = new QAction(tr("&Open..."), this);
     openAct->setShortcuts(QKeySequence::Open);
@@ -318,7 +318,7 @@ void DrawnWindow::createActions()
 void DrawnWindow::createMenus()
 {
     fileMenu = menuBar()->addMenu(tr("&File"));
-    //fileMenu->addAction(newAct);
+    fileMenu->addAction(newAct);
     fileMenu->addAction(openAct);
     fileMenu->addAction(saveAct);
     //fileMenu->addSeparator();
