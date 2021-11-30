@@ -79,6 +79,8 @@ If all goes well, a self contained binary is created at release/QtSpecem.exe
 
 . Tested in MacOS Monterey, Big Sur, Catalina, Mojave, High Sierra; Linux Debian 10 and Debian 11. Windows 10.
 
+Keys in QtSpecem:
+
 F2  - Z80 file dump /tmp/w0000.z80 where 0000 is incremented
 
 F5  - TAP file dump /tmp/w0000.tap where 0000 is incremented
