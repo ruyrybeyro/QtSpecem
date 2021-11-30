@@ -560,6 +560,9 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               //         break;
 
               default:		ok = 0;
+                                // qDebug() << "Original key:" << (char)event->key();
+                                // qDebug() << "Native   key:" << (char)event->nativeVirtualKey();
+                                // qDebug() << "Scan code   :" << (char)event->nativeScanCode();
     }
 
     if (ok)
