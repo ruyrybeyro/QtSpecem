@@ -52,7 +52,7 @@ private:
         QMenu   * miscMenu;
         QMenu   * windowMenu;
         QMenu   * helpMenu;
-   	QAction * newAct;
+   	// QAction * newAct;
     	QAction * openAct;
     	QAction * saveAct;
         QAction * resetAct;
