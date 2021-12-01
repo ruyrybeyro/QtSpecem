@@ -268,8 +268,8 @@ void DrawnWindow::createActions()
     aboutAct = new QAction(tr("&About"), this);
     connect(aboutAct, &QAction::triggered, this, &DrawnWindow::about);
 #else
-    newAct = new QAction(tr("&New"), this);
-    newAct->setShortcuts(QKeySequence::New);
+    newAct = new QAction(tr("New"), this);
+    //newAct->setShortcuts(QKeySequence::New);
     newAct->setStatusTip(tr("Create a new file"));
     connect(newAct, &QAction::triggered, this, &DrawnWindow::newFile);
 
