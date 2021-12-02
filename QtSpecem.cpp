@@ -161,6 +161,7 @@ extern "C" void border_updated(uint8_t color, unsigned long ticks)
     border_color = color;
 }
 
+#if !defined(_WIN32) && !defined(WIN32)
 void DrawnWindow::contextMenuEvent(QContextMenuEvent *event)
 {
     QMenu menu(this);
@@ -170,6 +171,7 @@ void DrawnWindow::contextMenuEvent(QContextMenuEvent *event)
     //menu.addAction(pasteAct);
     menu.exec(event->globalPos());
 }
+#endif
 
 void DrawnWindow::newFile()
 {
@@ -262,7 +264,7 @@ void DrawnWindow::createActions()
     warmresetAct = new QAction(tr("&Warm Reset"), this);
     connect(warmresetAct, &QAction::triggered, this, &DrawnWindow::warmreset);
 
-    fullscreenAct = new QAction(tr("Full screen on/off"), this);
+    fullscreenAct = new QAction(tr("Full screen on off"), this);
     connect(fullscreenAct, &QAction::triggered, this, &DrawnWindow::fullscreen);
 
     aboutAct = new QAction(tr("&About"), this);

@@ -29,7 +29,11 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
+    #if !defined(_WIN32) && !defined(WIN32)
+    #ifndef QT_NO_CONTEXTMENU
     void contextMenuEvent(QContextMenuEvent *event) override;
+    #endif // QT_NO_CONTEXTMENU
+    #endif
 
 private slots:
      	void newFile();
