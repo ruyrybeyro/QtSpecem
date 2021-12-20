@@ -27,10 +27,10 @@ void init_emul()
    /* init RAM with random values -- just to remember the good old
      days
     */
-   //srand(NULL);
+   srand(NULL);
    // nice visual, but problematic to handle
-   //for(i=0x4000; i<0xFFFE; i++)
-   //   writebyte(i, rand()/256);
+   for(i=0x4000; i<0x5B00; i++)
+      writebyte(i, rand()/256);
 
    /* Find WSpecem directory (it isn't the default if the programmed was called with a double-
     click in a associated icon
