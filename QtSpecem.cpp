@@ -507,8 +507,8 @@ void DrawnWindow::keyPressEvent(QKeyEvent *event)
               case Qt::Key_J:  keybd_buff[6] |= ~0xF7; break;
               case Qt::Key_H:  keybd_buff[6] |= ~0xEF; break;
       
-              /* case Qt::Key_Escape:
-                     keybd_buff[0] |= ~0xFE; */ /* CAPS SHIFT */
+              case Qt::Key_Escape: break;
+              /*       keybd_buff[0] |= ~0xFE; */ /* CAPS SHIFT */
       
               case Qt::Key_Space:      keybd_buff[7] |= ~0xFE; break;
               case Qt::Key_M:  keybd_buff[7] |= ~0xFB; break;
@@ -650,6 +650,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                         FullScreen = 0;
                         showNormal();
                      }
+                     break;
        
                case Qt::Key_Space:      
                      keybd_buff[7] &= 0xFE; break;
