@@ -104,6 +104,16 @@ void Init_Z80Emu(void)
  *=========================================================================*/
 void do_fullreset()
 {
+        USHORT i = 0;
+
+        /* init RAM with random values -- just to remember the good old
+         days
+         */
+        srand(NULL);
+        // nice visual, but problematic to handle
+        for(i=0x4000; i<0x5B00; i++)
+           writebyte(i, rand()/256);
+
         BreakPoint = -1;
         TraceOn    = 0;
 
