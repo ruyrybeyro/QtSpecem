@@ -1,8 +1,30 @@
+# macOS system files
 .DS_Store
+
+# Windows system files
+Thumbs.db
+
+# Vim swap files
+*.swp
+
+# Build artifacts
 *.o
+*.obj
+*.so
+*.a
+*.dll
+*.dylib
+*.log
+
+# Qt build system files
 qrc_*
 moc_*
 Makefile
 .qmake.stash
+*.pro.user
+
+# Ignore QtSpecem binaries
+QtSpecem
+QtSpecem.exe
 QtSpecem.app
 
