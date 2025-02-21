@@ -13,8 +13,7 @@
  *                                                                         *
  * Non fatal error, just gives the message                                 * 								
  *=========================================================================*/
-void Warning(msg)
-const char * msg;
+void Warning(const char * msg)
 {
    // MessageBox(NULL, msg, "WARNING", MB_OK | MB_ICONSTOP);
 }
@@ -24,8 +23,7 @@ const char * msg;
  *                                                                         *
  * Critical error, reset the emulation                                     *
  *=========================================================================*/
-void Panic(msg)
-const char * msg;
+void Panic(const char * msg)
 {
    Warning(msg);
    do_reset();
