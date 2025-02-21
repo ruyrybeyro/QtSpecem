@@ -800,8 +800,7 @@ void DrawnWindow::dropEvent(QDropEvent *e)
 
     foreach (const QUrl &url, e->mimeData()->urls()) {
         QString fileName = url.toLocalFile();
-        const char * filename = fileName.toUtf8().constData();
-        open_sna(filename);
+        open_sna(fileName.toUtf8().constData());
         //QMessageBox msgBox;
         //msgBox.setText(filename);
         //msgBox.exec();

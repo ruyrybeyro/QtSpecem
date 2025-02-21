@@ -1,9 +1,9 @@
 
 QtSpecem 
-(C) 2020-2022 Rui Fernando Ferreira Ribeiro
+(C) 2020-2025 Rui Fernando Ferreira Ribeiro
 
 Z80A core emulation
-(C) 1991-2022 Rui Fernando Ferreira Ribeiro
+(C) 1991-2025 Rui Fernando Ferreira Ribeiro
 
 New Qt6/Qt5 ZX Spectrum emulator
 
