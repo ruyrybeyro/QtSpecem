@@ -5,6 +5,7 @@
  */
 
 #include <stdlib.h>
+#include <time.h>
 
 #include "../h/z80.h"
 #include "../h/iglobal.h"
@@ -109,7 +110,7 @@ void do_fullreset()
         /* init RAM with random values -- just to remember the good old
          days
          */
-        srand(NULL);
+	srand((unsigned int) time(NULL));
         // nice visual, but problematic to handle
         for(i=0x4000; i<0x5B00; i++)
            writebyte(i, rand()/256);
