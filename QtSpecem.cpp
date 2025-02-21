@@ -717,7 +717,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                    static int n = 0;
                    char s[200];
                        
-                   sprintf(s, "/tmp/w%04d.z80", n++);
+                   snprintf(s, sizeof(s), "/tmp/w%04d.z80", n++);
                    save_sna(s);
                    }
                    break;
@@ -727,7 +727,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                    static int n = 0;
                    char s[200];
 
-                   sprintf(s, "/tmp/w%04d.tap", n++);
+                   snprintf(s, sizeof(s), "/tmp/w%04d.tap", n++);
                    save_sna(s);
                    }
                    break;
@@ -738,7 +738,7 @@ void DrawnWindow::keyReleaseEvent(QKeyEvent *event)
                    char s[200];
                    QString fileName;
 
-                   sprintf(s, "/tmp/snap%04d.png", n++);
+                   snprintf(s, sizeof(s), "/tmp/snap%04d.png", n++);
                    fileName = QString::fromStdString(s);
 
                    background->save(fileName, NULL, 0);
