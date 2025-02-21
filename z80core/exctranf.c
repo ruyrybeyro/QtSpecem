@@ -200,6 +200,9 @@ void ldir()
       T(5);
       PC -= 2;
       WZ = PC + 1;
+      //  https://github.com/hoglet67/Z80Decoder/wiki/Undocumented-Flags
+      Z80_X = (PC & 0x2000) > 0;
+      Z80_Y = (PC & 0x0800) > 0;
    }
 }
 
@@ -262,6 +265,8 @@ void lddr()
       T(5);
       PC -= 2;
       WZ = PC + 1;
+      Z80_X = (PC & 0x2000) > 0;
+      Z80_Y = (PC & 0x0800) > 0;
    }
 }
 
@@ -307,6 +312,8 @@ void cpir()
       T(5);
       WZ = PC + 1;
       PC -= 2;
+      Z80_X = (PC & 0x2000) > 0;
+      Z80_Y = (PC & 0x0800) > 0;
    }
 }
 
@@ -348,6 +355,8 @@ void cpdr()
       T(5);
       WZ = PC + 1;
       PC -= 2;
+      Z80_X = (PC & 0x2000) > 0;
+      Z80_Y = (PC & 0x0800) > 0;
    }
 }
 
