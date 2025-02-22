@@ -29,6 +29,7 @@ protected:
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
     void dragMoveEvent(QDragMoveEvent *e) override;
+    void handleKeyEvent(QKeyEvent *event, bool pressed);
     #if !defined(_WIN32) && !defined(WIN32)
     #ifndef QT_NO_CONTEXTMENU
     void contextMenuEvent(QContextMenuEvent *event) override;
