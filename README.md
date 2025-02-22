@@ -41,7 +41,7 @@ Loading a TAP file introduces patches to the ROM. A ROM checksum will fail after
 
 COMPILING:
 
-You need to install the Qt5 development framework.
+You need to install the Qt development framework.
 
 qmake
 
