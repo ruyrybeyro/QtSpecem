@@ -13,6 +13,12 @@
 #include <QMenuBar>  
 #include <QtWidgets> 
 #include <QCoreApplication>
+#include <QtCore/QSysInfo>
+#include <QtCore/QVersionNumber>
+#include <QtCore/QDate>
+#include <QtWidgets/QMessageBox>
+
+#define QTSPECEM_VERSION "1.0.0"
 
 extern "C" void execute();
 extern "C" void do_reset();
@@ -233,12 +239,41 @@ void DrawnWindow::fullscreen()
 
 void DrawnWindow::about()
 {
-    //infoLabel->setText(tr("<b>Help|About</b>"));
-    QMessageBox::about(this, tr("About Menu"),
-            tr("QtSpecem\n" 
-               "https://github.com/ruyrybeyro/QtSpecem\n"
-               __DATE__));
+    // Determine compiler information
+    QString compilerInfo =
+#ifdef __GNUC__
+        tr("GCC %1.%2.%3")
+        .arg(__GNUC__).arg(__GNUC_MINOR__).arg(__GNUC_PATCHLEVEL__);
+#elif defined(_MSC_VER)
+        tr("MSVC %1").arg(_MSC_VER);
+#else
+        tr("Unknown Compiler");
+#endif
+
+    // Format the about text
+    QString aboutText = tr("<b>QtSpecEm %1</b><br>"
+                           "<a href='https://github.com/ruyrybeyro/QtSpecem'>GitHub Repository</a><br><br>"
+                           "Built on: %2<br>"
+                           "Qt Version: %3<br>"
+                           "OS: %4 %5<br>"
+                           "Compiler: %6")
+                        .arg(QTSPECEM_VERSION)
+                        .arg(__DATE__)
+                        .arg(qVersion())
+                        .arg(QSysInfo::prettyProductName())
+                        .arg(QSysInfo::kernelVersion())
+                        .arg(compilerInfo);
+
+    // Create a message box with clickable link support
+    QMessageBox msgBox;
+    msgBox.setWindowTitle(tr("About QtSpecEm"));
+    msgBox.setTextFormat(Qt::RichText);
+    msgBox.setText(aboutText);
+    msgBox.setTextInteractionFlags(Qt::TextBrowserInteraction);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
 }
+
 
 void DrawnWindow::createActions()
 {
