@@ -4,6 +4,6 @@ sudo apt install git build-essential libsdl2-dev
 sudo apt install qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-multimedia-dev
 git clone https://github.com/ruyrybeyro/QtSpecem
 cd ..
-./do_make.sh
+./do_qmake.sh 
 make
 
