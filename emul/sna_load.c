@@ -23,8 +23,8 @@
 #include <string.h>
 #include <ctype.h>
 //#include <dir.h>
-#include "../h/env.h"
-#include "../h/snap.h"
+#include "env.h"
+#include "snap.h"
 
 // as defined in WSpecem.c
 // A handle that identifies the main window

@@ -5,7 +5,7 @@ QtSpecem
 Z80A core emulation
 (C) 1991-2025 Rui Fernando Ferreira Ribeiro
 
-New Qt6/Qt5 ZX Spectrum emulator
+New Qt6 ZX Spectrum emulator
 
 It also has a companion debugger, https://github.com/ruyrybeyro/debugZ80
 
@@ -41,17 +41,57 @@ Loading a TAP file introduces patches to the ROM. A ROM checksum will fail after
 
 COMPILING:
 
-You need to install the Qt development framework.
+You need to install the Qt6 development framework.
 
-qmake
-
+brew install sdl2
+./do_qmake.sh
 make
 
 For Mac deployment in a self-contained executable:
 
 macdeployqt QtSpecem.app
 
-For cross-compiling for Windows in Ubuntu:
+
+For compiling in Linux:
+
+
+Redhat based
+
+
+sudo dnf install epel-release git
+
+sudo yum groupinstall "C Development Tools and Libraries"
+
+sudo yum install SDL2 SDL2-devel
+
+sudo yum install mesa-libGL-devel
+
+sudo dnf install qt6-qtbase qt6-qtbase-devel qt6-qtdeclarative qt6-qtdeclarative-devel qt6-qtmultimedia qt6-qtmultimedia-devel
+
+git clone https://github.com/ruyrybeyro/QtSpecem
+
+cd QtSpecem
+
+./do_qmake.sh
+
+make
+
+
+Debian/Ubuntu based
+
+sudo apt install git build-essential libsdl2-dev
+
+sudo apt install qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-multimedia-dev
+
+git clone https://github.com/ruyrybeyro/QtSpecem
+
+cd QtSpecem
+
+./do_make.sh
+
+make
+
+For cross-compiling for Windows in Ubuntu (obsolete):
 
 Installing compiler toolchain:
 
@@ -61,7 +101,7 @@ deb [arch=amd64] https://pkg.mxe.cc/repos/apt focal main
 
 apt update
 
-sudo apt install mxe-x86-64-w64-mingw64.static-qt5
+sudo apt install mxe-x86-64-w64-mingw64.static-qt6
 
 Compiling:
 
@@ -71,9 +111,7 @@ git clone https://github.com/ruyrybeyro/QtSpecem
 
 cd QtSpecem
 
-/usr/lib/mxe/usr/x86_64-w64-mingw32.static/qt5/bin/qmake
-
-make
+/usr/lib/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qmake
 
 If all goes well, a self contained binary is created at release/QtSpecem.exe 
 

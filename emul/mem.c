@@ -4,8 +4,8 @@
  *
  */
 
-//#include "../h/quirks.h"
-#include "../h/env.h"
+//#include "quirks.h"
+#include "env.h"
 
 //static UCHAR inited = 0;
 

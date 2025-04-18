@@ -5,7 +5,7 @@
  */
 
 
-#include "../h/env.h"
+#include "env.h"
 
 /*=========================================================================*
  *                            in_a_pn                                      *
@@ -99,8 +99,20 @@ void inir()
       PC -= 2;
       Z80_X = (PC & 0x2000) > 0;
       Z80_Y = (PC & 0x0800) > 0;
-      if( Z80_C )
-         Z80_H = Z80_N?(B & 0x0F) == 0x00:(B & 0x0F) == 0x0F;
+      //if( Z80_C ) {
+      //   Z80_H = Z80_N?(B & 0x0F) == 0x00:(B & 0x0F) == 0x0F;
+      //}
+      if (Z80_C) {
+          if (n & 0x80) {
+              Z80_P = Z80_P ^ parity((B - 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x00;
+          } else {
+              Z80_P = Z80_P ^ parity((B + 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x0F;
+          }
+      } else {
+          Z80_P = Z80_P ^ parity(B & 0x7) ^ 1;
+      }
    }
 }
 
@@ -140,6 +152,17 @@ void indr()
       PC -= 2;
       Z80_X = (PC & 0x2000) > 0;
       Z80_Y = (PC & 0x0800) > 0;
+      if (Z80_C) {
+          if (n & 0x80) {
+              Z80_P = Z80_P ^ parity((B - 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x00;
+          } else {
+              Z80_P = Z80_P ^ parity((B + 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x0F;
+          }
+      } else {
+          Z80_P = Z80_P ^ parity(B & 0x7) ^ 1;
+      }
    }
 }
 
@@ -220,6 +243,17 @@ void otir()
       PC -= 2;
       Z80_X = (PC & 0x2000) > 0;
       Z80_Y = (PC & 0x0800) > 0;
+      if (Z80_C) {
+          if (n & 0x80) {
+              Z80_P = Z80_P ^ parity((B - 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x00;
+          } else {
+              Z80_P = Z80_P ^ parity((B + 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x0F;
+          }
+      } else {
+          Z80_P = Z80_P ^ parity(B & 0x7) ^ 1;
+      }
    }
 }
 
@@ -256,6 +290,17 @@ void otdr()
       PC -= 2;
       Z80_X = (PC & 0x2000) > 0;
       Z80_Y = (PC & 0x0800) > 0;
+      if (Z80_C) {
+          if (n & 0x80) {
+              Z80_P = Z80_P ^ parity((B - 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x00;
+          } else {
+              Z80_P = Z80_P ^ parity((B + 1) & 0x7) ^ 1;
+              Z80_H = (B & 0x0F) == 0x0F;
+          }
+      } else {
+          Z80_P = Z80_P ^ parity(B & 0x7) ^ 1;
+      }
    }
 }
 

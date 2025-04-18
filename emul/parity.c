@@ -4,7 +4,7 @@
  *
  */
 
-#include "../h/z80.h"
+#include "z80.h"
 
 USHORT parity_table[256] =
 {

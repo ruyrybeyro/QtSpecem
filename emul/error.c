@@ -6,7 +6,7 @@
 
 #include <string.h>
 #include <ctype.h>
-#include "../h/env.h"
+#include "env.h"
 
 /*=========================================================================*
  *                            warning                                      *

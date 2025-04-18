@@ -1,0 +1,6 @@
+#ifndef MACOSAUDIOPERMISSION_H
+#define MACOSAUDIOPERMISSION_H
+
+bool requestMacOSAudioPermission();
+
+#endif // MACOSAUDIOPERMISSION_H

@@ -10,8 +10,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "../h/env.h"
-#include "../h/snap.h"
+#include "env.h"
+#include "snap.h"
 
 //extern HWND hwndKeyboard;
 

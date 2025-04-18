@@ -7,8 +7,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "../h/z80.h"
-#include "../h/iglobal.h"
+#include "z80.h"
+#include "iglobal.h"
 
 unsigned char * alloc_speccy_shared_ram(void);
 unsigned char * alloc_speccy_shared_vars(void);

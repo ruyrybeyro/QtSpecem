@@ -7,10 +7,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../h/env.h"
+#include "env.h"
 
 void border_updated(uint8_t color, unsigned long ticks);
 void init_pallete(void);
+void sdlBeeperPortWrite(uint8_t value, unsigned long ticks);
+unsigned long getTstates(void);
 
 /* keeps last out to ula --- current border colour */
 static UCHAR out_ula = 190;
@@ -56,6 +58,27 @@ void writeport(USHORT port, UCHAR value)
 		}
 	 else
 	  */
+    //if (!(port & 1)) {       // ULA
+    if ((port & 1)==0) {       // ULA
+
+        sdlBeeperPortWrite(value, clock_ticks);
+        // ULA Bits:  0-2:  border
+        //              3:  0 activates MIC output
+        //              4:  1 activates EAR / Internal Speaker
+
+        borderColor = value & 7;
+
+        border_updated(borderColor, clock_ticks);
+
+        out_ula = value;
+
+        // in side, not out
+        if (!(out_ula & 0x10))
+        //   out_ula |= 0x40;
+        //else
+        //   out_ula &= 0xBF;
+           return;
+    }
 if ( (port & 0xFF ) == (USHORT)0x00FF)
        {
           int i;
@@ -129,26 +152,6 @@ if ( (port & 0xFF ) == (USHORT)0x00FF)
        {
           set_palette(palettePos, value);
        }
-    }
-    else
-    if (!(port & 1)) {       // ULA
-
-        // ULA Bits:  0-2:  border
-        //              3:  0 activates MIC output
-        //              4:  1 activates EAR / Internal Speaker
-
-        borderColor = value & 7;
-
-        border_updated(borderColor, clock_ticks);
-
-        out_ula = value;
-       
-        // in side, not out
-        //if (out_ula & 0x10)
-        //   out_ula |= 0x40;
-        //else
-        //   out_ula &= 0xBF;
-                  
     }
 }
 
@@ -310,6 +313,11 @@ UCHAR readport(USHORT port)
         if (port == (USHORT)0xFF3B)
            value=out_ULAplus;
 	return(value);	// default: 0xff
+}
+
+unsigned long getTstates(void)
+{
+    return clock_ticks;
 }
 
 /* EOF: Ports.c */

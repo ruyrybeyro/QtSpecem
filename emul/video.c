@@ -8,7 +8,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "../h/env.h"
+#include "env.h"
 
 extern USHORT colours_8x1;
 extern USHORT hires;

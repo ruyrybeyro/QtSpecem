@@ -2,6 +2,9 @@
 <RCC version="1.0">
     <qresource>
         <file>rom/spectrum.rom</file>
+        <file>rom/tk90X_v3en.rom</file>
+        <file>rom/tc2048.rom</file>
+        <file>images/zx_keyboard.png</file>
     </qresource>
 </RCC>
 

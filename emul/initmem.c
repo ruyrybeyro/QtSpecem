@@ -11,7 +11,7 @@
 #include <string.h>
 //#include <process.h>
 #include <stdlib.h>
-#include "../h/env.h"
+#include "env.h"
 
 char szROMPath[260];
 char szHELPath[260];
