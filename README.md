@@ -87,7 +87,7 @@ git clone https://github.com/ruyrybeyro/QtSpecem
 
 cd QtSpecem
 
-./do_make.sh
+./do_qmake.sh
 
 make
 
