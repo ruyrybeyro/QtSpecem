@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = QtSpecem
-VERSION = 2.0.0  # Add proper versioning
+VERSION = 1.0.0  # Add proper versioning
 
 # Qt version compatibility check
 lessThan(QT_MAJOR_VERSION, 5) {
@@ -32,6 +32,101 @@ DEFINES += USE_SDL_AUDIO
 
 # Uncomment to disable deprecated Qt APIs before a specific version
 # DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000  # Disable APIs deprecated before Qt 6.0.0
+
+# ======== Static Build Option ========
+# Add option for static builds (enabled with CONFIG+=static on qmake command line)
+# Usage: qmake CONFIG+=static
+
+static {
+    message("Static build enabled - will try to build a standalone executable")
+    
+    # Force static linking
+    CONFIG += staticlib static
+    DEFINES += STATIC_BUILD
+    
+    # Specific settings for different platforms
+    win32 {
+        # Windows static build settings
+        QMAKE_LFLAGS += -static -static-libgcc -static-libstdc++
+        
+        # Static linking of Qt - needs static Qt libraries
+        QTPLUGIN.platforms = qwindows
+        QTPLUGIN.imageformats = qgif qico qjpeg
+        QTPLUGIN += qwindows
+        
+        # SDL2 static library
+        SDL2_PATH = $$(SDL2_DIR)
+        isEmpty(SDL2_PATH): SDL2_PATH = C:/SDL2
+        
+        # Use static SDL2 if available
+        exists($${SDL2_PATH}/lib/libSDL2.a) {
+            message("Using static SDL2 library")
+            LIBS -= -lSDL2
+            LIBS += $${SDL2_PATH}/lib/libSDL2.a -lwinmm -limm32 -lversion -loleaut32 -lole32 -lsetupapi
+        } else {
+            warning("Static SDL2 library not found! Will use dynamic linking for SDL2.")
+            warning("For fully static builds, compile SDL2 with --enable-static --disable-shared")
+        }
+    }
+    
+    unix:!macx {
+        # Linux static build settings
+        QMAKE_LFLAGS += -static-libgcc -static-libstdc++
+        
+        # Check if static Qt is available
+        !exists($$[QT_INSTALL_LIBS]/libQt5Core.a):!exists($$[QT_INSTALL_LIBS]/libQt6Core.a) {
+            warning("Static Qt libraries not found!")
+            warning("For static builds on Linux, you need to compile Qt with -static option")
+            warning("or install appropriate static packages for your distribution")
+        }
+        
+        # Try to find static SDL2 library
+        system("pkg-config --exists --static sdl2") {
+            message("Using static SDL2 library from pkg-config")
+            QMAKE_CFLAGS += $$system("pkg-config --static --cflags sdl2")
+            QMAKE_CXXFLAGS += $$system("pkg-config --static --cflags sdl2")
+            LIBS -= -lSDL2
+            LIBS += $$system("pkg-config --static --libs sdl2")
+        } else {
+            exists(/usr/lib*/libSDL2.a) {
+                message("Using static SDL2 library from system path")
+                LIBS -= -lSDL2
+                LIBS += -Wl,-Bstatic -lSDL2 -Wl,-Bdynamic
+                LIBS += -lX11 -lXext -lXcursor -lXrandr -lXfixes -lpthread -ldl
+            } else {
+                warning("Static SDL2 library not found! Will use dynamic linking for SDL2.")
+                warning("For fully static builds, install SDL2 static libraries (libsdl2-dev-static or similar)")
+            }
+        }
+    }
+    
+    macx {
+        warning("Static builds on macOS are limited due to platform restrictions")
+        warning("Will use -static-libgcc but many libraries must be dynamic on macOS")
+        
+        # Limited static linking for macOS
+        QMAKE_LFLAGS += -static-libgcc
+        
+        # Static frameworks are preferred but rare
+        exists(/Library/Frameworks/SDL2.framework) {
+            message("Using SDL2 framework (preferred method on macOS)")
+        } else {
+            exists($$BREWDIR_INTEL/lib/libSDL2.a) {
+                message("Using static SDL2 from Homebrew (Intel)")
+                LIBS -= -lSDL2
+                LIBS += $$BREWDIR_INTEL/lib/libSDL2.a
+            } else {
+                exists($$BREWDIR_ARM/lib/libSDL2.a) {
+                    message("Using static SDL2 from Homebrew (ARM)")
+                    LIBS -= -lSDL2
+                    LIBS += $$BREWDIR_ARM/lib/libSDL2.a
+                } else {
+                    warning("Static SDL2 library not found! Will use dynamic linking for SDL2.")
+                }
+            }
+        }
+    }
+}
 
 # ======== Build Information ========
 # Add build timestamp for version information
@@ -168,15 +263,67 @@ unix:!macx {
             error("SDL2 development package not found. Please install libsdl2-dev or equivalent.")
         }
     }
-    
-    # Deployment
-    target.path = /usr/local/bin
-    INSTALLS += target
 }
 
-# Windows specific SDL2 configuration
+# ======== Windows Deployment ========
+# Create a complete deployment package for Windows
+
 win32 {
-    # MinGW
+    # Basic output directory for deployment
+    CONFIG(debug, debug|release) {
+        DEPLOY_DIR = $$OUT_PWD/debug_deploy
+        TARGET_DIR = $$OUT_PWD/debug
+    } else {
+        DEPLOY_DIR = $$OUT_PWD/release_deploy
+        TARGET_DIR = $$OUT_PWD/release
+    }
+    
+    # Create deployment directory
+    QMAKE_POST_LINK += $$quote(cmd /c if not exist \"$${DEPLOY_DIR}\" mkdir \"$${DEPLOY_DIR}\"$$escape_expand(\n\t))
+    
+    # Copy the main executable
+    QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$${TARGET_DIR}\\$${TARGET}.exe\" \"$${DEPLOY_DIR}\\$${TARGET}.exe\"$$escape_expand(\n\t))
+    
+    # Deploy Qt dependencies using windeployqt
+    qtBinDir = $$[QT_INSTALL_BINS]
+    QMAKE_POST_LINK += $$quote(\"$${qtBinDir}\\windeployqt\" --no-translations --no-system-d3d-compiler \"$${DEPLOY_DIR}\\$${TARGET}.exe\"$$escape_expand(\n\t))
+    
+    # SDL2 DLL
+    SDL2_PATH = $$(SDL2_DIR)
+    isEmpty(SDL2_PATH): SDL2_PATH = C:/SDL2
+    
+    CONFIG(debug, debug|release) {
+        SDL2_DLL = $${SDL2_PATH}/bin/SDL2d.dll
+    } else {
+        SDL2_DLL = $${SDL2_PATH}/bin/SDL2.dll
+    }
+    
+    # Copy SDL2 DLL
+    QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$${SDL2_DLL}\" \"$${DEPLOY_DIR}\\\"$$escape_expand(\n\t))
+    
+    # Copy ROM directory
+    ROM_SRC = $$PWD/rom
+    ROM_DST = $$DEPLOY_DIR/rom
+    
+    # Convert to platform-specific paths
+    ROM_SRC_WIN = $$replace(ROM_SRC, /, \\)
+    ROM_DST_WIN = $$replace(ROM_DST, /, \\)
+    
+    QMAKE_POST_LINK += $$quote(cmd /c xcopy /s /y /i \"$${ROM_SRC_WIN}\" \"$${ROM_DST_WIN}\"$$escape_expand(\n\t))
+    
+    # Copy controller database if it exists
+    exists($$PWD/gamecontrollerdb.txt) {
+        QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$$PWD\\gamecontrollerdb.txt\" \"$${DEPLOY_DIR}\\gamecontrollerdb.txt\"$$escape_expand(\n\t))
+    }
+    
+    # Add a message in the build summary
+    CONFIG(debug, debug|release) {
+        message("Windows DEBUG deployment will be created in: $$DEPLOY_DIR")
+    } else {
+        message("Windows RELEASE deployment will be created in: $$DEPLOY_DIR")
+    }
+    
+    # MinGW - just compile and link, SDL2 path is set above
     mingw {
         # Try pkg-config first (safe way)
         packagesExist(sdl2) {
@@ -189,29 +336,90 @@ win32 {
         }
     } else {
         # MSVC
-        SDL2_PATH = $$(SDL2_DIR)
-        isEmpty(SDL2_PATH): SDL2_PATH = C:/SDL2
-        
         INCLUDEPATH += $${SDL2_PATH}/include
         
         CONFIG(debug, debug|release) {
             LIBS += -L$${SDL2_PATH}/lib -lSDL2d
-            SDL2_DLL = $${SDL2_PATH}/bin/SDL2d.dll
         } else {
             LIBS += -L$${SDL2_PATH}/lib -lSDL2
-            SDL2_DLL = $${SDL2_PATH}/bin/SDL2.dll
+        }
+    }
+}
+
+# ======== Linux Deployment ========
+# Normal build by default, with option for AppImage if linuxdeployqt is available
+unix:!macx {
+    # Normal build and installation
+    target.path = /usr/local/bin
+    INSTALLS += target
+    
+    # Copy ROM files
+    romfiles.files = rom/
+    romfiles.path = /usr/local/share/$$TARGET/
+    INSTALLS += romfiles
+    
+    # Copy controller database if available
+    exists($$PWD/gamecontrollerdb.txt) {
+        controllerdb.files = gamecontrollerdb.txt
+        controllerdb.path = /usr/local/share/$$TARGET/
+        INSTALLS += controllerdb
+    }
+    
+    # Check if linuxdeployqt is available and notify user about AppImage option
+    system("which linuxdeployqt > /dev/null") {
+        message("----------------------------------------")
+        message("linuxdeployqt detected - you can create an AppImage with:")
+        message("make appimage")
+        message("----------------------------------------")
+        
+        # Define deployment directory
+        APPDIR = $$OUT_PWD/AppDir
+        
+        # Create AppDir structure
+        appdir_create.commands = mkdir -p $$APPDIR/usr/{bin,lib,share/applications,share/icons/hicolor/256x256/apps,share/$$TARGET}
+        
+        # Copy executable
+        appdir_exe.depends = appdir_create
+        appdir_exe.commands = cp -f $$OUT_PWD/$$TARGET $$APPDIR/usr/bin/
+        
+        # Create desktop file if doesn't exist
+        !exists($$PWD/$$TARGET.desktop) {
+            appdir_desktop.depends = appdir_create
+            appdir_desktop.commands = echo "[Desktop Entry]\\nName=QtSpecem\\nExec=$$TARGET\\nIcon=$$TARGET\\nType=Application\\nCategories=Game;Emulator;" > $$APPDIR/usr/share/applications/$$TARGET.desktop
+        } else {
+            appdir_desktop.depends = appdir_create
+            appdir_desktop.commands = cp -f $$PWD/$$TARGET.desktop $$APPDIR/usr/share/applications/
         }
         
-        # DLL deployment
-        CONFIG(release, debug|release) {
-            SDL2_DEPLOY.files = $${SDL2_DLL}
-            SDL2_DEPLOY.path = $${OUT_PWD}/release
-            INSTALLS += SDL2_DEPLOY
+        # Create icon if doesn't exist
+        !exists($$PWD/icon.png) {
+            warning("No icon.png found - AppImage will use a default icon")
         } else {
-            SDL2_DEPLOY.files = $${SDL2_DLL}
-            SDL2_DEPLOY.path = $${OUT_PWD}/debug
-            INSTALLS += SDL2_DEPLOY
+            appdir_icon.depends = appdir_create
+            appdir_icon.commands = cp -f $$PWD/icon.png $$APPDIR/usr/share/icons/hicolor/256x256/apps/$$TARGET.png
         }
+        
+        # Copy ROM directory
+        appdir_rom.depends = appdir_create
+        appdir_rom.commands = cp -rf $$PWD/rom $$APPDIR/usr/share/$$TARGET/
+        
+        # Copy controller database if it exists
+        exists($$PWD/gamecontrollerdb.txt) {
+            appdir_controller.depends = appdir_create
+            appdir_controller.commands = cp -f $$PWD/gamecontrollerdb.txt $$APPDIR/usr/share/$$TARGET/
+        }
+        
+        # Run linuxdeployqt to create AppImage
+        appimage.depends = appdir_exe appdir_desktop appdir_icon appdir_rom appdir_controller
+        appimage.commands = linuxdeployqt $$APPDIR/usr/bin/$$TARGET -bundle-non-qt-libs -appimage
+        
+        # Mark as phony targets
+        QMAKE_EXTRA_TARGETS += appdir_create appdir_exe appdir_desktop appdir_icon appdir_rom appdir_controller appimage
+    } else {
+        message("----------------------------------------")
+        message("Note: Install linuxdeployqt from https://github.com/probonopd/linuxdeployqt")
+        message("to enable creation of portable AppImage packages.")
+        message("----------------------------------------")
     }
 }
 
@@ -273,14 +481,6 @@ exists($$PWD/gamecontrollerdb.txt) {
         controllerdb.path = $$OUT_PWD
         INSTALLS += controllerdb
     }
-    
-    win32 {
-        CONFIG(release, debug|release) {
-            QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$$PWD\\gamecontrollerdb.txt\" \"$$OUT_PWD\\release\\gamecontrollerdb.txt\"$$escape_expand(\n\t))
-        } else {
-            QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$$PWD\\gamecontrollerdb.txt\" \"$$OUT_PWD\\debug\\gamecontrollerdb.txt\"$$escape_expand(\n\t))
-        }
-    }
 }
 
 # ======== Compiler settings ========
@@ -318,23 +518,6 @@ unix:!macx {
     INSTALLS += romfiles
 }
 
-win32 {
-    # Use Qt's path handling for Windows
-    ROM_SRC = $$PWD/rom
-    ROM_DST = $$OUT_PWD/rom
-    
-    # Convert to platform-specific paths
-    ROM_SRC_WIN = $$replace(ROM_SRC, /, \\)
-    ROM_DST_WIN = $$replace(ROM_DST, /, \\)
-    
-    # Add deployment step
-    CONFIG(release, debug|release) {
-        QMAKE_POST_LINK += $$quote(cmd /c xcopy /s /y /i $${ROM_SRC_WIN} $${ROM_DST_WIN}$$escape_expand(\n\t))
-    } else {
-        QMAKE_POST_LINK += $$quote(cmd /c xcopy /s /y /i $${ROM_SRC_WIN} $${ROM_DST_WIN}$$escape_expand(\n\t))
-    }
-}
-
 # ======== Platform-Specific App Icons ========
 # Basic application icon handling for each platform
 macx:ICON = icon.icns
@@ -370,7 +553,10 @@ cleandist.commands = $$DEL_CMD Makefile && \
 deepclean.commands = $(MAKE) cleandist && \
                     $$RMDIR_CMD debug && \
                     $$RMDIR_CMD release && \
-                    $$RMDIR_CMD $$TARGET".app"
+                    $$RMDIR_CMD $$TARGET".app" && \
+                    $$RMDIR_CMD debug_deploy && \
+                    $$RMDIR_CMD release_deploy && \
+                    $$RMDIR_CMD AppDir
 
 # Add to QMAKE_EXTRA_TARGETS
 QMAKE_EXTRA_TARGETS += cleandist deepclean
@@ -387,6 +573,7 @@ message("Source directory: $$PWD")
 message("Output directory: $$OUT_PWD")
 message("Platform: $$QMAKESPEC")
 message("Added custom clean targets: 'make cleandist' and 'make deepclean'")
+message("Static build mode available: 'qmake CONFIG+=static'")
 message("----------------------------------------")
 
 # ======== Directories for headers and sources ========
