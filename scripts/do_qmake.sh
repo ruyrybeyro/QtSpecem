@@ -1,4 +1,4 @@
-#!/bin/bash -v
+#!/bin/bash
 
 # Detect OS
 OS="$(uname)"
