@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = QtSpecem
-VERSION = 2.0.0  # Add proper versioning
+VERSION = 1.0.0  # Add proper versioning
 
 # Qt version compatibility check
 lessThan(QT_MAJOR_VERSION, 5) {
@@ -21,11 +21,20 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 
 # Basic configuration
 QT += core gui widgets
+greaterThan(QT_MAJOR_VERSION, 5): QT += multimedia
+lessThan(QT_MAJOR_VERSION, 6): QT += multimedia
 CONFIG += c++11 app_bundle
 INCLUDEPATH += h
 
-# Application icon
-ICON = icon.icns
+# Platform-Specific App Icons
+macx:ICON = icon.icns
+win32 {
+    exists($$PWD/icon.ico) {
+        RC_ICONS = icon.ico
+    } else {
+        warning("icon.ico not found! The application will use the default Windows icon.")
+    }
+}
 
 # Define use of SDL Audio
 DEFINES += USE_SDL_AUDIO
@@ -271,26 +280,33 @@ unix:!macx {
 win32 {
     # Basic output directory for deployment
     CONFIG(debug, debug|release) {
-        DEPLOY_DIR = $$OUT_PWD/debug_deploy
-        TARGET_DIR = $$OUT_PWD/debug
+        DEPLOY_DIR = $$shell_path($$OUT_PWD/debug_deploy)
+        TARGET_DIR = $$shell_path($$OUT_PWD/debug)
     } else {
-        DEPLOY_DIR = $$OUT_PWD/release_deploy
-        TARGET_DIR = $$OUT_PWD/release
+        DEPLOY_DIR = $$shell_path($$OUT_PWD/release_deploy)
+        TARGET_DIR = $$shell_path($$OUT_PWD/release)
     }
     
-    # Create deployment directory
-    QMAKE_POST_LINK += $$quote(cmd /c if not exist \"$${DEPLOY_DIR}\" mkdir \"$${DEPLOY_DIR}\"$$escape_expand(\n\t))
+    # Create directory (safer approach)
+    mkdirCmd = "$$QMAKE_CHK_DIR_EXISTS \"$${DEPLOY_DIR}\" || $$QMAKE_MKDIR \"$${DEPLOY_DIR}\""
+    QMAKE_POST_LINK += $$mkdirCmd$$escape_expand(\n\t)
     
-    # Copy the main executable
-    QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$${TARGET_DIR}\\$${TARGET}.exe\" \"$${DEPLOY_DIR}\\$${TARGET}.exe\"$$escape_expand(\n\t))
+    # Copy the main executable (safer approach)
+    exeSource = $${TARGET_DIR}/$${TARGET}.exe
+    exeTarget = $${DEPLOY_DIR}/$${TARGET}.exe
+    exeSource = $$replace(exeSource, /, \\)
+    exeTarget = $$replace(exeTarget, /, \\)
+    QMAKE_POST_LINK += $$QMAKE_COPY \"$${exeSource}\" \"$${exeTarget}\"$$escape_expand(\n\t)
     
     # Deploy Qt dependencies using windeployqt
-    qtBinDir = $$[QT_INSTALL_BINS]
-    QMAKE_POST_LINK += $$quote(\"$${qtBinDir}\\windeployqt\" --no-translations --no-system-d3d-compiler \"$${DEPLOY_DIR}\\$${TARGET}.exe\"$$escape_expand(\n\t))
+    qtBinDir = $$shell_path($$[QT_INSTALL_BINS])
+    windeployqtCmd = \"$${qtBinDir}/windeployqt\" --no-translations --no-system-d3d-compiler \"$${exeTarget}\"
+    QMAKE_POST_LINK += $$windeployqtCmd$$escape_expand(\n\t)
     
     # SDL2 DLL
     SDL2_PATH = $$(SDL2_DIR)
     isEmpty(SDL2_PATH): SDL2_PATH = C:/SDL2
+    SDL2_PATH = $$shell_path($${SDL2_PATH})
     
     CONFIG(debug, debug|release) {
         SDL2_DLL = $${SDL2_PATH}/bin/SDL2d.dll
@@ -298,22 +314,38 @@ win32 {
         SDL2_DLL = $${SDL2_PATH}/bin/SDL2.dll
     }
     
+    SDL2_DLL = $$replace(SDL2_DLL, /, \\)
+    SDL2_TARGET = $${DEPLOY_DIR}
+    SDL2_TARGET = $$replace(SDL2_TARGET, /, \\)
+    
     # Copy SDL2 DLL
-    QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$${SDL2_DLL}\" \"$${DEPLOY_DIR}\\\"$$escape_expand(\n\t))
+    QMAKE_POST_LINK += $$QMAKE_COPY \"$${SDL2_DLL}\" \"$${SDL2_TARGET}\\\"$$escape_expand(\n\t)
     
     # Copy ROM directory
-    ROM_SRC = $$PWD/rom
-    ROM_DST = $$DEPLOY_DIR/rom
-    
-    # Convert to platform-specific paths
-    ROM_SRC_WIN = $$replace(ROM_SRC, /, \\)
-    ROM_DST_WIN = $$replace(ROM_DST, /, \\)
-    
-    QMAKE_POST_LINK += $$quote(cmd /c xcopy /s /y /i \"$${ROM_SRC_WIN}\" \"$${ROM_DST_WIN}\"$$escape_expand(\n\t))
+    exists($$PWD/rom) {
+        ROM_SRC = $$shell_path($$PWD/rom)
+        ROM_DST = $$shell_path($${DEPLOY_DIR}/rom)
+        
+        # Convert to platform-specific paths
+        ROM_SRC_WIN = $$replace(ROM_SRC, /, \\)
+        ROM_DST_WIN = $$replace(ROM_DST, /, \\)
+        
+        mkromdir = "$$QMAKE_CHK_DIR_EXISTS \"$${ROM_DST_WIN}\" || $$QMAKE_MKDIR \"$${ROM_DST_WIN}\""
+        QMAKE_POST_LINK += $$mkromdir$$escape_expand(\n\t)
+        
+        # Use robocopy instead of xcopy for better compatibility
+        QMAKE_POST_LINK += robocopy \"$${ROM_SRC_WIN}\" \"$${ROM_DST_WIN}\" /E /NFL /NDL /NJH /NJS /nc /ns /np || exit 0$$escape_expand(\n\t)
+    } else {
+        warning("ROM directory not found! Deployment will not include ROM files.")
+    }
     
     # Copy controller database if it exists
     exists($$PWD/gamecontrollerdb.txt) {
-        QMAKE_POST_LINK += $$quote(cmd /c copy /y \"$$PWD\\gamecontrollerdb.txt\" \"$${DEPLOY_DIR}\\gamecontrollerdb.txt\"$$escape_expand(\n\t))
+        DB_SRC = $$shell_path($$PWD/gamecontrollerdb.txt)
+        DB_DST = $$shell_path($${DEPLOY_DIR}/gamecontrollerdb.txt)
+        DB_SRC = $$replace(DB_SRC, /, \\)
+        DB_DST = $$replace(DB_DST, /, \\)
+        QMAKE_POST_LINK += $$QMAKE_COPY \"$${DB_SRC}\" \"$${DB_DST}\"$$escape_expand(\n\t)
     }
     
     # Add a message in the build summary
@@ -519,9 +551,7 @@ unix:!macx {
 }
 
 # ======== Platform-Specific App Icons ========
-# Basic application icon handling for each platform
-macx:ICON = icon.icns
-win32:RC_ICONS = icon.ico
+# Linux icon (only used if icon.png exists)
 unix:!macx {
     # Simple icon for Linux - assumes you have icon.png in your project
     exists($$PWD/icon.png) {
