@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = QtSpecem
-VERSION = 2.0.0  # Add proper versioning
+VERSION = 2.0.0  # Updated version number
 
 # Qt version compatibility check
 lessThan(QT_MAJOR_VERSION, 5) {
@@ -21,8 +21,15 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 
 # Basic configuration
 QT += core gui widgets
+# No multimedia needed since we're using SDL
 CONFIG += c++11 app_bundle
 INCLUDEPATH += h
+
+# Default to release build
+CONFIG += release
+
+# Explicitly disable debug build unless specified
+CONFIG -= debug debug_and_release
 
 # Platform-Specific App Icons
 macx:ICON = icon.icns
@@ -164,29 +171,20 @@ win32 {
 }
 
 # ======== Better Multiple Configuration Support ========
-# Support explicit build modes with separate target names
+# Support explicit debug mode with separate target names when explicitly requested
 CONFIG(debug, debug|release) {
     message("Debug build")
     TARGET = $${TARGET}_debug
+    DEFINES += DEBUG QT_DEBUG
     
     # Add debug suffix to output files
     macx {
         # For macOS bundles
         QMAKE_APPLICATION_BUNDLE_NAME = $${TARGET}
-    } else {
-        # For other platforms
-        TARGET_OUTPUT_BASENAME = $${TARGET}
     }
-}
-
-# ======== Build Configuration ========
-# Debug and Release configurations
-CONFIG(debug, debug|release) {
-    DEFINES += DEBUG QT_DEBUG
-    message("Building in DEBUG mode")
 } else {
+    message("Release build")
     DEFINES += QT_NO_DEBUG NDEBUG RELEASE
-    message("Building in RELEASE mode")
     
     # Enable optimizations for release builds
     *g++*|*clang* {
@@ -272,86 +270,61 @@ unix:!macx {
     }
 }
 
-# ======== Windows Deployment ========
-# Create a complete deployment package for Windows
-
+# Windows Deployment - fixed path handling
 win32 {
-    # Basic output directory for deployment
+    # Set deployment directories using native Windows paths
     CONFIG(debug, debug|release) {
-        DEPLOY_DIR = $$shell_path($$OUT_PWD/debug_deploy)
-        TARGET_DIR = $$shell_path($$OUT_PWD/debug)
+        TARGET_FILE = $${TARGET}_debug.exe
     } else {
-        DEPLOY_DIR = $$shell_path($$OUT_PWD/release_deploy)
-        TARGET_DIR = $$shell_path($$OUT_PWD/release)
+        TARGET_FILE = $${TARGET}.exe
     }
     
-    # Create directory (safer approach)
-    mkdirCmd = "$$QMAKE_CHK_DIR_EXISTS \"$${DEPLOY_DIR}\" || $$QMAKE_MKDIR \"$${DEPLOY_DIR}\""
-    QMAKE_POST_LINK += $$mkdirCmd$$escape_expand(\n\t)
+    # Get absolute paths and convert to Windows format
+    OUT_DIR_WIN = $$system_path($$OUT_PWD)
+    DEPLOY_DIR_WIN = $$system_path($$OUT_PWD/deploy)
+    TARGET_PATH_WIN = $$system_path($$OUT_PWD/$${TARGET_FILE})
     
-    # Copy the main executable (safer approach)
-    exeSource = $${TARGET_DIR}/$${TARGET}.exe
-    exeTarget = $${DEPLOY_DIR}/$${TARGET}.exe
-    exeSource = $$replace(exeSource, /, \\)
-    exeTarget = $$replace(exeTarget, /, \\)
-    QMAKE_POST_LINK += $$QMAKE_COPY \"$${exeSource}\" \"$${exeTarget}\"$$escape_expand(\n\t)
+    # Create deployment directory with Windows commands
+    QMAKE_POST_LINK += if not exist \"$$DEPLOY_DIR_WIN\" mkdir \"$$DEPLOY_DIR_WIN\"$$escape_expand(\n\t)
     
-    # Deploy Qt dependencies using windeployqt
-    qtBinDir = $$shell_path($$[QT_INSTALL_BINS])
-    windeployqtCmd = \"$${qtBinDir}/windeployqt\" --no-translations --no-system-d3d-compiler \"$${exeTarget}\"
-    QMAKE_POST_LINK += $$windeployqtCmd$$escape_expand(\n\t)
+    # Copy executable
+    QMAKE_POST_LINK += copy /y \"$$TARGET_PATH_WIN\" \"$$DEPLOY_DIR_WIN\\$${TARGET_FILE}\"$$escape_expand(\n\t)
+    
+    # Run windeployqt
+    QMAKE_POST_LINK += \"$$[QT_INSTALL_BINS]\\windeployqt\" \"$$DEPLOY_DIR_WIN\\$${TARGET_FILE}\"$$escape_expand(\n\t)
     
     # SDL2 DLL
     SDL2_PATH = $$(SDL2_DIR)
     isEmpty(SDL2_PATH): SDL2_PATH = C:/SDL2
-    SDL2_PATH = $$shell_path($${SDL2_PATH})
     
     CONFIG(debug, debug|release) {
-        SDL2_DLL = $${SDL2_PATH}/bin/SDL2d.dll
+        SDL2_DLL = $$system_path($${SDL2_PATH}/bin/SDL2d.dll)
     } else {
-        SDL2_DLL = $${SDL2_PATH}/bin/SDL2.dll
+        SDL2_DLL = $$system_path($${SDL2_PATH}/bin/SDL2.dll)
     }
     
-    SDL2_DLL = $$replace(SDL2_DLL, /, \\)
-    SDL2_TARGET = $${DEPLOY_DIR}
-    SDL2_TARGET = $$replace(SDL2_TARGET, /, \\)
-    
     # Copy SDL2 DLL
-    QMAKE_POST_LINK += $$QMAKE_COPY \"$${SDL2_DLL}\" \"$${SDL2_TARGET}\\\"$$escape_expand(\n\t)
+    QMAKE_POST_LINK += copy /y \"$$SDL2_DLL\" \"$$DEPLOY_DIR_WIN\\\"$$escape_expand(\n\t)
     
     # Copy ROM directory
     exists($$PWD/rom) {
-        ROM_SRC = $$shell_path($$PWD/rom)
-        ROM_DST = $$shell_path($${DEPLOY_DIR}/rom)
+        ROM_SRC_WIN = $$system_path($$PWD/rom)
+        ROM_DST_WIN = $$system_path($$DEPLOY_DIR_WIN/rom)
         
-        # Convert to platform-specific paths
-        ROM_SRC_WIN = $$replace(ROM_SRC, /, \\)
-        ROM_DST_WIN = $$replace(ROM_DST, /, \\)
-        
-        mkromdir = "$$QMAKE_CHK_DIR_EXISTS \"$${ROM_DST_WIN}\" || $$QMAKE_MKDIR \"$${ROM_DST_WIN}\""
-        QMAKE_POST_LINK += $$mkromdir$$escape_expand(\n\t)
-        
-        # Use robocopy instead of xcopy for better compatibility
-        QMAKE_POST_LINK += robocopy \"$${ROM_SRC_WIN}\" \"$${ROM_DST_WIN}\" /E /NFL /NDL /NJH /NJS /nc /ns /np || exit 0$$escape_expand(\n\t)
+        QMAKE_POST_LINK += if not exist \"$$ROM_DST_WIN\" mkdir \"$$ROM_DST_WIN\"$$escape_expand(\n\t)
+        QMAKE_POST_LINK += xcopy \"$$ROM_SRC_WIN\" \"$$ROM_DST_WIN\" /E /Y /I$$escape_expand(\n\t)
     } else {
         warning("ROM directory not found! Deployment will not include ROM files.")
     }
     
     # Copy controller database if it exists
     exists($$PWD/gamecontrollerdb.txt) {
-        DB_SRC = $$shell_path($$PWD/gamecontrollerdb.txt)
-        DB_DST = $$shell_path($${DEPLOY_DIR}/gamecontrollerdb.txt)
-        DB_SRC = $$replace(DB_SRC, /, \\)
-        DB_DST = $$replace(DB_DST, /, \\)
-        QMAKE_POST_LINK += $$QMAKE_COPY \"$${DB_SRC}\" \"$${DB_DST}\"$$escape_expand(\n\t)
+        DB_SRC_WIN = $$system_path($$PWD/gamecontrollerdb.txt)
+        DB_DST_WIN = $$system_path($$DEPLOY_DIR_WIN/gamecontrollerdb.txt)
+        QMAKE_POST_LINK += copy /y \"$$DB_SRC_WIN\" \"$$DB_DST_WIN\"$$escape_expand(\n\t)
     }
     
-    # Add a message in the build summary
-    CONFIG(debug, debug|release) {
-        message("Windows DEBUG deployment will be created in: $$DEPLOY_DIR")
-    } else {
-        message("Windows RELEASE deployment will be created in: $$DEPLOY_DIR")
-    }
+    message("Windows deployment will be created in: $$DEPLOY_DIR_WIN")
     
     # MinGW - just compile and link, SDL2 path is set above
     mingw {
@@ -584,6 +557,7 @@ deepclean.commands = $(MAKE) cleandist && \
                     $$RMDIR_CMD $$TARGET".app" && \
                     $$RMDIR_CMD debug_deploy && \
                     $$RMDIR_CMD release_deploy && \
+                    $$RMDIR_CMD deploy && \
                     $$RMDIR_CMD AppDir
 
 # Add to QMAKE_EXTRA_TARGETS
