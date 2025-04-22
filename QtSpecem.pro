@@ -68,9 +68,25 @@ static {
         QTPLUGIN.imageformats = qgif qico qjpeg
         QTPLUGIN += qwindows
         
-        # SDL2 static library
-        SDL2_PATH = $$(SDL2_DIR)
-        isEmpty(SDL2_PATH): SDL2_PATH = $$PWD/SDL2
+        # SDL2 static library - use environment variable if set
+        isEmpty(SDL2_PATH) {
+            SDL2_LOCATIONS = $$PWD/SDL2 $$(ProgramFiles)/SDL2 $$(MINGW_HOME)/SDL2
+            for(location, SDL2_LOCATIONS) {
+                exists($${location}/include/SDL.h) {
+                    SDL2_PATH = $$location
+                    message("Found SDL2 at: $$SDL2_PATH")
+                    break()
+                }
+            }
+            
+            # If still not found, show error and guidance
+            isEmpty(SDL2_PATH) {
+                error("SDL2 development package not found. Please either:")
+                error("1. Set the SDL2_DIR environment variable to your SDL2 installation directory")
+                error("2. Install SDL2 via your package manager so it can be found with pkg-config")
+                error("3. Place SDL2 in one of the standard locations (./SDL2, Program Files/SDL2, etc.)")
+            }
+        }
         
         # Use static SDL2 if available
         exists($${SDL2_PATH}/lib/libSDL2.a) {
@@ -270,9 +286,51 @@ unix:!macx {
     }
 }
 
-# Windows Deployment - fixed path handling
+# Windows SDL2 configuration
 win32 {
-    # Set deployment directories using native Windows paths
+    # Check for SDL2 environment variable first
+    SDL2_PATH = $$(SDL2_DIR)
+    
+    # If environment variable not set, try pkg-config
+    isEmpty(SDL2_PATH) {
+        packagesExist(sdl2) {
+            message("Found SDL2 via pkg-config")
+            PKGCONFIG += sdl2
+        } else {
+            # Try common installation locations
+            SDL2_LOCATIONS = $$PWD/SDL2 $$(ProgramFiles)/SDL2 $$(MINGW_HOME)/SDL2
+            for(location, SDL2_LOCATIONS) {
+                exists($${location}/include/SDL.h) {
+                    SDL2_PATH = $$location
+                    message("Found SDL2 at: $$SDL2_PATH")
+                    break()
+                }
+            }
+            
+            # If still not found, show error and guidance
+            isEmpty(SDL2_PATH) {
+                error("SDL2 development package not found. Please either:")
+                error("1. Set the SDL2_DIR environment variable to your SDL2 installation directory")
+                error("2. Install SDL2 via your package manager so it can be found with pkg-config")
+                error("3. Place SDL2 in one of the standard locations (./SDL2, Program Files/SDL2, etc.)")
+            }
+        }
+    }
+    
+    # Set up include and library paths if not using pkg-config
+    !packagesExist(sdl2) {
+        INCLUDEPATH += $${SDL2_PATH}/include
+        
+        CONFIG(debug, debug|release) {
+            LIBS += -L$${SDL2_PATH}/lib -lSDL2d
+            SDL2_DLL = $${SDL2_PATH}/bin/SDL2d.dll
+        } else {
+            LIBS += -L$${SDL2_PATH}/lib -lSDL2
+            SDL2_DLL = $${SDL2_PATH}/bin/SDL2.dll
+        }
+    }
+    
+    # Windows deployment setup
     CONFIG(debug, debug|release) {
         TARGET_FILE = $${TARGET}_debug.exe
     } else {
@@ -291,17 +349,10 @@ win32 {
     # Add command for windeployqt (no shell interpretation)
     QMAKE_POST_LINK += && cmd /c \"$$replace(shell_path($$[QT_INSTALL_BINS]/windeployqt), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\\$${TARGET_FILE}\"
     
-    # SDL2 DLL copy
-    SDL2_PATH = $$(SDL2_DIR)
-    isEmpty(SDL2_PATH): SDL2_PATH = $$PWD/SDL2
-    
-    CONFIG(debug, debug|release) {
-        SDL2_DLL = $$shell_path($${SDL2_PATH}/bin/SDL2d.dll)
-    } else {
-        SDL2_DLL = $$shell_path($${SDL2_PATH}/bin/SDL2.dll)
+    # Copy SDL2 DLL if we found it and we're not using pkg-config
+    !isEmpty(SDL2_DLL):!packagesExist(sdl2) {
+        QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(shell_path($$SDL2_DLL), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\"
     }
-    
-    QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(SDL2_DLL, /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\"
     
     # Copy ROM directory if it exists
     exists($$PWD/rom) {
@@ -315,15 +366,6 @@ win32 {
     }
     
     message("Windows deployment will be created in: $$DEPLOY_DIR")
-    
-    # SDL2 path configuration for MinGW
-    INCLUDEPATH += $$SDL2_PATH/include
-    
-    CONFIG(debug, debug|release) {
-        LIBS += -L$$SDL2_PATH/lib -lSDL2d
-    } else {
-        LIBS += -L$$SDL2_PATH/lib -lSDL2
-    }
 }
 
 # ======== Linux Deployment ========
