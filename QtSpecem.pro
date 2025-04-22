@@ -70,7 +70,7 @@ static {
         
         # SDL2 static library
         SDL2_PATH = $$(SDL2_DIR)
-        isEmpty(SDL2_PATH): SDL2_PATH = C:/SDL2
+        isEmpty(SDL2_PATH): SDL2_PATH = $$PWD/SDL2
         
         # Use static SDL2 if available
         exists($${SDL2_PATH}/lib/libSDL2.a) {
@@ -279,73 +279,50 @@ win32 {
         TARGET_FILE = $${TARGET}.exe
     }
     
-    # Get absolute paths and convert to Windows format
-    OUT_DIR_WIN = $$system_path($$OUT_PWD)
-    DEPLOY_DIR_WIN = $$system_path($$OUT_PWD/deploy)
-    TARGET_PATH_WIN = $$system_path($$OUT_PWD/$${TARGET_FILE})
+    # We need to use native Windows commands for MinGW
+    DEPLOY_DIR = $$shell_path($$OUT_PWD/deploy)
     
-    # Create deployment directory with Windows commands
-    QMAKE_POST_LINK += if not exist \"$$DEPLOY_DIR_WIN\" mkdir \"$$DEPLOY_DIR_WIN\"$$escape_expand(\n\t)
+    # Use plain Windows commands without shell interpretation
+    QMAKE_POST_LINK = cmd /c if not exist \"$$replace(DEPLOY_DIR, /, \\)\" mkdir \"$$replace(DEPLOY_DIR, /, \\)\"
     
-    # Copy executable
-    QMAKE_POST_LINK += copy /y \"$$TARGET_PATH_WIN\" \"$$DEPLOY_DIR_WIN\\$${TARGET_FILE}\"$$escape_expand(\n\t)
+    # Add command to copy the executable - use multiple post-link commands instead of &&
+    QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(shell_path($$OUT_PWD/$${TARGET_FILE}), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\\$${TARGET_FILE}\"
     
-    # Run windeployqt
-    QMAKE_POST_LINK += \"$$[QT_INSTALL_BINS]\\windeployqt\" \"$$DEPLOY_DIR_WIN\\$${TARGET_FILE}\"$$escape_expand(\n\t)
+    # Add command for windeployqt (no shell interpretation)
+    QMAKE_POST_LINK += && cmd /c \"$$replace(shell_path($$[QT_INSTALL_BINS]/windeployqt), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\\$${TARGET_FILE}\"
     
-    # SDL2 DLL
+    # SDL2 DLL copy
     SDL2_PATH = $$(SDL2_DIR)
-    isEmpty(SDL2_PATH): SDL2_PATH = C:/SDL2
+    isEmpty(SDL2_PATH): SDL2_PATH = $$PWD/SDL2
     
     CONFIG(debug, debug|release) {
-        SDL2_DLL = $$system_path($${SDL2_PATH}/bin/SDL2d.dll)
+        SDL2_DLL = $$shell_path($${SDL2_PATH}/bin/SDL2d.dll)
     } else {
-        SDL2_DLL = $$system_path($${SDL2_PATH}/bin/SDL2.dll)
+        SDL2_DLL = $$shell_path($${SDL2_PATH}/bin/SDL2.dll)
     }
     
-    # Copy SDL2 DLL
-    QMAKE_POST_LINK += copy /y \"$$SDL2_DLL\" \"$$DEPLOY_DIR_WIN\\\"$$escape_expand(\n\t)
+    QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(SDL2_DLL, /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\"
     
-    # Copy ROM directory
+    # Copy ROM directory if it exists
     exists($$PWD/rom) {
-        ROM_SRC_WIN = $$system_path($$PWD/rom)
-        ROM_DST_WIN = $$system_path($$DEPLOY_DIR_WIN/rom)
-        
-        QMAKE_POST_LINK += if not exist \"$$ROM_DST_WIN\" mkdir \"$$ROM_DST_WIN\"$$escape_expand(\n\t)
-        QMAKE_POST_LINK += xcopy \"$$ROM_SRC_WIN\" \"$$ROM_DST_WIN\" /E /Y /I$$escape_expand(\n\t)
-    } else {
-        warning("ROM directory not found! Deployment will not include ROM files.")
+        QMAKE_POST_LINK += && cmd /c if not exist \"$$replace(DEPLOY_DIR, /, \\)\\rom\" mkdir \"$$replace(DEPLOY_DIR, /, \\)\\rom\"
+        QMAKE_POST_LINK += && cmd /c xcopy /s /y /i \"$$replace(shell_path($$PWD/rom), /, \\)\\*\" \"$$replace(DEPLOY_DIR, /, \\)\\rom\"
     }
     
     # Copy controller database if it exists
     exists($$PWD/gamecontrollerdb.txt) {
-        DB_SRC_WIN = $$system_path($$PWD/gamecontrollerdb.txt)
-        DB_DST_WIN = $$system_path($$DEPLOY_DIR_WIN/gamecontrollerdb.txt)
-        QMAKE_POST_LINK += copy /y \"$$DB_SRC_WIN\" \"$$DB_DST_WIN\"$$escape_expand(\n\t)
+        QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(shell_path($$PWD/gamecontrollerdb.txt), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\\gamecontrollerdb.txt\"
     }
     
-    message("Windows deployment will be created in: $$DEPLOY_DIR_WIN")
+    message("Windows deployment will be created in: $$DEPLOY_DIR")
     
-    # MinGW - just compile and link, SDL2 path is set above
-    mingw {
-        # Try pkg-config first (safe way)
-        packagesExist(sdl2) {
-            message("Found SDL2 via pkg-config")
-            PKGCONFIG += sdl2
-        } else {
-            # Fallback to environment variable
-            INCLUDEPATH += $$(MINGW_HOME)/include/SDL2
-            LIBS += -L$$(MINGW_HOME)/lib -lSDL2
-        }
+    # SDL2 path configuration for MinGW
+    INCLUDEPATH += $$SDL2_PATH/include
+    
+    CONFIG(debug, debug|release) {
+        LIBS += -L$$SDL2_PATH/lib -lSDL2d
     } else {
-        # MSVC
-        INCLUDEPATH += $${SDL2_PATH}/include
-        
-        CONFIG(debug, debug|release) {
-            LIBS += -L$${SDL2_PATH}/lib -lSDL2d
-        } else {
-            LIBS += -L$${SDL2_PATH}/lib -lSDL2
-        }
+        LIBS += -L$$SDL2_PATH/lib -lSDL2
     }
 }
 
