@@ -44,7 +44,9 @@ COMPILING:
 You need to install the Qt6 development framework.
 
 brew install sdl2
-./do_qmake.sh
+
+qmake    # or ./do_qmake
+
 make
 
 For Mac deployment in a self-contained executable:
@@ -72,7 +74,7 @@ git clone https://github.com/ruyrybeyro/QtSpecem
 
 cd QtSpecem
 
-./do_qmake.sh
+qmake # or ./scripts/do_qmake.sh
 
 make
 
@@ -87,7 +89,7 @@ git clone https://github.com/ruyrybeyro/QtSpecem
 
 cd QtSpecem
 
-./do_qmake.sh
+qmake # or ./do_qmake.sh
 
 make
 
