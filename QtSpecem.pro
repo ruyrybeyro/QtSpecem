@@ -286,28 +286,48 @@ unix:!macx {
     }
 }
 
-# Windows SDL2 configuration
+# Windows deployment with better path handling
 win32 {
-    # Check for SDL2 environment variable first
-    SDL2_PATH = $$(SDL2_DIR)
+    # Set deployment directories
+    CONFIG(debug, debug|release) {
+        TARGET_FILE = $${TARGET}_debug.exe
+    } else {
+        TARGET_FILE = $${TARGET}.exe
+    }
     
-    # If environment variable not set, try pkg-config
+    # Get native Windows paths
+    NATIVE_PWD = $$replace(PWD, /, \\)
+    NATIVE_OUT_PWD = $$replace(OUT_PWD, /, \\)
+    DEPLOY_DIR = $$NATIVE_OUT_PWD\\deploy
+    
+    # Use plain Windows commands without shell_path function
+    QMAKE_POST_LINK = cmd /c if not exist \"$$DEPLOY_DIR\" mkdir \"$$DEPLOY_DIR\"
+    
+    # Add command to copy the executable
+    QMAKE_POST_LINK += && cmd /c copy /y \"$$NATIVE_OUT_PWD\\$${TARGET_FILE}\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
+    
+    # Add command for windeployqt
+    WINDEPLOYQT_PATH = $$replace($$[QT_INSTALL_BINS], /, \\)
+    QMAKE_POST_LINK += && cmd /c \"$$WINDEPLOYQT_PATH\\windeployqt\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
+    
+    # SDL2 path for Windows (using native paths)
+    SDL2_PATH = $$(SDL2_DIR)
     isEmpty(SDL2_PATH) {
         packagesExist(sdl2) {
             message("Found SDL2 via pkg-config")
             PKGCONFIG += sdl2
         } else {
-            # Try common installation locations
-            SDL2_LOCATIONS = $$PWD/SDL2 $$(ProgramFiles)/SDL2 $$(MINGW_HOME)/SDL2
+            # Try standard locations (using native paths to check)
+            SDL2_LOCATIONS = $$NATIVE_PWD\\SDL2 $$(ProgramFiles)\\SDL2 $$(MINGW_HOME)\\SDL2
             for(location, SDL2_LOCATIONS) {
-                exists($${location}/include/SDL.h) {
-                    SDL2_PATH = $$location
+                exists($${location}\\include\\SDL.h) {
+                    SDL2_PATH = $$replace(location, \\, /)
                     message("Found SDL2 at: $$SDL2_PATH")
                     break()
                 }
             }
             
-            # If still not found, show error and guidance
+            # If still not found, show error
             isEmpty(SDL2_PATH) {
                 error("SDL2 development package not found. Please either:")
                 error("1. Set the SDL2_DIR environment variable to your SDL2 installation directory")
@@ -323,46 +343,25 @@ win32 {
         
         CONFIG(debug, debug|release) {
             LIBS += -L$${SDL2_PATH}/lib -lSDL2d
-            SDL2_DLL = $${SDL2_PATH}/bin/SDL2d.dll
+            SDL2_DLL = $$replace($${SDL2_PATH}, /, \\)\\bin\\SDL2d.dll
         } else {
             LIBS += -L$${SDL2_PATH}/lib -lSDL2
-            SDL2_DLL = $${SDL2_PATH}/bin/SDL2.dll
+            SDL2_DLL = $$replace($${SDL2_PATH}, /, \\)\\bin\\SDL2.dll
         }
-    }
-    
-    # Windows deployment setup
-    CONFIG(debug, debug|release) {
-        TARGET_FILE = $${TARGET}_debug.exe
-    } else {
-        TARGET_FILE = $${TARGET}.exe
-    }
-    
-    # We need to use native Windows commands for MinGW
-    DEPLOY_DIR = $$shell_path($$OUT_PWD/deploy)
-    
-    # Use plain Windows commands without shell interpretation
-    QMAKE_POST_LINK = cmd /c if not exist \"$$replace(DEPLOY_DIR, /, \\)\" mkdir \"$$replace(DEPLOY_DIR, /, \\)\"
-    
-    # Add command to copy the executable - use multiple post-link commands instead of &&
-    QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(shell_path($$OUT_PWD/$${TARGET_FILE}), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\\$${TARGET_FILE}\"
-    
-    # Add command for windeployqt (no shell interpretation)
-    QMAKE_POST_LINK += && cmd /c \"$$replace(shell_path($$[QT_INSTALL_BINS]/windeployqt), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\\$${TARGET_FILE}\"
-    
-    # Copy SDL2 DLL if we found it and we're not using pkg-config
-    !isEmpty(SDL2_DLL):!packagesExist(sdl2) {
-        QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(shell_path($$SDL2_DLL), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\"
+        
+        # Copy SDL2 DLL
+        QMAKE_POST_LINK += && cmd /c copy /y \"$$SDL2_DLL\" \"$$DEPLOY_DIR\"
     }
     
     # Copy ROM directory if it exists
     exists($$PWD/rom) {
-        QMAKE_POST_LINK += && cmd /c if not exist \"$$replace(DEPLOY_DIR, /, \\)\\rom\" mkdir \"$$replace(DEPLOY_DIR, /, \\)\\rom\"
-        QMAKE_POST_LINK += && cmd /c xcopy /s /y /i \"$$replace(shell_path($$PWD/rom), /, \\)\\*\" \"$$replace(DEPLOY_DIR, /, \\)\\rom\"
+        QMAKE_POST_LINK += && cmd /c if not exist \"$$DEPLOY_DIR\\rom\" mkdir \"$$DEPLOY_DIR\\rom\"
+        QMAKE_POST_LINK += && cmd /c xcopy /s /y /i \"$$NATIVE_PWD\\rom\\*\" \"$$DEPLOY_DIR\\rom\"
     }
     
     # Copy controller database if it exists
     exists($$PWD/gamecontrollerdb.txt) {
-        QMAKE_POST_LINK += && cmd /c copy /y \"$$replace(shell_path($$PWD/gamecontrollerdb.txt), /, \\)\" \"$$replace(DEPLOY_DIR, /, \\)\\gamecontrollerdb.txt\"
+        QMAKE_POST_LINK += && cmd /c copy /y \"$$NATIVE_PWD\\gamecontrollerdb.txt\" \"$$DEPLOY_DIR\\gamecontrollerdb.txt\"
     }
     
     message("Windows deployment will be created in: $$DEPLOY_DIR")
@@ -689,5 +688,3 @@ RESOURCES += QtSpecem.qrc
 # Add correct include path for SDL2
 INCLUDEPATH += $$PWD
 INCLUDEPATH += .
-
-
