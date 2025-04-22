@@ -1,6 +1,6 @@
 TEMPLATE = app
 TARGET = QtSpecem
-VERSION = 1.0.0  # Add proper versioning
+VERSION = 2.0.0  # Add proper versioning
 
 # Qt version compatibility check
 lessThan(QT_MAJOR_VERSION, 5) {
@@ -21,8 +21,6 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 
 # Basic configuration
 QT += core gui widgets
-greaterThan(QT_MAJOR_VERSION, 5): QT += multimedia
-lessThan(QT_MAJOR_VERSION, 6): QT += multimedia
 CONFIG += c++11 app_bundle
 INCLUDEPATH += h
 
