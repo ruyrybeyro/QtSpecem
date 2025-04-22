@@ -21,8 +21,6 @@ greaterThan(QT_MAJOR_VERSION, 5) {
 
 # Basic configuration
 QT += core gui widgets
-greaterThan(QT_MAJOR_VERSION, 5): QT += multimedia
-lessThan(QT_MAJOR_VERSION, 6): QT += multimedia
 CONFIG += c++11 app_bundle
 INCLUDEPATH += h
 
@@ -350,6 +348,33 @@ unix:!macx {
     }
 }
 
+# ======== Custom Clean Targets ========
+# Add a cleandist target that also removes the Makefile and other build artifacts
+
+# Cross-platform file deletion command
+win32 {
+    DEL_CMD = del /Q /F
+    RMDIR_CMD = rmdir /S /Q
+} else {
+    DEL_CMD = rm -f
+    RMDIR_CMD = rm -rf
+}
+
+# Clean dist target - more thorough than distclean
+cleandist.depends = distclean
+cleandist.commands = $$DEL_CMD Makefile && \
+                    $$DEL_CMD .qmake.stash && \
+                    $$DEL_CMD .qmake.cache
+
+# Create additional target to remove build directories
+deepclean.commands = $(MAKE) cleandist && \
+                    $$RMDIR_CMD debug && \
+                    $$RMDIR_CMD release && \
+                    $$RMDIR_CMD $$TARGET".app"
+
+# Add to QMAKE_EXTRA_TARGETS
+QMAKE_EXTRA_TARGETS += cleandist deepclean
+
 # ======== Simplified Build Notifications ========
 # Print build summary at configuration time
 message("----------------------------------------")
@@ -361,6 +386,7 @@ message("Build type: $$CONFIG")
 message("Source directory: $$PWD")
 message("Output directory: $$OUT_PWD")
 message("Platform: $$QMAKESPEC")
+message("Added custom clean targets: 'make cleandist' and 'make deepclean'")
 message("----------------------------------------")
 
 # ======== Directories for headers and sources ========
