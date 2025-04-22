@@ -91,6 +91,12 @@ cd QtSpecem
 
 make
 
+If all the icons do not appear,
+
+sudo apt install adwaita-icon-theme
+
+sudo apt install breeze-icon-theme
+
 For cross-compiling for Windows in Ubuntu (obsolete):
 
 Installing compiler toolchain:
