@@ -320,7 +320,7 @@ AboutDialog::AboutDialog(QWidget *parent) : QDialog(parent) {
         "<p>QtSpecem is built using:</p>"
         "<ul>"
         "<li><b>Qt Framework</b> - Cross-platform application framework</li>"
-        "<li><b>SDL2 (Simple DirectMedia Layer)</b> - Cross-platform gamepad/joystick support</li>"
+        "<li><b>SDL2 (Simple DirectMedia Layer)</b> - Cross-platform sound, gamepad/joystick support</li>"
         "<li><b>EmZ80/WSpecem Z80 CPU (Rui Ribeiro)</b> - Z80 emulation</li>"
         "</ul>"
         "<h3 style='color:#3794FF;'>SDL2 Acknowledgment</h3>"
