@@ -387,10 +387,18 @@ unix:!macx {
         INSTALLS += controllerdb
     }
     
-    # Check if linuxdeployqt is available and notify user about AppImage option
+    # Check for linuxdeployqt binaries with different naming conventions
+    LINUX_DEPLOY_QT = ""
     system("which linuxdeployqt > /dev/null") {
+        LINUX_DEPLOY_QT = "linuxdeployqt"
+    } else:system("which linuxdeployqt-continuous-x86_64.AppImage > /dev/null") {
+        LINUX_DEPLOY_QT = "linuxdeployqt-continuous-x86_64.AppImage"
+    }
+    
+    # If linuxdeployqt is found in any form, enable AppImage creation
+    !isEmpty(LINUX_DEPLOY_QT) {
         message("----------------------------------------")
-        message("linuxdeployqt detected - you can create an AppImage with:")
+        message("linuxdeployqt detected as '$$LINUX_DEPLOY_QT' - you can create an AppImage with:")
         message("make appimage")
         message("----------------------------------------")
         
@@ -431,9 +439,9 @@ unix:!macx {
             appdir_controller.commands = cp -f $$PWD/gamecontrollerdb.txt $$APPDIR/usr/share/$$TARGET/
         }
         
-        # Run linuxdeployqt to create AppImage
+        # Run linuxdeployqt to create AppImage using the detected binary
         appimage.depends = appdir_exe appdir_desktop appdir_icon appdir_rom appdir_controller
-        appimage.commands = linuxdeployqt $$APPDIR/usr/bin/$$TARGET -bundle-non-qt-libs -appimage
+        appimage.commands = $$LINUX_DEPLOY_QT $$APPDIR/usr/bin/$$TARGET -bundle-non-qt-libs -appimage
         
         # Mark as phony targets
         QMAKE_EXTRA_TARGETS += appdir_create appdir_exe appdir_desktop appdir_icon appdir_rom appdir_controller appimage
@@ -441,6 +449,8 @@ unix:!macx {
         message("----------------------------------------")
         message("Note: Install linuxdeployqt from https://github.com/probonopd/linuxdeployqt")
         message("to enable creation of portable AppImage packages.")
+        message("The binary should be named either 'linuxdeployqt' or")
+        message("'linuxdeployqt-continuous-x86_64.AppImage' and be in your PATH.")
         message("----------------------------------------")
     }
 }
@@ -678,4 +688,6 @@ RESOURCES += QtSpecem.qrc
 
 # Add correct include path for SDL2
 INCLUDEPATH += $$PWD
+INCLUDEPATH += .
+
 
