@@ -303,15 +303,16 @@ win32 {
     NATIVE_OUT_PWD = $$replace(OUT_PWD, /, \\)
     DEPLOY_DIR = $$NATIVE_OUT_PWD\\deploy
     
-    # Use plain Windows commands without shell_path function
+    # Use plain Windows commands without shell interpretation
     QMAKE_POST_LINK = cmd /c if not exist \"$$DEPLOY_DIR\" mkdir \"$$DEPLOY_DIR\"
     
     # Add command to copy the executable
     QMAKE_POST_LINK += && cmd /c copy /y \"$$NATIVE_OUT_PWD\\$${TARGET_FILE}\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
     
-    # Add command for windeployqt - properly convert Qt bin path
-    QT_INSTALL_BINS_NATIVE = $$replace($$[QT_INSTALL_BINS], /, \\)
-    QMAKE_POST_LINK += && cmd /c \"$$QT_INSTALL_BINS_NATIVE\\windeployqt\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
+    # Add command for windeployqt - fixed path handling
+    QT_INSTALL_BINS_VALUE = $$[QT_INSTALL_BINS]
+    QT_INSTALL_BINS_NATIVE = $$replace(QT_INSTALL_BINS_VALUE, /, \\)
+    QMAKE_POST_LINK += && cmd /c \"$$QT_INSTALL_BINS_NATIVE\\windeployqt.exe\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
     
     # SDL2 path for Windows (using native paths)
     SDL2_PATH = $$(SDL2_DIR)
@@ -691,5 +692,4 @@ RESOURCES += QtSpecem.qrc
 # Add correct include path for SDL2
 INCLUDEPATH += $$PWD
 INCLUDEPATH += .
-
 
