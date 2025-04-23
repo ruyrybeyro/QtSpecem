@@ -1,6 +1,6 @@
 # QtSpecem
 
-A new Qt6 ZX Spectrum emulator with companion debugger.
+A new Qt6 ZX Spectrum 48K emulator with companion debugger.
 
 *© 2020-2025 Rui Fernando Ferreira Ribeiro*  
 *Z80A core emulation © 1991-2025 Rui Fernando Ferreira Ribeiro*
