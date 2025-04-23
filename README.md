@@ -1,139 +1,129 @@
+# QtSpecem
 
-QtSpecem 
-(C) 2020-2025 Rui Fernando Ferreira Ribeiro
+A new Qt6 ZX Spectrum emulator with companion debugger.
 
-Z80A core emulation
-(C) 1991-2025 Rui Fernando Ferreira Ribeiro
+*© 2020-2025 Rui Fernando Ferreira Ribeiro*  
+*Z80A core emulation © 1991-2025 Rui Fernando Ferreira Ribeiro*
 
-New Qt6 ZX Spectrum emulator
+## Features
 
-It also has a companion debugger, https://github.com/ruyrybeyro/debugZ80
+- Z80 C emulation from legacy WSpecem/emz80 emulators
+- Full support for documented and undocumented Z80 functionality (including Q/WZ/MEMPTR)
+- Passes all zxeall/z80test tests
+- Floating bus behavior implemented (passes Ramsoft's floatspy tests)
+- Real-time emulation
+- Timex video modes + ULAplus support
+- Early support for Timex cartridges
+- Companion debugger available at: https://github.com/ruyrybeyro/debugZ80
 
-Z80 C emulation from my old emulators WSpecem/emz80, corrected, fixed and improved to support the documented and undocumented funcionalities of a Z80 from Zilog (including Q/WZ/MEMPTR). It passes all the zxeall/z80test tests.
+## File Format Support
 
-Floating bus behaviour implemented and passing Ramsoft's floatspy tests.
+Supports the following snapshot formats:
+- SLT, TAP, Z80, SNA, SNX, SIT
+- RAW, ZX, PRG, ACH, ROM, DAT, SCR, SEM
 
-Real time emulator, no sound support. 
+## Usage
 
-Still (very) rudimentary user interface.
+- **Loading TAP files**: Drag and drop the file, then enter `LOAD ""` in the emulator
+- **Kempston Joystick**: Use ALT + cursor keys
+- **F2**: Save Z80 snapshots to /tmp
+- **F5**: Save TAP file dump to /tmp
+- **F12**: Save screen snapshot to /tmp
 
-The project idea is being a emulator framework for having independent utilities, running in the same machine as different programs. For now it has a command line debugger.
+## Known Issues
 
-Supports drag-and-drop, file as arguments, and SLT, TAP, Z80, SNA, SNX, SIT, RAW, ZX, PRG, ACH, ROM, DAT, SCR, SEM snapshot emulation formats.
+- SHIFT + 0-9 does not work in MacOS due to Qt limitations (use Command + 0-9 instead)
+- Loading a TAP file introduces patches to the ROM, which will cause ROM checksum validation to fail
 
-For loading a TAP file, drag&drop and then do LOAD "".
+## Building from Source
 
-For now pressing F2 saves Z80 snapshots at /tmp.
+### macOS
 
-Kempston Joystick ALT + cursor keys
+Prerequisites:
+- Command Line Developer Tools
+- Qt6 development framework
 
-Timex video modes+ULAplus
-
-Very hackish early support for Timex cartridges
-
-KNOWN BUGs
-
-- SHIFT 0-9 does not work in MacOS due to a Qt feature, use Command 0-9 instead.
-
-"Features"
-
-Loading a TAP file introduces patches to the ROM. A ROM checksum will fail after loading/drag and dropping a TAP file.
-
-COMPILING for MacOS:
-
-You need to install Command Line Developer Tools and the Qt6 development framework.
-
+```bash
+# Install dependencies
 brew install sdl2
 
+# Build
 qmake    # or ./do_qmake
-
 make
 
-For Mac deployment in a self-contained executable:
-
+# For deployment as self-contained executable
 macdeployqt QtSpecem.app
+```
 
+### Linux (Red Hat based)
 
-For compiling in Linux:
-
-
-Redhat based
-
-
+```bash
+# Install dependencies
 sudo dnf install epel-release git
-
 sudo yum groupinstall "C Development Tools and Libraries"
-
-sudo yum install SDL2 SDL2-devel
-
-sudo yum install mesa-libGL-devel
-
+sudo yum install SDL2 SDL2-devel mesa-libGL-devel
 sudo dnf install qt6-qtbase qt6-qtbase-devel qt6-qtdeclarative qt6-qtdeclarative-devel qt6-qtmultimedia qt6-qtmultimedia-devel
 
+# Build
 git clone https://github.com/ruyrybeyro/QtSpecem
-
 cd QtSpecem
-
-qmake # or ./scripts/do_qmake.sh
-
+qmake    # or ./scripts/do_qmake.sh
 make
+```
 
-(see scripts/rh.sh)
+### Linux (Debian/Ubuntu based)
 
-
-Debian/Ubuntu based
-
+```bash
+# Install dependencies
 sudo apt install git build-essential libsdl2-dev
-
 sudo apt install qt6-base-dev qt6-base-dev-tools qt6-declarative-dev qt6-multimedia-dev
 
+# Build
 git clone https://github.com/ruyrybeyro/QtSpecem
-
 cd QtSpecem
-
-qmake # or ./do_qmake.sh
-
+qmake    # or ./do_qmake.sh
 make
 
-(see scripts/debian.sh)
+# If icons don't appear
+sudo apt install adwaita-icon-theme breeze-icon-theme
+```
 
-If all the icons do not appear,
+### Cross-compiling for Windows (from Ubuntu)
 
-sudo apt install adwaita-icon-theme
+This method is obsolete but preserved for reference.
 
-sudo apt install breeze-icon-theme
+```bash
+# Add MXE repository
+# Add to sources.list:
+# deb [arch=amd64] https://pkg.mxe.cc/repos/apt focal main
 
-For cross-compiling for Windows in Ubuntu (obsolete):
-
-Installing compiler toolchain:
-
-add to sources.list
-
-deb [arch=amd64] https://pkg.mxe.cc/repos/apt focal main
-
-apt update
-
+sudo apt update
 sudo apt install mxe-x86-64-w64-mingw64.static-qt6
 
-Compiling:
-
+# Build
 PATH=/usr/lib/mxe/usr/bin:$PATH
-
 git clone https://github.com/ruyrybeyro/QtSpecem
-
 cd QtSpecem
-
 /usr/lib/mxe/usr/x86_64-w64-mingw32.static/qt6/bin/qmake
+```
 
-If all goes well, a self contained binary is created at release/QtSpecem.exe 
+If successful, a self-contained binary will be created at `release/QtSpecem.exe`.
 
-. Tested in MacOS Monterey, Big Sur, Catalina, Mojave, High Sierra; Linux Debian 10 and Debian 11. Windows 10.
+## Platform Compatibility
 
-Keys in QtSpecem:
+Tested on:
+- macOS: Sequoia
+- Linux: Debian 13
+- Windows: Windows 10
 
-F2  - Z80 file dump /tmp/w0000.z80 where 0000 is incremented
+## Project Vision
 
-F5  - TAP file dump /tmp/w0000.tap where 0000 is incremented
+The project aims to serve as an emulator framework for hosting independent utilities that run as separate programs on the same machine. Currently, it includes a command-line debugger.
 
-F12 - save image snapshot /tmp/snap0000.png where 0000 is incremented
+## Keyboard Shortcuts
 
+| Key | Function |
+|-----|----------|
+| F2  | Save Z80 file dump to `/tmp/w0000.z80` (incremental numbering) |
+| F5  | Save TAP file dump to `/tmp/w0000.tap` (incremental numbering) |
+| F12 | Save screen snapshot to `/tmp/snap0000.png` (incremental numbering) |
