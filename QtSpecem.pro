@@ -70,10 +70,12 @@ static {
         
         # SDL2 static library - use environment variable if set
         isEmpty(SDL2_PATH) {
-            SDL2_LOCATIONS = $$PWD/SDL2 $$(ProgramFiles)/SDL2 $$(MINGW_HOME)/SDL2
+            NATIVE_PWD = $$replace(PWD, /, \\)
+            
+            SDL2_LOCATIONS = $$NATIVE_PWD\\SDL2 $$(ProgramFiles)\\SDL2 $$(MINGW_HOME)\\SDL2
             for(location, SDL2_LOCATIONS) {
-                exists($${location}/include/SDL.h) {
-                    SDL2_PATH = $$location
+                exists($${location}\\include\\SDL.h) {
+                    SDL2_PATH = $$replace(location, \\, /)
                     message("Found SDL2 at: $$SDL2_PATH")
                     break()
                 }
@@ -89,7 +91,8 @@ static {
         }
         
         # Use static SDL2 if available
-        exists($${SDL2_PATH}/lib/libSDL2.a) {
+        SDL2_PATH_NATIVE = $$replace(SDL2_PATH, /, \\)
+        exists($$SDL2_PATH_NATIVE\\lib\\libSDL2.a) {
             message("Using static SDL2 library")
             LIBS -= -lSDL2
             LIBS += $${SDL2_PATH}/lib/libSDL2.a -lwinmm -limm32 -lversion -loleaut32 -lole32 -lsetupapi
@@ -306,9 +309,9 @@ win32 {
     # Add command to copy the executable
     QMAKE_POST_LINK += && cmd /c copy /y \"$$NATIVE_OUT_PWD\\$${TARGET_FILE}\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
     
-    # Add command for windeployqt
-    WINDEPLOYQT_PATH = $$replace($$[QT_INSTALL_BINS], /, \\)
-    QMAKE_POST_LINK += && cmd /c \"$$WINDEPLOYQT_PATH\\windeployqt\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
+    # Add command for windeployqt - properly convert Qt bin path
+    QT_INSTALL_BINS_NATIVE = $$replace($$[QT_INSTALL_BINS], /, \\)
+    QMAKE_POST_LINK += && cmd /c \"$$QT_INSTALL_BINS_NATIVE\\windeployqt\" \"$$DEPLOY_DIR\\$${TARGET_FILE}\"
     
     # SDL2 path for Windows (using native paths)
     SDL2_PATH = $$(SDL2_DIR)
@@ -688,3 +691,5 @@ RESOURCES += QtSpecem.qrc
 # Add correct include path for SDL2
 INCLUDEPATH += $$PWD
 INCLUDEPATH += .
+
+
