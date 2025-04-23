@@ -289,8 +289,17 @@ unix:!macx {
     }
 }
 
-# Windows deployment with better path handling
+# Windows specific configuration and deployment
 win32 {
+    # Windows compatibility warning
+    message("----------------------------------------")
+    message("NOTE: QtSpecem requires Windows 8 or later to run.")
+    message("Windows 7 and earlier are not supported.")
+    message("----------------------------------------")
+    
+    # Ensure Windows 8 or later API is used (Windows 8 = 0x0602)
+    DEFINES += WINVER=0x0602 _WIN32_WINNT=0x0602
+    
     # Set deployment directories
     CONFIG(debug, debug|release) {
         TARGET_FILE = $${TARGET}_debug.exe
