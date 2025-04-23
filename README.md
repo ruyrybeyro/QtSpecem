@@ -39,9 +39,9 @@ KNOWN BUGs
 
 Loading a TAP file introduces patches to the ROM. A ROM checksum will fail after loading/drag and dropping a TAP file.
 
-COMPILING:
+COMPILING for MacOS:
 
-You need to install the Qt6 development framework.
+You need to install Command Line Developer Tools and the Qt6 development framework.
 
 brew install sdl2
 
@@ -78,6 +78,8 @@ qmake # or ./scripts/do_qmake.sh
 
 make
 
+(see scripts/rh.sh)
+
 
 Debian/Ubuntu based
 
@@ -92,6 +94,8 @@ cd QtSpecem
 qmake # or ./do_qmake.sh
 
 make
+
+(see scripts/debian.sh)
 
 If all the icons do not appear,
 
