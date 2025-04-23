@@ -42,6 +42,7 @@ Supports the following snapshot formats:
 Prerequisites:
 - Command Line Developer Tools
 - Qt6 development framework
+- Homebrew
 
 ```bash
 # Install dependencies
