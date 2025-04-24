@@ -205,5 +205,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 - Thanks to all contributors and testers
 - Thanks to Emanuel Santos for helping making it compile under Windows
-- ZX Spectrum community for testing and feedback
 - Original Z80 documentation authors
