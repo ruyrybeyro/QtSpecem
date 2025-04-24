@@ -9,7 +9,7 @@ A new Qt6 ZX Spectrum 48K emulator with companion debugger.
 
 - Z80 C emulation from legacy WSpecem/emz80 emulators
 - Full support for documented and undocumented Z80 functionality (including Q/WZ/MEMPTR)
-- Passes all zxeall/z80test tests
+- Successfully passes all 2023 ZXEALL and Z80TEST validation tests.
 - Floating bus behavior implemented (passes Ramsoft's floatspy tests)
 - Real-time emulation
 - Timex video modes + ULAplus support
