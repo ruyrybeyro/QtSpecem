@@ -148,10 +148,6 @@ int main(int argc, char **argv) {
        qDebug() << "Audio disabled in settings, beeper not initialized";
     }
 
-    // Install the global key filter
-    GlobalKeyFilter *keyFilter = new GlobalKeyFilter(&app);
-    app.installEventFilter(keyFilter);
-    
     draw.show();
     
     return app.exec();

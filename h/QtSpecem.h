@@ -34,21 +34,8 @@ public:
     
 protected:
     void paintEvent(QPaintEvent *) override;
-    
-    // Pass key events to the parent window using the forwarding function
-    void keyPressEvent(QKeyEvent *event) override {
-        QWidget::keyPressEvent(event);
-        if (DrawnWindow *parent = qobject_cast<DrawnWindow *>(parentWidget())) {
-            handleKeyEventForward(parent, event, true);
-        }
-    }
-    
-    void keyReleaseEvent(QKeyEvent *event) override {
-        QWidget::keyReleaseEvent(event);
-        if (DrawnWindow *parent = qobject_cast<DrawnWindow *>(parentWidget())) {
-            handleKeyEventForward(parent, event, false);
-        }
-    }
+    void keyPressEvent(QKeyEvent *event) override;
+    void keyReleaseEvent(QKeyEvent *event) override;
 };
 
 class DrawnWindow : public QMainWindow {
@@ -59,9 +46,9 @@ class DrawnWindow : public QMainWindow {
 public:
     DrawnWindow(QWidget *parent = nullptr);
     ~DrawnWindow(); // Added destructor for proper cleanup
+    void handleKeyEvent(QKeyEvent *event, bool pressed);
 
 protected:
-    void handleKeyEvent(QKeyEvent *event, bool pressed);
     void drawBorder();
     void dragEnterEvent(QDragEnterEvent *event) override;
     void dropEvent(QDropEvent *event) override;
@@ -208,17 +195,6 @@ private:
 
     // Remember current ROM
     QString currentRomPath;
-};
-
-// Global event filter to handle problematic key combinations
-class GlobalKeyFilter : public QObject {
-    Q_OBJECT
-public:
-    GlobalKeyFilter(QObject *parent = nullptr) : QObject(parent) {}
-    
-protected:
-    bool eventFilter(QObject *obj, QEvent *event) override;
-
 };
 
 #endif // QTSPECEM_H

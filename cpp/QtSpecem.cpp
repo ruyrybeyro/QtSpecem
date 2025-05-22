@@ -242,6 +242,19 @@ void DisplayWidget::paintEvent(QPaintEvent *) {
     }
 }
 
+void DisplayWidget::keyPressEvent(QKeyEvent *event) {
+    // Forward to parent DrawnWindow
+    if (DrawnWindow* parent = qobject_cast<DrawnWindow*>(parentWidget())) {
+        parent->handleKeyEvent(event, true);
+    }
+}
+
+void DisplayWidget::keyReleaseEvent(QKeyEvent *event) {
+    if (DrawnWindow* parent = qobject_cast<DrawnWindow*>(parentWidget())) {
+        parent->handleKeyEvent(event, false);
+    }
+}
+
 void DrawnWindow::drawBorder() {
     // Optimized border drawing with fewer repeated code
     const int width = hires ? 512 + (BORDER_HORIZONTAL * 2) : 256 + (BORDER_HORIZONTAL * 2);
@@ -1368,6 +1381,13 @@ static const std::unordered_map<int, KeyMapping> keyMap = {
 void DrawnWindow::handleKeyEvent(QKeyEvent *event, bool pressed) {
     uint8_t mask = pressed ? 0xFF : 0x00;
     int key = event->key();
+    int nativekey = event->nativeVirtualKey();
+
+    qDebug() << "Key:"
+                 << "Qt::Key=" << key 
+                 << "char=" << (char)key
+                 << "nativekey=" << nativekey;
+    
     bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
     
     // Special case for ESC - toggle fullscreen
@@ -1407,41 +1427,42 @@ void DrawnWindow::handleKeyEvent(QKeyEvent *event, bool pressed) {
     }
     
     // DIRECT FIX FOR SHIFT+NUMBER KEYS
-    if (shiftPressed && key >= Qt::Key_0 && key <= Qt::Key_9) {
+    if (shiftPressed && (nativekey >= 18) && (nativekey <= 29)) {
+
         // We'll handle this directly by setting the keyboard matrix
-        if (pressed) {
+        if (!pressed) {
             // Symbol Shift DOWN - row 7, bit 1
             keybd_buff[7] &= ~0x02;
             
             // Press the number key
-            switch (key) {
-                case Qt::Key_1: keybd_buff[3] &= ~0x01; break; // Row 3, bit 0
-                case Qt::Key_2: keybd_buff[3] &= ~0x02; break; // Row 3, bit 1
-                case Qt::Key_3: keybd_buff[3] &= ~0x04; break; // Row 3, bit 2
-                case Qt::Key_4: keybd_buff[3] &= ~0x08; break; // Row 3, bit 3
-                case Qt::Key_5: keybd_buff[3] &= ~0x10; break; // Row 3, bit 4
-                case Qt::Key_6: keybd_buff[4] &= ~0x10; break; // Row 4, bit 4
-                case Qt::Key_7: keybd_buff[4] &= ~0x08; break; // Row 4, bit 3
-                case Qt::Key_8: keybd_buff[4] &= ~0x04; break; // Row 4, bit 2
-                case Qt::Key_9: keybd_buff[4] &= ~0x02; break; // Row 4, bit 1
-                case Qt::Key_0: keybd_buff[4] &= ~0x01; break; // Row 4, bit 0
+            switch (nativekey) {
+                case 18: keybd_buff[3] &= ~0x01; break; // Row 3, bit 0
+                case 19: keybd_buff[3] &= ~0x02; break; // Row 3, bit 1
+                case 20: keybd_buff[3] &= ~0x04; break; // Row 3, bit 2
+                case 21: keybd_buff[3] &= ~0x08; break; // Row 3, bit 3
+                case 23: keybd_buff[3] &= ~0x10; break; // Row 3, bit 4
+                case 22: keybd_buff[4] &= ~0x10; break; // Row 4, bit 4
+                case 26: keybd_buff[4] &= ~0x08; break; // Row 4, bit 3
+                case 28: keybd_buff[4] &= ~0x04; break; // Row 4, bit 2
+                case 25: keybd_buff[4] &= ~0x02; break; // Row 4, bit 1
+                case 29: keybd_buff[4] &= ~0x01; break; // Row 4, bit 0
             }
         } else {
             // Symbol Shift UP
             keybd_buff[7] |= 0x02;
             
             // Release the number key
-            switch (key) {
-                case Qt::Key_1: keybd_buff[3] |= 0x01; break;
-                case Qt::Key_2: keybd_buff[3] |= 0x02; break;
-                case Qt::Key_3: keybd_buff[3] |= 0x04; break;
-                case Qt::Key_4: keybd_buff[3] |= 0x08; break;
-                case Qt::Key_5: keybd_buff[3] |= 0x10; break;
-                case Qt::Key_6: keybd_buff[4] |= 0x10; break;
-                case Qt::Key_7: keybd_buff[4] |= 0x08; break;
-                case Qt::Key_8: keybd_buff[4] |= 0x04; break;
-                case Qt::Key_9: keybd_buff[4] |= 0x02; break;
-                case Qt::Key_0: keybd_buff[4] |= 0x01; break;
+            switch (nativekey) {
+                case 18: keybd_buff[3] |= 0x01; break;
+                case 19: keybd_buff[3] |= 0x02; break;
+                case 20: keybd_buff[3] |= 0x04; break;
+                case 21: keybd_buff[3] |= 0x08; break;
+                case 23: keybd_buff[3] |= 0x10; break;
+                case 22: keybd_buff[4] |= 0x10; break;
+                case 26: keybd_buff[4] |= 0x08; break;
+                case 28: keybd_buff[4] |= 0x04; break;
+                case 25: keybd_buff[4] |= 0x02; break;
+                case 29: keybd_buff[4] |= 0x01; break;
             }
         }
         
@@ -1749,75 +1770,6 @@ void DrawnWindow::setDisplaySize(int scaleFactor) {
     
     // Show confirmation in status bar
     statusBar()->showMessage(tr("Display size set to %1x").arg(scaleFactor), 3000);
-}
-
-bool GlobalKeyFilter::eventFilter(QObject *obj, QEvent *event) {
-    // Only handle KeyPress and KeyRelease events
-    if (event->type() != QEvent::KeyPress && event->type() != QEvent::KeyRelease) {
-        return QObject::eventFilter(obj, event);
-    }
-    
-    QKeyEvent *keyEvent = static_cast<QKeyEvent*>(event);
-    bool pressed = (event->type() == QEvent::KeyPress);
-    int key = keyEvent->key();
-
- // Never intercept plain Shift key events
-    if (key == Qt::Key_Shift) {
-        return QObject::eventFilter(obj, event);
-    }
-    
-    // Check if it's a Shift+number key combination
-    // Use the nativeModifiers() instead of modifiers() for more reliable detection
-    bool shiftPressed = keyEvent->modifiers() & Qt::ShiftModifier;
-    
-    // ONLY handle Shift+number keys (0-9), and nothing else
-    if (shiftPressed && key >= Qt::Key_0 && key <= Qt::Key_9) {
-        // We'll handle this directly by setting the keyboard matrix
-        if (pressed) {
-            // Symbol Shift DOWN - row 7, bit 1
-            keybd_buff[7] &= ~0x02;
-            
-            // Press the number key
-            switch (key) {
-                case Qt::Key_1: keybd_buff[3] &= ~0x01; break; // Row 3, bit 0
-                case Qt::Key_2: keybd_buff[3] &= ~0x02; break; // Row 3, bit 1
-                case Qt::Key_3: keybd_buff[3] &= ~0x04; break; // Row 3, bit 2
-                case Qt::Key_4: keybd_buff[3] &= ~0x08; break; // Row 3, bit 3
-                case Qt::Key_5: keybd_buff[3] &= ~0x10; break; // Row 3, bit 4
-                case Qt::Key_6: keybd_buff[4] &= ~0x10; break; // Row 4, bit 4
-                case Qt::Key_7: keybd_buff[4] &= ~0x08; break; // Row 4, bit 3
-                case Qt::Key_8: keybd_buff[4] &= ~0x04; break; // Row 4, bit 2
-                case Qt::Key_9: keybd_buff[4] &= ~0x02; break; // Row 4, bit 1
-                case Qt::Key_0: keybd_buff[4] &= ~0x01; break; // Row 4, bit 0
-            }
-        } else {
-            // Symbol Shift UP
-            keybd_buff[7] |= 0x02;
-            
-            // Release the number key
-            switch (key) {
-                case Qt::Key_1: keybd_buff[3] |= 0x01; break;
-                case Qt::Key_2: keybd_buff[3] |= 0x02; break;
-                case Qt::Key_3: keybd_buff[3] |= 0x04; break;
-                case Qt::Key_4: keybd_buff[3] |= 0x08; break;
-                case Qt::Key_5: keybd_buff[3] |= 0x10; break;
-                case Qt::Key_6: keybd_buff[4] |= 0x10; break;
-                case Qt::Key_7: keybd_buff[4] |= 0x08; break;
-                case Qt::Key_8: keybd_buff[4] |= 0x04; break;
-                case Qt::Key_9: keybd_buff[4] |= 0x02; break;
-                case Qt::Key_0: keybd_buff[4] |= 0x01; break;
-            }
-        }
-        
-        // Force a redraw of the display
-        WindowDirty = 1;
-        
-        // Return true to indicate we've handled this event
-        return true;
-    }
-    
-    // For ALL other key events, pass them along to be processed normally
-    return QObject::eventFilter(obj, event);
 }
 
 void DrawnWindow::processSDLEvents() {
