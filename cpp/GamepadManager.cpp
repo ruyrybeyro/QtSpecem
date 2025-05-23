@@ -117,8 +117,10 @@ void GamepadManager::initSDL() {
         
         // Enable joystick events
         SDL_JoystickEventState(SDL_ENABLE);
-        
+       
+#ifdef DEBUG 
         qDebug() << "SDL initialized for joystick input";
+#endif
     }
 }
 
@@ -130,7 +132,9 @@ void GamepadManager::shutdownSDL() {
         SDL_Quit();
         
         m_sdlInitialized = false;
+#ifdef DEBUG
         qDebug() << "SDL shut down";
+#endif
     }
 }
 
@@ -145,12 +149,14 @@ void GamepadManager::openJoystick(int deviceIndex) {
     m_sdlJoystick = SDL_JoystickOpen(deviceIndex);
     if (m_sdlJoystick) {
         m_gamepadConnected = true;
-        
+       
+#ifdef DEBUG 
         qDebug() << "Opened Joystick" << deviceIndex;
         qDebug() << "Name:" << SDL_JoystickName(m_sdlJoystick);
         qDebug() << "Number of Axes:" << SDL_JoystickNumAxes(m_sdlJoystick);
         qDebug() << "Number of Buttons:" << SDL_JoystickNumButtons(m_sdlJoystick);
         qDebug() << "Number of Hats:" << SDL_JoystickNumHats(m_sdlJoystick);
+#endif
         
         // Special handling for controllers with D-Pad as buttons instead of axes/hats
         // Map D-pad buttons if needed (implemented in derived class)
@@ -183,8 +189,10 @@ void GamepadManager::closeJoystick() {
         for (int i = 0; i < 4; i++) {
             m_directionalStates[i] = false;
         }
-        
+       
+#ifdef DEBUG 
         qDebug() << "Joystick closed";
+#endif
     }
 }
 
@@ -221,12 +229,16 @@ void GamepadManager::pollSDLEvents() {
                 break;
                 
             case SDL_JOYBUTTONDOWN:
+#ifdef DEBUG
                 qDebug() << "Button event:" << event.jbutton.button << (event.type == SDL_JOYBUTTONDOWN ? "pressed" : "released");
+#endif
                 processButtonEvent(event.jbutton.button, true);
                 break;
                 
             case SDL_JOYBUTTONUP:
+#ifdef DEBUG
                 qDebug() << "Button event:" << event.jbutton.button << (event.type == SDL_JOYBUTTONDOWN ? "pressed" : "released");
+#endif
                 processButtonEvent(event.jbutton.button, false);
                 break;
                 
@@ -402,7 +414,9 @@ void GamepadManager::mapDPadButtons() {
     // But we need to identify the controller and adjust accordingly
     if (m_sdlJoystick) {
         const char* controllerName = SDL_JoystickName(m_sdlJoystick);
+#ifdef DEBUG
         qDebug() << "Mapping D-pad buttons for controller:" << controllerName;
+#endif
         
         // Default D-pad button mapping (common for many controllers)
         m_dpadButtonIndices[UP] = 11;    // D-pad Up
@@ -432,13 +446,15 @@ void GamepadManager::mapDPadButtons() {
             m_dpadButtonIndices[DOWN] = 7;  // D-pad Down
             m_dpadButtonIndices[LEFT] = 8;  // D-pad Left
         }
-        
+       
+#ifdef DEBUG 
         // Log the button mapping for debugging
         qDebug() << "D-pad button mapping:";
         qDebug() << "  UP:" << m_dpadButtonIndices[UP];
         qDebug() << "  RIGHT:" << m_dpadButtonIndices[RIGHT];
         qDebug() << "  DOWN:" << m_dpadButtonIndices[DOWN];
         qDebug() << "  LEFT:" << m_dpadButtonIndices[LEFT];
+#endif
     }
 }
 
@@ -505,8 +521,10 @@ void GamepadManager::setJoystickType(JoystickType type) {
                 mapCursorJoystick();
                 break;
         }
-        
+       
+#ifdef DEBUG 
         qDebug() << "Joystick type set to:" << JoystickTypeNames[type];
+#endif
     }
 }
 

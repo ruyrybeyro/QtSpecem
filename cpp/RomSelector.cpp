@@ -84,9 +84,12 @@ void RomSelector::initializeRomList()
     for (auto it = romPaths.begin(); it != romPaths.end(); ++it) {
         if (QFile::exists(it.value())) {
             availableRoms.append(it.key());
-        } else {
+        } 
+#ifdef DEBUG
+else {
             qDebug() << "ROM not found:" << it.value();
         }
+#endif
     }
     
     // Add available ROMs to list widget

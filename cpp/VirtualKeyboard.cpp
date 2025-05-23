@@ -113,8 +113,10 @@ VirtualKeyboard::VirtualKeyboard(DrawnWindow *parent)
     symbolShiftTimer = new QTimer(this);
     symbolShiftTimer->setSingleShot(true);
     connect(symbolShiftTimer, &QTimer::timeout, this, &VirtualKeyboard::clearSymbolShift);
-    
+   
+#ifdef DEBUG 
     qDebug() << "Keyboard initialized with fixed coordinates";
+#endif
 }
 
 void VirtualKeyboard::highlightKey(int keyIndex)
@@ -167,8 +169,10 @@ void VirtualKeyboard::clearCapsShift()
             // Both shifts are now inactive, so clear the bothShiftsActive flag
             bothShiftsActive = false;
         }
-        
+       
+#ifdef DEBUG 
         qDebug() << "CAPS SHIFT timer expired - deactivated";
+#endif
         update();  // Redraw to update the display
     } else if (capsShiftActive) {
         // Normal single key operation - don't automatically deactivate
@@ -201,8 +205,10 @@ void VirtualKeyboard::clearSymbolShift()
             // Both shifts are now inactive, so clear the bothShiftsActive flag
             bothShiftsActive = false;
         }
-        
+       
+#ifdef DEBUG 
         qDebug() << "SYMBOL SHIFT timer expired - deactivated";
+#endif
         update();  // Redraw to update the display
     } else if (symbolShiftActive) {
         // Normal single key operation - don't automatically deactivate
@@ -302,8 +308,10 @@ void VirtualKeyboard::toggleShiftKey(int keyIndex)
             // Start timers for both shift keys
             capsShiftTimer->start(500);  // Slightly longer timer for shift keys
             symbolShiftTimer->start(500);
-            
+           
+#ifdef DEBUG 
             qDebug() << "Both SHIFT keys active - special mode activated";
+#endif
         } else if (bothShiftsActive) {
             // Special mode already active - reset timers
             capsShiftTimer->start(500);
@@ -320,8 +328,10 @@ void VirtualKeyboard::toggleShiftKey(int keyIndex)
             
             handleKeyEventForward(static_cast<DrawnWindow*>(mainWindow), keyEvent, capsShiftActive);
             delete keyEvent;
-            
+           
+#ifdef DEBUG 
             qDebug() << "CAPS SHIFT toggled:" << (capsShiftActive ? "ON" : "OFF");
+#endif
         }
     } 
     else if (keyIndex == SYMBOL_SHIFT_INDEX) {
@@ -349,8 +359,10 @@ void VirtualKeyboard::toggleShiftKey(int keyIndex)
             // Start timers for both shift keys
             capsShiftTimer->start(500);  // Slightly longer timer for shift keys
             symbolShiftTimer->start(500);
-            
+           
+#ifdef DEBUG 
             qDebug() << "Both SHIFT keys active - special mode activated";
+#endif
         } else if (bothShiftsActive) {
             // Special mode already active - reset timers
             capsShiftTimer->start(500);
@@ -367,8 +379,10 @@ void VirtualKeyboard::toggleShiftKey(int keyIndex)
             
             handleKeyEventForward(static_cast<DrawnWindow*>(mainWindow), keyEvent, symbolShiftActive);
             delete keyEvent;
-            
+           
+#ifdef DEBUG 
             qDebug() << "SYMBOL SHIFT toggled:" << (symbolShiftActive ? "ON" : "OFF");
+#endif
         }
     }
     
@@ -426,11 +440,15 @@ int VirtualKeyboard::getKeyAtPosition(const QPoint &pos)
 void VirtualKeyboard::mousePressEvent(QMouseEvent *event)
 {
     if (event->button() == Qt::LeftButton) {
+#ifdef DEBUG
         // Debug click position
         qDebug() << "Mouse clicked at position:" << event->pos().x() << "," << event->pos().y();
+#endif
         
         int keyIndex = getKeyAtPosition(event->pos());
+#ifdef DEBUG
         qDebug() << "Key index at position:" << keyIndex;
+#endif
         
         if (keyIndex >= 0) {
             // Handle shift keys specially
@@ -440,7 +458,9 @@ void VirtualKeyboard::mousePressEvent(QMouseEvent *event)
                 // For non-shift keys, use the standard press-release behavior
                 // Get the key code
                 int keyCode = zx_keys[keyIndex];
+#ifdef DEBUG
                 qDebug() << "Key pressed:" << keyIndex << "Code:" << keyCode;
+#endif
                 
                 // Highlight the key
                 highlightKey(keyIndex);
@@ -464,7 +484,9 @@ void VirtualKeyboard::mousePressEvent(QMouseEvent *event)
     }
     else if (event->button() == Qt::RightButton) {
         // Right-click simulates Tab key
+#ifdef DEBUG
         qDebug() << "Right-click - simulating Tab key";
+#endif
         
         // Use the handleKeyEventForward function for Tab
         QKeyEvent *pressEvent = new QKeyEvent(QEvent::KeyPress, Qt::Key_Tab, Qt::NoModifier);

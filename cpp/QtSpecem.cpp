@@ -1383,10 +1383,12 @@ void DrawnWindow::handleKeyEvent(QKeyEvent *event, bool pressed) {
     int key = event->key();
     int nativekey = event->nativeVirtualKey();
 
+#ifdef DEBUG
     qDebug() << "Key:"
                  << "Qt::Key=" << key 
                  << "char=" << (char)key
                  << "nativekey=" << nativekey;
+#endif
     
     bool shiftPressed = event->modifiers() & Qt::ShiftModifier;
     

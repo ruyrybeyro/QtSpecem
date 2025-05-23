@@ -54,23 +54,30 @@ int main(int argc, char **argv) {
         // Check for joysticks
         int joystickCount = SDL_NumJoysticks();
         if (joystickCount > 0) {
+#ifdef DEBUG
             qDebug() << "Found" << joystickCount << "joysticks";
+#endif
             
             // Log information about each joystick
             for (int i = 0; i < joystickCount; i++) {
                 SDL_Joystick* joy = SDL_JoystickOpen(i);
                 if (joy) {
+#ifdef DEBUG
                     qDebug() << "  Joystick" << i << ":";
                     qDebug() << "    Name:" << SDL_JoystickName(joy);
                     qDebug() << "    Axes:" << SDL_JoystickNumAxes(joy);
                     qDebug() << "    Buttons:" << SDL_JoystickNumButtons(joy);
                     qDebug() << "    Hats:" << SDL_JoystickNumHats(joy);
+#endif
                     SDL_JoystickClose(joy);
                 }
             }
-        } else {
+        } 
+#ifdef DEBUG
+else {
             qDebug() << "No joysticks connected";
         }
+#endif
     }
    
     // Request audio permission on macOS
@@ -144,9 +151,12 @@ int main(int argc, char **argv) {
     if (Settings::instance().getAudioEnabled()) {
        // Use SDL beeper instead of the Qt-based one
        initSDLBeeper();
-    } else {
+    } 
+#ifdef DEBUG
+else {
        qDebug() << "Audio disabled in settings, beeper not initialized";
     }
+#endif
 
     draw.show();
     
