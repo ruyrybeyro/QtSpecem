@@ -179,7 +179,6 @@ If successful, a self-contained binary will be created at `release/QtSpecem.exe`
 
 ## Known Issues
 
-- SHIFT + 0-9 combinations do not work in macOS due to Qt limitations (use Command + 0-9 instead)
 - Loading a TAP file introduces temporary patches to the ROM, which will cause ROM checksum validation to fail
 - Some ULAplus applications may display color artifacts
 

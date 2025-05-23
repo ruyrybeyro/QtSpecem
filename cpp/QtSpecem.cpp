@@ -1339,7 +1339,7 @@ static const std::unordered_map<int, KeyMapping> keyMap = {
     {Qt::Key_F, {1, 0xF7, false, 0}},
     {Qt::Key_G, {1, 0xEF, false, 0}},
     {Qt::Key_CapsLock, {0, 0xFE, false, 0}}, // CAPS SHIFT
-    {Qt::Key_Control, {7, 0xFD, false, 0}}, // SYMBOL SHIFT
+//    {Qt::Key_Control, {7, 0xFD, false, 0}}, // SYMBOL SHIFT
     {Qt::Key_Shift, {7, 0xFD, false, 0}}, // SYMBOL SHIFT
     {Qt::Key_Z, {0, 0xFD, false, 0}},
     {Qt::Key_X, {0, 0xFB, false, 0}},
