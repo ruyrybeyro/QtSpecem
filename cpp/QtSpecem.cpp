@@ -1492,8 +1492,10 @@ void DrawnWindow::handleKeyEvent(QKeyEvent *event, bool pressed) {
             // Regular key
             keybd_buff[mapping.keyRow] = (keybd_buff[mapping.keyRow] & mapping.keyMask) | (mask & ~mapping.keyMask);
             
-            // If it's also a joystick key
+            // arrow keys
             if (mapping.isJoystick) {
+                // CAPS because arrow keys are mapped thus for BASIC editing
+                keybd_buff[0] = (keybd_buff[0] & 0xFE) | (mask & ~0xFE); // CAPS SHIFT
                 joystick = pressed ? joystick | mapping.joystickMask : joystick & ~mapping.joystickMask;
             }
         }
