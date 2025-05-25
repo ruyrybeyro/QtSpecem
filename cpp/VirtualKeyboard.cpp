@@ -70,7 +70,7 @@ static const int KEY_CODES[40] = {
     Qt::Key_H, Qt::Key_J, Qt::Key_K, Qt::Key_L, Qt::Key_Return,
     
     Qt::Key_CapsLock, Qt::Key_Z, Qt::Key_X, Qt::Key_C, Qt::Key_V,
-    Qt::Key_B, Qt::Key_N, Qt::Key_M, Qt::Key_Control, Qt::Key_Space
+    Qt::Key_B, Qt::Key_N, Qt::Key_M, Qt::Key_Shift, Qt::Key_Space
 };
 
 VirtualKeyboard::VirtualKeyboard(DrawnWindow *parent)
@@ -189,7 +189,7 @@ void VirtualKeyboard::clearSymbolShift()
         // Send key release event
         QKeyEvent *keyEvent = new QKeyEvent(
             QEvent::KeyRelease, 
-            Qt::Key_Control, 
+            Qt::Key_Shift, 
             Qt::NoModifier);
         
         handleKeyEventForward(static_cast<DrawnWindow*>(mainWindow), keyEvent, false);
@@ -351,7 +351,7 @@ void VirtualKeyboard::toggleShiftKey(int keyIndex)
             // For SYMBOL SHIFT
             QKeyEvent *symbolEvent = new QKeyEvent(
                 QEvent::KeyPress, 
-                Qt::Key_Control, 
+                Qt::Key_Shift, 
                 Qt::NoModifier);
             handleKeyEventForward(static_cast<DrawnWindow*>(mainWindow), symbolEvent, true);
             delete symbolEvent;
@@ -374,7 +374,7 @@ void VirtualKeyboard::toggleShiftKey(int keyIndex)
             // Send key press or release event depending on new state
             QKeyEvent *keyEvent = new QKeyEvent(
                 symbolShiftActive ? QEvent::KeyPress : QEvent::KeyRelease, 
-                Qt::Key_Control, 
+                Qt::Key_Shift, 
                 Qt::NoModifier);
             
             handleKeyEventForward(static_cast<DrawnWindow*>(mainWindow), keyEvent, symbolShiftActive);
@@ -417,7 +417,7 @@ void VirtualKeyboard::clearAllShiftKeys()
     
     if (symbolShiftActive) {
         symbolShiftActive = false;
-        QKeyEvent *releaseEvent = new QKeyEvent(QEvent::KeyRelease, Qt::Key_Control, Qt::NoModifier);
+        QKeyEvent *releaseEvent = new QKeyEvent(QEvent::KeyRelease, Qt::Key_Shift, Qt::NoModifier);
         handleKeyEventForward(static_cast<DrawnWindow*>(mainWindow), releaseEvent, false);
         delete releaseEvent;
     }

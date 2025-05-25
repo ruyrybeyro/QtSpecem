@@ -1323,16 +1323,16 @@ struct KeyMapping {
 };
 
 static const std::unordered_map<int, KeyMapping> keyMap = {
-    {Qt::Key_1, {3, 0xFE, false, 0}},
-    {Qt::Key_2, {3, 0xFD, false, 0}},
-    {Qt::Key_3, {3, 0xFB, false, 0}},
-    {Qt::Key_4, {3, 0xF7, false, 0}},
-    {Qt::Key_5, {3, 0xEF, false, 0}},
-    {Qt::Key_Q, {2, 0xFE, false, 0}},
-    {Qt::Key_W, {2, 0xFD, false, 0}},
+    {Qt::Key_1, {3, 0xFE, false, 0}}, // !
+    {Qt::Key_2, {3, 0xFD, false, 0}}, // @
+    {Qt::Key_3, {3, 0xFB, false, 0}}, // #
+    {Qt::Key_4, {3, 0xF7, false, 0}}, // $
+    {Qt::Key_5, {3, 0xEF, false, 0}}, // %
+    {Qt::Key_Q, {2, 0xFE, false, 0}}, 
+    {Qt::Key_W, {2, 0xFD, false, 0}}, 
     {Qt::Key_E, {2, 0xFB, false, 0}},
-    {Qt::Key_R, {2, 0xF7, false, 0}},
-    {Qt::Key_T, {2, 0xEF, false, 0}},
+    {Qt::Key_R, {2, 0xF7, false, 0}}, // < 
+    {Qt::Key_T, {2, 0xEF, false, 0}}, // >
     {Qt::Key_A, {1, 0xFE, false, 0}},
     {Qt::Key_S, {1, 0xFD, false, 0}},
     {Qt::Key_D, {1, 0xFB, false, 0}},
@@ -1341,30 +1341,30 @@ static const std::unordered_map<int, KeyMapping> keyMap = {
     {Qt::Key_CapsLock, {0, 0xFE, false, 0}}, // CAPS SHIFT
 //    {Qt::Key_Control, {7, 0xFD, false, 0}}, // SYMBOL SHIFT
     {Qt::Key_Shift, {7, 0xFD, false, 0}}, // SYMBOL SHIFT
-    {Qt::Key_Z, {0, 0xFD, false, 0}},
-    {Qt::Key_X, {0, 0xFB, false, 0}},
-    {Qt::Key_C, {0, 0xF7, false, 0}},
-    {Qt::Key_V, {0, 0xEF, false, 0}},
-    {Qt::Key_0, {4, 0xFE, false, 0}},
-    {Qt::Key_9, {4, 0xFD, false, 0}},
-    {Qt::Key_8, {4, 0xFB, false, 0}},
-    {Qt::Key_7, {4, 0xF7, false, 0}},
-    {Qt::Key_6, {4, 0xEF, false, 0}},
-    {Qt::Key_P, {5, 0xFE, false, 0}},
-    {Qt::Key_O, {5, 0xFD, false, 0}},
-    {Qt::Key_I, {5, 0xFB, false, 0}},
+    {Qt::Key_Z, {0, 0xFD, false, 0}}, // :
+    {Qt::Key_X, {0, 0xFB, false, 0}}, // £
+    {Qt::Key_C, {0, 0xF7, false, 0}}, // ?
+    {Qt::Key_V, {0, 0xEF, false, 0}}, // /
+    {Qt::Key_0, {4, 0xFE, false, 0}}, // *
+    {Qt::Key_9, {4, 0xFD, false, 0}}, // ,
+    {Qt::Key_8, {4, 0xFB, false, 0}}, // .
+    {Qt::Key_7, {4, 0xF7, false, 0}}, // ´
+    {Qt::Key_6, {4, 0xEF, false, 0}}, // &
+    {Qt::Key_P, {5, 0xFE, false, 0}}, // "
+    {Qt::Key_O, {5, 0xFD, false, 0}}, // ;
+    {Qt::Key_I, {5, 0xFB, false, 0}}, 
     {Qt::Key_U, {5, 0xF7, false, 0}},
     {Qt::Key_Y, {5, 0xEF, false, 0}},
     {Qt::Key_Return, {6, 0xFE, false, 0}},
-    {Qt::Key_L, {6, 0xFD, false, 0}},
-    {Qt::Key_K, {6, 0xFB, false, 0}},
-    {Qt::Key_J, {6, 0xF7, false, 0}},
-    {Qt::Key_H, {6, 0xEF, false, 0}},
+    {Qt::Key_L, {6, 0xFD, false, 0}}, // =
+    {Qt::Key_K, {6, 0xFB, false, 0}}, // +
+    {Qt::Key_J, {6, 0xF7, false, 0}}, // -
+    {Qt::Key_H, {6, 0xEF, false, 0}}, 
     {Qt::Key_Space, {7, 0xFE, false, 0}},
-    {Qt::Key_M, {7, 0xFB, false, 0}},
-    {Qt::Key_N, {7, 0xF7, false, 0}},
-    {Qt::Key_B, {7, 0xEF, false, 0}},
-    {Qt::Key_Left, {3, 0xEF, true, 2}},
+    {Qt::Key_M, {7, 0xFB, false, 0}}, // .
+    {Qt::Key_N, {7, 0xF7, false, 0}}, // ,
+    {Qt::Key_B, {7, 0xEF, false, 0}}, // *
+    {Qt::Key_Left, {3, 0xEF, true, 2}}, // /
     {Qt::Key_Right, {4, 0xFB, true, 1}},
     {Qt::Key_Up, {4, 0xF7, true, 8}},
     {Qt::Key_Down, {4, 0xEF, true, 4}},
