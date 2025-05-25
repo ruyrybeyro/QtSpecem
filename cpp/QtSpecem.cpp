@@ -1339,7 +1339,6 @@ static const std::unordered_map<int, KeyMapping> keyMap = {
     {Qt::Key_F, {1, 0xF7, false, 0}},
     {Qt::Key_G, {1, 0xEF, false, 0}},
     {Qt::Key_CapsLock, {0, 0xFE, false, 0}}, // CAPS SHIFT
-//    {Qt::Key_Control, {7, 0xFD, false, 0}}, // SYMBOL SHIFT
     {Qt::Key_Shift, {7, 0xFD, false, 0}}, // SYMBOL SHIFT
     {Qt::Key_Z, {0, 0xFD, false, 0}}, // :
     {Qt::Key_X, {0, 0xFB, false, 0}}, // £
@@ -1377,6 +1376,32 @@ static const std::unordered_map<int, KeyMapping> keyMap = {
     {Qt::Key_Backspace, {0, 0xFE, false, 0}} // This is partial, we handle specially
 };
 
+static const std::unordered_map<int, KeyMapping> keyMap2 = {
+    {Qt::Key_Exclam,     {3, 0xFE, false, 0}}, // !
+    {Qt::Key_At,         {3, 0xFD, false, 0}}, // @
+    {Qt::Key_NumberSign, {3, 0xFB, false, 0}}, // #
+    {Qt::Key_Dollar,     {3, 0xF7, false, 0}}, // $
+    {Qt::Key_Percent,    {3, 0xEF, false, 0}}, // %
+    {Qt::Key_Less,       {2, 0xF7, false, 0}}, // < 
+    {Qt::Key_Greater,    {2, 0xEF, false, 0}}, // >
+    {Qt::Key_Colon,      {0, 0xFD, false, 0}}, // :
+    {Qt::Key_sterling,   {0, 0xFB, false, 0}}, // £
+    {Qt::Key_Question,   {0, 0xF7, false, 0}}, // ?
+    {Qt::Key_Slash,      {0, 0xEF, false, 0}}, // /
+    {Qt::Key_Underscore, {4, 0xFE, false, 0}}, // _
+    {Qt::Key_ParenRight, {4, 0xFD, false, 0}}, // )
+    {Qt::Key_ParenLeft,  {4, 0xFB, false, 0}}, // (
+    {Qt::Key_acute,      {4, 0xF7, false, 0}}, // ´
+    {Qt::Key_Ampersand,  {4, 0xEF, false, 0}}, // &
+    {Qt::Key_QuoteDbl,   {5, 0xFE, false, 0}}, // "
+    {Qt::Key_Semicolon,  {5, 0xFD, false, 0}}, // ;
+    {Qt::Key_Equal,      {6, 0xFD, false, 0}}, // =
+    {Qt::Key_Plus,       {6, 0xFB, false, 0}}, // +
+    {Qt::Key_Minus,      {6, 0xF7, false, 0}}, // -
+    {Qt::Key_Period,     {7, 0xFB, false, 0}}, // .
+    {Qt::Key_Comma,      {7, 0xF7, false, 0}}, // ,
+    {Qt::Key_Asterisk,   {7, 0xEF, false, 0}}  // *
+};
 
 void DrawnWindow::handleKeyEvent(QKeyEvent *event, bool pressed) {
     uint8_t mask = pressed ? 0xFF : 0x00;
@@ -1499,6 +1524,14 @@ void DrawnWindow::handleKeyEvent(QKeyEvent *event, bool pressed) {
                 joystick = pressed ? joystick | mapping.joystickMask : joystick & ~mapping.joystickMask;
             }
         }
+    }
+    // Lookup key in our map
+    auto it2 = keyMap2.find(key);
+    if (it2 != keyMap2.end()) {
+        const KeyMapping& mapping = it2->second;
+
+        keybd_buff[7] = (keybd_buff[7] & 0xFD) | (mask & ~0xFD); // SYMBOL SHIFT
+        keybd_buff[mapping.keyRow] = (keybd_buff[mapping.keyRow] & mapping.keyMask) | (mask & ~mapping.keyMask);
     }
 
     event->accept();
