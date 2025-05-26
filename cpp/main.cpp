@@ -16,7 +16,7 @@
 
 extern "C" void init_emul();
 extern "C" void init_pallete();
-extern "C" void open_sna(const char *);
+extern "C" int open_sna(const char *);
 extern "C" void writebyte(unsigned short, unsigned char);
 extern "C" void patch_rom(int);
 extern "C" void Close_Z80Emu();

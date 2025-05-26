@@ -12,6 +12,29 @@
 #include "GamepadManager.h"
 #include "AboutDialog.h"
 
+// External C variables and functions
+extern "C" {
+    extern unsigned char keybd_buff[8];
+    extern unsigned char joystick;
+    extern unsigned short hires;
+    extern unsigned short FullScreen;
+    extern unsigned char ULAplus;
+    extern int WindowDirty;
+    extern unsigned char *mem;
+    
+    void execute();
+    void do_reset();
+    void do_fullreset();
+    void do_nmi_int();
+    void do_warmreset();
+    int open_sna(const char * file_name);
+    void save_sna(const char * file_name);
+    void writebyte(unsigned short, unsigned char);
+    void initSDLBeeper(void);
+    void deinitSDLBeeper(void);
+    void sdlBeeperSetVolume(float volume);
+}
+
 QT_BEGIN_NAMESPACE
 class QAction;
 class QActionGroup;

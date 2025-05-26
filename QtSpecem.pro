@@ -637,7 +637,9 @@ HEADERS += \
     $$HEADERS_DIR/VirtualKeyboard.h \
     $$HEADERS_DIR/RomSelector.h \
     $$HEADERS_DIR/Version.h \
-    $$HEADERS_DIR/SDLBeeper.h 
+    $$HEADERS_DIR/SDLBeeper.h  \
+    $$HEADERS_DIR/Colours.h  \
+    $$HEADERS_DIR/Keys.h
 
 # Emulator Core Headers
 HEADERS += \
@@ -656,7 +658,13 @@ SOURCES += \
     $$FRONTEND_DIR/GamepadManager.cpp \
     $$FRONTEND_DIR/VirtualKeyboard.cpp \
     $$FRONTEND_DIR/RomSelector.cpp \
-    $$FRONTEND_DIR/SDLBeeper.cpp
+    $$FRONTEND_DIR/SDLBeeper.cpp \
+    $$FRONTEND_DIR/QtFiles.cpp \
+    $$FRONTEND_DIR/QtMenus.cpp \
+    $$FRONTEND_DIR/QtKeys.cpp \
+    $$FRONTEND_DIR/QtMisc.cpp \
+    $$FRONTEND_DIR/QtSDLAudio.cpp \
+    $$FRONTEND_DIR/ColoursPixels.cpp
 
 # Emulator Core Sources
 SOURCES += \
