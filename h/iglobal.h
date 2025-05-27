@@ -1427,5 +1427,8 @@ int do_nothing(USHORT *);
 /* floating_bus.c */
 int floating_bus(unsigned int t_states);
 
+/* contention.c */
+void contention_delay(uint32_t tstate, uint16_t address);
+
 /* EOF: IGlobal.h */
 

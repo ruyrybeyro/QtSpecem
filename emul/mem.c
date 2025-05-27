@@ -43,6 +43,7 @@ void writeword(USHORT addr, USHORT value)
 UCHAR readbyte(USHORT addr)
 {
 	/* definide as a macro at z80.h */
+        contention_delay(clock_ticks, addr);
 	return((UCHAR) *(mem+addr) );
 }
 

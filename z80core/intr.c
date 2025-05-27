@@ -32,7 +32,7 @@ void do_interrupt()
       case (UCHAR)2: /* IM 2 */
 	    // clock_ticks = 19; /* Time : Ian Collier */
             // Ian Collier says 19, RAMSOFT in their floatspy say 29
-            // and 28 works ok....
+            // emulation seems still to work better with 28
 	    clock_ticks = 28;
             /* PC = readword( (USHORT) ( ((USHORT)I << 8) + DATA_BUS) );
             */

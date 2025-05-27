@@ -670,6 +670,7 @@ SOURCES += \
 SOURCES += \
     $$EMUL_DIR/error.c \
     $$EMUL_DIR/floating_bus.c \
+    $$EMUL_DIR/contention.c \
     $$EMUL_DIR/init.c \
     $$EMUL_DIR/initmem.c \
     $$EMUL_DIR/mem.c \

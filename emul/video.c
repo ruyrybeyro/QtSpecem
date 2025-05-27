@@ -54,7 +54,7 @@ void writebyte(unsigned short adress, unsigned char byte)
 
    // if ( adress == 0xFDBB )
    //   TraceOn = 3;
-
+   contention_delay(clock_ticks, (adress));
    *(mem + adress) = byte;
    if( ( (adress >= 0x4000 && (adress < 0x5800) ) && !hires && !alt_video)
 ||

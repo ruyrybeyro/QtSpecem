@@ -84,8 +84,8 @@ extern USHORT parity_table[256];
 #define PutPC(adress) PC = (USHORT)(adress)
 
 /*  memory adressing - readbyte()
+#define readbyte(adress) (contention_delay(clock_ticks, (adress)), *(mem+(USHORT)(adress)))
  */
-#define readbyte(adress) (*(mem+(USHORT)(adress)))
 
 /* read word pointed to PC and sum 2 to PC
  */
